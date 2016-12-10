@@ -1,0 +1,22 @@
+{
+  "name": "freemarker",
+  "version": "0.0.1",
+  "description": "Freemarker integration for NodeJS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/int64ago/freemarker.git"
+  },
+  "keywords": [
+    "Freemarker"
+  ],
+  "author": "Cody Chan <int64ago@gmail.com> (https://int64ago.org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/int64ago/freemarker/issues"
+  },
+  "homepage": "https://github.com/int64ago/freemarker#readme"
+}
