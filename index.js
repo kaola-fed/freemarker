@@ -17,8 +17,8 @@ class Freemarker {
   }
   _writeConfig(configFile, config = {}) {
     let str = '';
-    for (let [key, value] of Object.entries(config)) {
-      str += `${key}: ${value}\n`;
+    for (let key in config) {
+      str += `${key}: ${config[key]}\n`;
     }
     fs.writeFileSync(configFile, str, 'utf8');
   }
