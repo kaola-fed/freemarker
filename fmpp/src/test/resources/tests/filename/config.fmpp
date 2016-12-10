@@ -1,0 +1,5 @@
+sourceRoot: src
+outputRoot: out
+removePostfixes: [t, xxx, xx]
+removeExtensions: [bat.man, man, spider.man, spider]
+replaceExtensions: [spider, pok, qw, wq, wq, qw]

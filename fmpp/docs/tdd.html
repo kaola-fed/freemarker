@@ -1,0 +1,318 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, TDD">
+<title>TDD - Textual Data Definition - FMPP</title>
+<meta property="og:title" content="TDD - Textual Data Definition - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/tdd.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/tdd.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/languages.html">
+<link rel="next" href="http://fmpp.sourceforge.net/pathpattern.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="languages.html" itemprop="url"><span itemprop="title">Languages (formats) used</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="tdd.html" itemprop="url"><span itemprop="title">TDD - Textual Data Definition</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="languages.html">Prev</a></li><li><a class="pager-icon next" href="pathpattern.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">TDD - Textual Data Definition</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#sect1">Basics</a></li>
+    <li><a href="#modes">Interpretation modes</a></li>
+    <li><a href="#hashAddition">Hash addition</a></li>
+    <li><a href="#sect4">TDD functions</a></li>
+    <li><a href="#sect5">Comments</a></li>
+    <li><a href="#encoding">Character encoding issues</a></li>
+  </ul>
+  <div class="clear"></div>
+              </div>
+            <div class="page-content content-right">
+              
+<a name="sect1"></a>
+     <h2>Basics</h2>
+
+<p> TDD is a very simple expression language created for defining hierarchical data (hashes, sequences) with plain text. It is mostly used for configuring FMPP. For example, <a href="configfile.html">configuration files</a> use TDD syntax.</p>
+
+<p>TDD syntax is identical to the syntax of literals in FTL (FreeMarker Template Language). For example, this data structure:</p>
+
+<pre>
+(root)
+ |
+ +- user = "Big Joe"
+ |
+ +- tall = true
+ |
+ +- animals
+     |
+     +- (1st)
+     |   |
+     |   +- name = "white mouse"
+     |   |
+     |   +- price = 30
+     |
+     +- (2nd)
+     |   |
+     |   +- name = "black mouse"
+     |   |
+     |   +- price = 25
+     |
+     +- (3rd)
+         |
+         +- name = "green mouse"
+         |
+         +- price = 150
+</pre>
+
+<p>could be described with this TDD expression:</p>
+
+<pre>{
+    &quot;user&quot;: &quot;Big Joe&quot;,
+    &quot;tall&quot;: true,
+    &quot;animals&quot;: [
+        {&quot;name&quot;: &quot;white mouse&quot;, &quot;price&quot;: 30},
+        {&quot;name&quot;: &quot;black mouse&quot;, &quot;price&quot;: 25},
+        {&quot;name&quot;: &quot;green mouse&quot;, &quot;price&quot;: 150}
+    ]
+}</pre>
+<p>which is also a legal FTL expression. Please read <a href="freemarker/dgui_template_exp.html#dgui_template_exp_direct" rel="nofollow">the FreeMarker Manual about "Specify values directly"</a> if you are not familiar with them. TDD doesn't support any other FTL operators (as variables, built-ins, interpolations, etc.), only the "Specify values directly" part of FTL.</p>
+
+<p>TDD syntax allows terser expressions than FTL because of these additional syntactical rules:</p>
+<ul>
+  <li>Strings need not be quoted if they doesn't look like a legal boolean or number value, and they don't contain:
+     <ul>
+       <li>white-space: space, tab, line-break, etc.</li>
+       <li>Quotation marks or apostrophe-quote: <code>"</code>, <code>'</code></li>
+       <li>Separator-like chars: comma (<code>,</code>), semicolon (<code>;</code>). Colon (<code>:</code>) is allowed without quoting the string if the string is not a key in a hash.</li>
+       <li>Bracket-like chars: <code>(</code>, <code>)</code>, <code>[</code>, <code>]</code>, <code>{</code>, <code>}</code>, <code>&lt;</code>, <code>></code></li>
+       <li>Equals sign (<code>=</code>)</li>
+       <li>Plus sign (<code>+</code>)</li>
+     </ul>
+  </li>
+  <li>Line-break can be used instead of comma (<code>,</code>). That is, in practice, you can omit commas that would be at the end of the lines.</li>
+  <li>If in a hash the value is missing from a key:value pair, then the value defaults to boolean <code>true</code>.
+</ul>
+
+<p>Utilizing these rules, the example TDD expression can be written as:</p>
+
+<pre>{
+    user: &quot;Big Joe&quot;
+    tall
+    animals: [
+        {name: &quot;white mouse&quot;, price: 30}
+        {name: &quot;black mouse&quot;, price: 25}
+        {name: &quot;green mouse&quot;, price: 150}
+    ]
+}</pre>
+<p>Back to the strings... Examples of legal unquoted strings:</p>
+<ul>
+  <li><code>**/foo-bar/baz.txt</code></li>
+  <li><code>C:\windows\system32</code></li>
+  <li><code>25%</code></li>
+  <li><code>#FF80FF</code></li>
+  <li><code>?!</code></li>
+  <li><code>7.txt</code></li>
+  <li><code>1-2</code></li>
+  <li><code>True</code></li>
+</ul>
+<p>Examples of strings where quotation had to be used:</p>
+<ul>
+  <li><code>"contains space"</code></li>
+  <li><code>"a'b"</code></li>
+  <li><code>"(c)"</code></li>
+  <li><code>"&lt;head>"</code></li>
+  <li><code>"7"</code></li>
+  <li><code>"true"</code></li>
+</ul>
+
+<p>TDD supports an escape sequence that FTL doesn't: backslash at the end of the line. It is used to break strings into multiple lines in the TDD, without actually introducing line-breaks and indentation in the value of the string. For example here:</p>
+
+<pre>{
+    text: &#39;This is \
+           a single \
+           line.&#39;
+}</pre>
+<p>the value of <code>text</code> will be the same as with:
+
+<pre>{
+    text: &#39;This is a single line.&#39;
+}</pre>
+<p>The exact rule is that if backslash is followed by a line-break (extra horizontal white-space is allowed between the backslash and the line-break), then all characters after the backslash will be removed until the first non-white-space character is reached, or a 2nd line-break is reached.</p>
+
+
+
+<a name="modes"></a>
+     <h2>Interpretation modes</h2>
+
+<p>A text can be interpreted as TDD either in:</p>
+<ul>
+  <li>Single expression mode: this is the basic case.</li>
+  <li>Hash mode: The text is assumed to describe the name:value pair list of a hash.</li>
+  <li>Sequence mode: The text is assumed to describe the value list of a sequence.</li>
+</ul>
+
+<p>An example of hash mode are <a href="configfile.html">configuration files</a>. There you enter the settings as if you were already between <code>{</code> and <code>}</code>:</p>
+
+<pre>sourceRoot: src
+outputRoot: out</pre>
+<p>and this will evaluate to a hash. In single expression mode, you could describe the same value with this:</p>
+
+<pre>{
+    sourceRoot: src
+    outputRoot: out
+}</pre>
+<p>An example of sequence mode is when you specify the <code><a href="settings.html#key_removeExtensions">removeExtensions</a></code> setting with command-line argument to the <a href="commandline.html">command-line tool</a> or as Ant task parameter. For example, when you enter this in the command-line:</p>
+
+<pre>fmpp -S src -O out --removeExtensions &quot;foo, bar, baaz&quot;</pre>
+<p>Don't be confused on the quotation marks here, those are required by the command-line parser of the OS shell, it has nothing to do with TDD. What FMPP gets don't contain the quotation marks, only the text between them. So the TDD expression we are talking about is:</p>
+
+<pre>foo, bar, baaz</pre>
+<p>The same value could be described in single expression mode as:</p>
+
+<pre>[foo, bar, baaz]</pre>
+<p>When to use single expression mode, and when hash mode, and when sequence mode? Hash mode or sequence mode is used when you specify the value of something as discrete text (that is, not as the part of a larger, enclosing TDD expression), and it is known that the value must be hash or sequence respectively. For example, in the <code>--removeExtensions</code> example above, the TDD expression is given in an independent text fragment, and it is known that the <code><a href="settings.html#key_removeExtensions">removeExtensions</a></code> setting is a sequence. Compare it with the case, when you specify the same setting value in a configuration file:</p>
+
+<pre>removeExtensions: [foo, bar, baaz]</pre>
+<p>Here, the value is not a discrete text, because it is a fragment of a larger TDD expression (which is, by the way, a hash mode expression). Thus, the value must be specified in single expression mode, regardless that we know that it should be a sequence. Because, if you were allowed to write:</p>
+
+<pre>removeExtensions: foo, bar, baaz</pre>
+<p>then there would be an ambiguity, as it could be also interpreted as:</p>
+
+<pre>removeExtensions: foo
+bar: true
+baaz: true</pre>
+<p>(Since, if the value is missing from a key:value pair, then the value defaults to boolean <code>true</code>, and comma can be replaced with line-break) So be sure you don't forget the brackets in configuration files.</p>
+
+
+
+<a name="hashAddition"></a>
+     <h2>Hash addition</h2>
+
+<p>TDD allows you to put hash value directly into another hash value, without specifying key for it. For example:</p>
+
+<pre>{a: A, b: B,  {c: C, d: D}}</pre>
+<p>In this case, when the TDD interpretation passes the <code>{c: C, d: D}</code>, it will add all key:value pairs of it to the enclosing hash. So the final result hash will contain these key:value pairs: <code>a: A</code>, <code>b: B</code>, <code>c: C</code>, <code>d: D</code>.</p>
+
+<p>When the hash is added to its parent, it may overwrite keys in that. For example:</p>
+
+<pre>{a: A1, b: B1, c:C1, {b: B2, c: C2}, {c: C3}}</pre>
+<p>will result in a hash that contains these key:value pairs: <code>a:A1</code>, <code>b:B2</code>, <code>c:C3</code>.</p>
+
+<p>You may wonder what is this all good for. Hash additions are useful with data loaders that return hashes. Read on...</p>
+
+
+
+<a name="sect4"></a>
+     <h2>TDD functions</h2>
+
+<p>TDD has a construct called TDD function that is identical to FTL method calls. The meaning of TDD functions depends on which <a href="overview.html#settings">setting</a> do you use them in. For example, when you use TDD with the <code><a href="settings.html#key_data">data</a></code> setting, then they are used to invoke data loaders, and their return value is the loaded data. A part form the configuration used in the <a href="qtour.html">Quick Tour</a>:</p>
+
+<pre>data: {
+    tdd(data/style.tdd)
+    birds: csv(data/birds.csv)
+}</pre>
+<p>The first function call (<code>tdd(<em>...</em>)</code>) returns the a hash that was built by interpreting the <code>data/style.tdd</code> file. There is no key given for it (like <code>someKey:&nbsp;tdd(<em>...</em>)</code>), so its key:value pairs will be added directly to the <code><a href="settings.html#key_data">data</a></code> hash (<a href="#hashAddition">hash addition</a>). The second call (<code>csv(<em>...</em>)</code>) returns a sequence, which will be stored with key <code>birds</code> in the <code><a href="settings.html#key_data">data</a></code> hash.</p>
+
+<p>Another example of the usage TDD functions is when method calls are used with the <code><a href="settings.html#key_modes">modes</a></code> setting. A fragment from a possible configuration file:</p>
+
+<pre>modes: [copy(**/*.html, **/*.htm), ignore(tmp/)]</pre>
+<p>In this use case, you are not interested what kind of values do the function calls return. You just use the function calls for describing groups. It's the internal business of the FMPP core what the function calls return to solve this task.</p>
+
+<p>There is no restriction regarding the type of the value a TDD function returns. You may thought that TDD knows only these types: string, number, boolean, hash, sequence. These are the types for which you can specify values directly, but a sequence or a hash can store any type of Java objects as values, not only these. So any type of object can get into hashes or sequences as the return value of TDD function.</p>
+
+
+
+<a name="sect5"></a>
+     <h2>Comments</h2>
+
+<p>TDD knows 2 types of comments:</p>
+<ul>
+  <li>FTL comment: These are delimited with <code>&lt;#--</code> and <code>--></code>, and can span multiple lines. They can be inserted everywhere where optional white-space could be inserted. FTL comments can't be nested into another FTL comment.</li>
+  
+  <li>Shell-script/"properties" style comment: These are lines starting with <code>#</code>, optionally preceded with white-space. The comment spreads until the end of the line. This comment can be inserted everywhere where optional line-break could be inserted.</li>
+</ul>
+
+<p>Comments will not work inside quoted strings, nor nested inside comments. That is, they will count as normal text in these places.</p> 
+
+<p>Example:</p>
+
+<pre># This is a test.
+# Now &quot;a&quot; will be 1
+a: 1 &lt;#-- now &quot;a&quot; is 1 --&gt;
+b &lt;#-- this was the key --&gt; : &lt;#-- now comes the value --&gt; 2
+  # Comments can be indented.
+&lt;#--
+  FTL-style comment
+  can span over multiple lines.
+--&gt;</pre>
+
+<a name="encoding"></a>
+     <h2>Character encoding issues</h2>
+
+<p>If you load TDD from a file, then FMPP have to use an encoding (charset) to interpret the bytes as text. The default of this encoding depends on how do you load the TDD file:</p>
+<ul>
+  <li>If it is a configuration file: <code>ISO-8859-1</code> is used.</li>
+  <li>If it is loaded with <code>tdd</code> data loader as <code>tdd(<em>fileName</em>)</code>: <code><a href="settings.html#key_sourceEncoding">sourceEncoding</a></code> is used.</li>
+  <li>If it is loaded with data loader <code>tdd</code> as <code>tdd(<em>fileName</em>, <em>encoding</em>)</code>: the encoding suggested by the 2nd parameter is used.</li>
+</ul>
+
+<p>A TDD file can specify its own encoding with a special comment, in which case the default of the encoding (see above) is ignored. For example this TDD file will be always interpreted with UTF-8 encoding, doesn't mater how you load it:</p>
+
+<pre># encoding: UTF-8
+some: tdd
+comes: here</pre>
+<p>The encoding comment must be the very first line of the TDD file. FTL-style comment can't be used for this purpose. Extra white-space, or no white-space is OK between the <code>#</code> and <code>encoding</code>, also extra white-space can be present around the colon. Word <code>charset</code> can be used instead of <code>encoding</code>. The words are not case sensitive.</p>
+
+<p>The encoding comment works only if the file can be correctly interpreted as US-ASCII until the end of the encoding name. So it will not work for UTF-16, UCS-2, UCS-4, and with EBCDIC based charsets. Note that an UTF-8 BOM at the begining of the file is automatically ignored.</p>
+
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="languages.html">Prev</a></li><li><a class="pager-icon next" href="pathpattern.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

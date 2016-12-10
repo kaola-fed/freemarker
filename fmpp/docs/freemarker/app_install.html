@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="docgen-resources/docgen.css" type="text/css">
+  <meta name="generator" content="FreeMarker Docgen (DocBook 5)">
+  <title>
+    FreeMarker Manual - Installing FreeMarker
+  </title>
+    <script type="text/javascript" src="docgen-resources/jquery.js"></script>
+    <script type="text/javascript" src="docgen-resources/linktargetmarker.js"></script>
+</head>
+<body>
+
+    <div class="navigation">
+    <div class="breadcrumb">
+<span class="breadcrumb">        You are here:
+          <a href="index.html">FreeMarker Manual</a>
+            <b>></b>
+          <a href="app.html">Appendixes</a>
+            <b>></b>
+          Installing FreeMarker
+</span>    </div>
+    <div class="bookmarks">
+<span class="bookmarks">Bookmarks:
+<a href="alphaidx.html">Alpha. index</a>, <a href="dgui_template_exp.html#exp_cheatsheet">Expressions</a>, <a href="ref_builtins_alphaidx.html">?builtins</a>, <a href="ref_directive_alphaidx.html">#directives</a>, <a href="ref_specvar.html">.spec_vars</a>, <a href="app_faq.html">FAQ</a>, <a href="gloss.html">Glossary</a>, <a href="api/index.html">API</a>, <a href="../index.html">Home</a></span>    </div>
+    <div class="pagers">
+      <div class="pagersVerticalSpacer"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></div>
+<div class="pagerButton"><a href="app_legal.html"><span class="hideA">Next page: </span>Legal</a></div><div class="pagerButton"><a href="versions_2_0RC1.html">Previous page</a></div><div class="pagerButton"><a href="app.html">Parent page</a></div><div class="pagerButton"><a href="index.html">Contents</a></div>      <div class="pagersVerticalSpacer"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></div>
+    </div>
+    </div>
+
+<div id="mainContent">
+
+  
+  
+  
+  
+  <h1 class="rank_chapter"
+        id="pageTopTitle">
+<a name="app_install"></a>Appendix C   Installing FreeMarker  </h1>
+    
+    
+<p>No real installation is needed. Simply ensure that
+      <tt style="color: #A03D10">freemarker.jar</tt> is somewhere where your Java
+      application's class-loader will find it. In web application this usually
+      means putting <tt style="color: #A03D10">freemarker.jar</tt> into the
+      <tt style="color: #A03D10">WEB-INF/lib</tt> directory of your web application. (If
+      you want to use FreeMarker with JSP Model-2 style (which also means that
+      you can use custom JSP taglibs in the templates), some extra steps
+      needed. For more information please see <a href="pgui_misc_servlet.html">the chapter about servlets</a>.)</p><p>FreeMarker has no required dependencies. But to use certain
+      <i>optional</i> FreeMarker features, the related party
+      libraries have to be available for the class-loader:</p>    <div class="itemizedlist">
+<ul>
+        <li>
+          <p>Jaxen (recommended, <a href="http://jaxen.org/">download here</a>) or Apache Xalan
+          is needed for XML XPath support. Please use at least Jaxen
+          1.1-beta-8, not older versions! Apache Xalan classes are included in
+          a package-relocated form in Sun/Oracle J2SE 1.4-1.8 (maybe later
+          too), and FreeMarker will use those if it doesn't find Jaxen or
+          Xalan elsewhere. But as Oracle can change these internal packages
+          anytime, it's still recommended to use an external Jaxen or
+          Xalan.</p>
+        </li>
+
+        <li>
+          <p>Obviously, <tt style="color: #A03D10">javax.servlet</tt> classes are needed
+          for <tt style="color: #A03D10">FreemarkerServlet</tt>. Servlet version 2.2 or
+          later is needed.</p>
+        </li>
+
+        <li>
+          <p>For the custom JSP taglib support, you will need JSP 1.2 API
+          or later avilable. No JSP implementation is needed, just the API.
+          This is already present in pretty much every servlet container. For
+          more information please see <a href="pgui_misc_servlet.html">the
+          chapter about servlets</a>.</p>
+        </li>
+
+        <li>
+          <p>Jython classes are needed for the Jython wrapper.</p>
+        </li>
+
+        <li>
+          <p>Pre-1.0 JDOM is needed for the long deprecated
+          <tt style="color: #A03D10">freemarker.ext.jdom</tt> package. (When it was
+          created, there was no JDOM 1.0 yet.)</p>
+        </li>
+      </ul>    </div>
+  
+</div>
+
+    <div class="navigation">
+    <div class="pagers">
+      <div class="pagersVerticalSpacer"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></div>
+<div class="pagerButton"><a href="app_legal.html"><span class="hideA">Next page: </span>Legal</a></div><div class="pagerButton"><a href="versions_2_0RC1.html">Previous page</a></div><div class="pagerButton"><a href="app.html">Parent page</a></div><div class="pagerButton"><a href="index.html">Contents</a></div>      <div class="pagersVerticalSpacer"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></div>
+    </div>
+    <div class="breadcrumb">
+<span class="breadcrumb">        You are here:
+          <a href="index.html">FreeMarker Manual</a>
+            <b>></b>
+          <a href="app.html">Appendixes</a>
+            <b>></b>
+          Installing FreeMarker
+</span>    </div>
+    </div>
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%">
+    <tr>
+      <td colspan=2><img src="docgen-resources/img/none.gif" width=1 height=8 alt=""></td>
+    <tr>
+      <td align="left" valign="top"><span class="smallFooter">
+            FreeMarker Manual -- For FreeMarker 2.3.21
+            <br>
+          HTML generated: 2014-10-12 18:53:30 GMT
+      </span></td>
+      <td align="right" valign="top"><span class="smallFooter">
+          <a href="http://www.xmlmind.com/xmleditor/">
+            <img src="docgen-resources/img/xxe.gif" alt="Edited with XMLMind XML Editor">
+          </a>
+      </span></td>
+    </tr>
+</table>
+  <!-- Put pre-loaded images here: -->
+  <div style="display: none">
+    <img src="docgen-resources/img/linktargetmarker.gif" alt="Here!" />
+  </div>
+</body>
+</html>
+

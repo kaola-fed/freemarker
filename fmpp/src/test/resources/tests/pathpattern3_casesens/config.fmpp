@@ -1,0 +1,3 @@
+inheritConfiguration: ../pathpattern3/config.fmpp
+outputRoot: out
+caseSensitive: true

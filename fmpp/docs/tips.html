@@ -1,0 +1,110 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, tips, best practices">
+<title>Tips and Best Practices - FMPP</title>
+<meta property="og:title" content="Tips and Best Practices - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/tips.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/tips.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/reportbug.html">
+<link rel="next" href="http://fmpp.sourceforge.net/license.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="miscellaneous.html" itemprop="url"><span itemprop="title">Miscellaneous</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="tips.html" itemprop="url"><span itemprop="title">Tips and Best Practices</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="reportbug.html">Prev</a></li><li><a class="pager-icon next" href="license.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">Tips and Best Practices</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#sect1">Finding out the reasons of errors</a></li>
+    <li><a href="#sect2">Speeding up processing when you have many files</a></li>
+    <li><a href="#sect3">Avoid too much programming logic in templates</a></li>
+    <li><a href="#sect4">Showing information about something that will be generated further down</a></li>
+  </ul>
+  <div class="clear"></div>
+              </div>
+            <div class="page-content content-right">
+              
+<a name="sect1"></a>
+     <h2>Finding out the reasons of errors</h2>
+
+<p>Use a log file (see: <code><a href="settings.html#key_logFile">logFile</a></code>) as that will contain the full error stack trace. Also, if you are really lost, you may use temporary <code>pp.warning</code>-s as a poor man's debugger: you can see if a certain line in the template is reached, also you can print the current values of variables.</p>
+
+
+
+<a name="sect2"></a>
+     <h2>Speeding up processing when you have many files</h2>
+
+<p>Some tricks:</p>
+<ul>
+  <li>Try to use <code><a href="settings.html#key_skipUnchanged">skipUnchanged</a></code> setting. For most applications you can safely use it with the <code>static</code> value, and it speeds up things a lot if you have many images or other static files.
+  
+  <li>Try to set the <code><a href="settings.html#key_quiet">quiet</a></code> setting to <code>true</code> or <code>reallyQuiet</code>, or set <code><a href="settings.html#key_echoFormat">echoFormat</a></code> to <code>terse</code> for the command-line tool. Surprising enough, some terminals scrolls screen slowly, so FMPP has to wait until it can print the next line to the screen.
+  
+  <li>Process only the files/directories that actually need reprocessing. You don't have to process the whole source root directory; you can select the set of files and directories that you want to process inside the source root, with the <code><a href="settings.html#key_sources">sources</a></code> setting.
+</ul>
+
+
+<a name="sect3"></a>
+     <h2>Avoid too much programming logic in templates</h2>
+<p>FTL (FreeMarker Template Language) is not a general purpose programming language, just a template language. Implementing complex programming logic in it is cumbersome, and defeats the original purpose of templates: to be simple, almost the same as the output. To avoid this, pair BeanShell scripts with the problematic templates, and do the complex calculations in the script file, and then pass the results to the template for displaying. BeanShell is good in calculating data (and in whatever complex algorithms), FTL is good in displaying data. So you use the adequate languages for the subtasks. This can be implemented with the <code><a href="settings.html#key_localData">localData</a></code> setting and its <code>bsh</code> function.</p>
+
+<a name="sect4"></a>
+     <h2>Showing information about something that will be generated further down</h2>
+
+<p>For example, you have to show a Table of Contents at the top of the page, but the list of headings is not known until the page generation reaches the bottom of the page. In this case, generate the section that contains the headings first, but capture the output in a variable with an assignment directive (as <code>&lt;#assign <em>var</em>><em>...</em>&lt;/#assign></code>). Then print the top of the page, and then the captured output. Check <code><em>&lt;FMPP></em>/docs/examples/capture</code> to see a working example.</p>
+
+
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="reportbug.html">Prev</a></li><li><a class="pager-icon next" href="license.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

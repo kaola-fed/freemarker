@@ -1,0 +1,90 @@
+To build FMPP, you will need JDK (Java Development Kit) and Apache Ant to
+be installed.
+
+
+Building the binary
+-------------------
+
+For reproducible builds, it's recommended to copy build.properties.sample into
+build.properties and edit it.
+
+To build lib/fmpp.jar: `ant`
+To run test suite: `ant test`
+To remove earlier build output: `ant clean`
+
+
+Building the documentation
+--------------------------
+
+Preparation (needed only once):
+1. Ensure that the "For documentation building" section in build.properties
+   is filled properly.
+2. Go to http://nodejs.org/ and install node.js (tried with v0.10.32)
+3. Go to the FMPP project directory and issue `npm install`
+   Possible problems an solutions:
+   - "Error: ENOENT, stat <someDirectoryHere>": create that directory manually,
+     then retry.
+   - If the system doesn't find `npm`: Open a new terminal (command window) so
+     that it pick up the "path" environment variable changes. Adjust it if necessary.
+
+To build the docs: `ant docs`
+The output will be be in `build/docs`!
+
+To re-build the FMPP generated part only: `fmpp -C docs.fmpp`
+To re-build the Gulp generated part only: `ant docs.gulp`
+
+
+Making a release
+----------------
+
+1. Release to sourcefoge.net:
+
+* Ensure that the version numbers in src/main/java/fmpp/version.properties are
+  up to date.
+
+* Ensure that all properties in build.properties are set correctly.
+  (Copy build.properties.sample if you don't have build.properties yet.)
+
+* Ensure that the proper version of the dependencies are in the lib
+  directory.
+
+* `ant clean test` must pass successfully.
+
+* An extracted FreeMarker release of the proper version must be
+  at the location deduced from the build.properties (see
+  freemarkerDocs.path in build.xml), as that's where we will
+  copy the FreeMarker documentation from.
+
+* Ensure that you haven't polluted the FMPP directories with some
+  temporary files (your ad-hoc tests, backups, etc.). Note that typical
+  noise like *.bak, *.~*, SVN files, etc. should be filtered out
+  automatically by Ant.
+
+* Run "ant clean dist"
+
+* Release the generated tar.gz and zip on sourceforge.net.
+  Check their content before that, of course.
+
+2. Release to to the Maven Central Repository
+  
+* Run `ant maven-dist`.
+
+  Note that unlike sourceforge.net releases, Maven Central Repository
+  releases can't ever be redone, so double check everything.
+
+3. Update the Web site:
+
+* The site generation will use the FMPP version number and also
+  build/dist/fmpp_x.x.x.tar.gz and zip, so be sure that these are
+  there correct. If have just built the release with `ant dist`, then it
+  shouldn't be a problem.
+  
+  Note: The download link will use the download system of sourceforge.net.
+  That is, you do not upload the tar.gz and zip to the WWW site, but do an
+  FMPP release on SourceForge with the correct version number.
+
+* Run `ant site`
+
+* Upload the generated site.
+
+4. Make the announcements where appropriate

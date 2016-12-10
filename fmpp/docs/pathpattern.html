@@ -1,0 +1,84 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, Path Pattern">
+<title>Path Patterns - FMPP</title>
+<meta property="og:title" content="Path Patterns - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/pathpattern.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/pathpattern.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/tdd.html">
+<link rel="next" href="http://fmpp.sourceforge.net/ftl.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="languages.html" itemprop="url"><span itemprop="title">Languages (formats) used</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="pathpattern.html" itemprop="url"><span itemprop="title">Path Patterns</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="tdd.html">Prev</a></li><li><a class="pager-icon next" href="ftl.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">Path Patterns</h1>
+
+          <div class="content-inner">
+            <div class="page-content content-right">
+              
+<p>Probably you have already used commands like <code>dir *.txt</code> (or <code>ls *.txt</code> on UN*X). This lists all files in the current directory where the name of the file ends with <code>.txt</code>. The <code>*.txt</code> stuff is called a path pattern.</p>
+
+<p>With FMPP you also use path patterns to select certain files, say, in the <code><a href="settings.html#key_modes">modes</a></code> setting, to tell FMPP which files to copy as is, and which files to execute as template. A path pattern looks like a path, but it can contain some special parts:</p>
+<ul>
+  <li><code>*</code>: matches zero or more characers, except slash (<code>/</code>). For example <code>a*c</code> matches to <code>abc</code>, <code>axyzc</code> and <code>ac</code>, but not <code>a/c</code>.
+  <li><code>?</code>: matches exactly one characer, except slash (<code>/</code>). For example <code>a?c</code> matches to <code>abc</code>, but not <code>axyzc</code> or <code>ac</code> or <code>a/c</code>.
+  <li><code>**</code>: This matches zero or more directories of the path. For example <code>a/**/c</code> matches to <code>a/b/c</code>, <code>a/b/xyz/c</code> and <code>a/c</code>. Another example: <code>**/*.gif</code> matches to <code>foo.gif</code>, <code>a/foo.gif</code> and , <code>a/b/foo.gif</code>. Also, if you use <code>**</code> at the end of the pattern, then it match with all file names as well. Thus, <code>foo/**</code> will match all files inside <code>foo</code>, such as <code>foo/bar.txt</code> or <code>foo/sub/bar.txt</code>. Furthermore, if the pattern ends with <code>/</code>, then it is considered as shorthand for <code>/**</code>, so <code>foo/</code> is the same as <code>foo/**</code>. 
+</ul>
+
+<p>If your operating system use something else instead of <code>/</code> (as <code>\</code> on Windows), FMPP will internally convert the native paths to UN*X format, so do not worry about this.  Just use slash in the patterns. (Or, in fact, you can even use the native "slash" in patterns, just it is not a good practice in general.)</p>
+
+<p>Note that pattern as <code>*.gif</code> will match only the GIF files in the current directory. If you want to match all GIF files of the subdirectories (and sub-subdirectories, etc.) as well, use <code>**/*.gif</code>.
+
+<p>The meaning of "current directory" in FMPP depends on the concrete situation where you use the path. In most cases where you will use path patterns (as with the <code><a href="settings.html#key_modes">modes</a></code> setting) it will be the source root directory. Also, the meaning of "root directory" is depends on where you use the path. That is, absolute path <code>/foo.txt</code> maybe means <code>foo.txt</code> in the source root directory (this is the typical), or in the output root directory, or in the real root directory of the file system, etc.</p>
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="tdd.html">Prev</a></li><li><a class="pager-icon next" href="ftl.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

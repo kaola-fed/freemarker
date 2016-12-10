@@ -1,0 +1,174 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, configuration file">
+<title>Configuration Files - FMPP</title>
+<meta property="og:title" content="Configuration Files - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/configfile.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/configfile.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/settings.html">
+<link rel="next" href="http://fmpp.sourceforge.net/pphash.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="details.html" itemprop="url"><span itemprop="title">Core Details</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="configfile.html" itemprop="url"><span itemprop="title">Configuration Files</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="settings.html">Prev</a></li><li><a class="pager-icon next" href="pphash.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">Configuration Files</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#sect1">Basics</a></li>
+    <li><a href="#configurationBase">The configuration base</a></li>
+    <li><a href="#inheritance">Configuration inheritance</a></li>
+    <li><a href="#sect4">Configuration files with TDD syntax</a></li>
+    <li><a href="#sect5">Configuration files with &quot;properties&quot; syntax</a></li>
+  </ul>
+  <div class="clear"></div>
+              </div>
+            <div class="page-content content-right">
+              
+<a name="sect1"></a>
+     <h2>Basics</h2>
+
+<p>Configuration files are text files that store setting values. They can use two syntaxes (two formats):</p>
+<ul>
+  <li><a href="tdd.html">TDD</a>: This is the preferred format.</li>
+  <li><a href="properties.html">Java "Properties"</a>: This is mostly supported for backward compatibility with the FMPP 0.8.X series.</li>
+</ul>
+
+<p>The syntax that a configuration file uses is detected with the file extension. For "properties" configuration files, the file extension must be <code>cfg</code> or <code>properties</code>. For TDD files, the preferred file extension is <code>fmpp</code>, but it can be anything but <code>cfg</code> and <code>properties</code>.</p>
+
+<p>When you want to load a configuration file, you specify the path of the file for the front-end somehow (read <a href="frontends.html">the documentation of the front-end</a>). But if the configuration file name is one of these standard names:</p>
+<ul>
+  <li><code>config.fmpp</code></li>
+  <li><code>fmpp.cfg</code></li>
+</ul>
+
+<p>then it is enough to give the path of the directory that contains the configuration file. (<code>config.fmpp</code> has higher priority if both file is present.)</p>
+
+
+
+<a name="configurationBase"></a>
+     <h2>The configuration base</h2>
+
+<p>The configuration base is the directory used as base for resolving relative <a href="overview.html#realPath">real paths</a> in setting values. Be default, the configuration base is the directory that contains the configuration file. For example, if <code>/home/me/project1/config.fmpp</code> contains <code>sourceRoot:&nbsp;src</code>, then the <code><a href="settings.html#key_sourceRoot">sourceRoot</a></code> will be <code>/home/me/project1/src</code>.</p>
+
+<p>The configuration base can be changed with the <code><a href="settings.html#key_configurationBase">configurationBase</a></code> meta setting. For example, if in the previous example <code>config.fmpp</code> contains <code>configurationBase:&nbsp;../project2</code>, then the <code><a href="settings.html#key_sourceRoot">sourceRoot</a></code> will be <code>/home/me/project2/src</code>. The <code><a href="settings.html#key_configurationBase">configurationBase</a></code> setting applies only for the setting values specified in the same file it is stored in.</p>
+
+<p>Not all relative paths in settings are resolved relatively to the <code><a href="settings.html#key_configurationBase">configurationBase</a></code>. Relative <a href="overview.html#virtualPath">virtual paths</a>, for example, are relative to the <code><a href="settings.html#key_sourceRoot">sourceRoot</a></code> or <code><a href="settings.html#key_outputRoot">outputRoot</a></code>. Relative paths of data files passed to data loaders are relative to the <code><a href="settings.html#key_dataRoot">dataRoot</a></code>.</p>
+
+<p>If the setting value comes not from a configuration file (such as from a command-line argument), then the front-end specifies what the configuration base is for that setting value (see the documentation of the front-end).</p>
+
+
+
+<a name="inheritance"></a>
+     <h2>Configuration inheritance</h2>
+
+<p>A configuration file can inherit setting values from another configuration file, with the <code><a href="settings.html#key_inheritConfiguration">inheritConfiguration</a></code> meta setting. When the FMPP core loads a configuration file, and it finds <code><a href="settings.html#key_inheritConfiguration">inheritConfiguration</a></code> setting in it, it will automatically load that configuration file too, and then merge its settings with the settings loaded from the inheriting (the first) configuration file. The settings stored in the inheriting configuration file have higher priority than the settings stored in the inherited configuration file. Thus, if both file contains the same setting, then the value stored in the inheriting file will be used, or it will be merged with the other value if the setting supports merging.</p>
+
+<p>The above description is applicable recursively. That is, an inherited configuration file can inherit another configuration file, and that can inherit yet another configuration file, and so on.</p>
+
+<p><a href="settings.html#metaSettings">Meta settings</a> (as <code><a href="settings.html#key_inheritConfiguration">inheritConfiguration</a></code> and <code><a href="settings.html#key_configurationBase">configurationBase</a></code>) are never inherited. They influence only the file where they are actually present.</p>
+
+<p>A possible usage of configuration inheritance is to customize a common configuration file. See: <code><em>&lt;FMPP></em>/docs/examples/inherit_config</code>.</p>
+
+
+
+<a name="sect4"></a>
+     <h2>Configuration files with TDD syntax</h2>
+
+<p>These files start in TDD hash mode. For example:</p>
+
+<pre>sourceRoot: src
+outputRoot: out
+data: {tdd(data/style.tdd), birds:csv(data/birds.csv)}
+removeExtensions: [ftl, t2]
+datetimeFormat: &quot;MMM d, yyyy hh:mm a zzz&quot;
+caseSensitive</pre>
+<p>According the TDD syntax, values of type sequence (as <code><a href="settings.html#key_removeExtensions">removeExtensions</a></code>) was put into square brackets. However, for sequence settings, if the sequence would contain exactly 1 element, then you can just give that element directly:</p>
+
+<pre>removeExtensions: ftl</pre>
+<p>and the value will be automatically converted to a sequence that contains the a single string <code>ftl</code>, as it is known that <code><a href="settings.html#key_removeExtensions">removeExtensions</a></code> must be a sequence. This is a feature of the setting handling mechanism, not TDD, so don't try to use this trick elsewhere.</p>
+
+<p>TDD configuration files always use ISO-8859-1 encoding, if there is no other encoding suggested in the file with <a href="tdd.html#encoding">TDD's encoding comment</a>.</p>
+
+<p>For more information about TDD, please read <a href="tdd.html">the chapter about TDD</a>.</p>
+
+
+
+<a name="sect5"></a>
+     <h2>Configuration files with &quot;properties&quot; syntax</h2>
+
+<p><strong>Attention:</strong> "properties" configuration files must use <code>cfg</code> or <code>properties</code> file extension.</p>
+
+<p>This is the previous example configuration file with "properties" format:</p>
+
+<pre>sourceRoot = src
+outputRoot = out
+data = tdd(data/style.tdd), birds:csv(data/birds.csv)
+removeExtensions = ftl, t2
+datetimeFormat = MMM d, yyyy hh:mm a zzz
+caseSensitive</pre>
+<p>The differences to TDD configuration files are:</p>
+<ul>
+  <li>It uses <a href="properties.html">"properties" syntax</a>...</li>
+  <li>The values do not use TDD syntax, except for composite types as hashes and sequences. For example, the value of <code><a href="settings.html#key_datetimeFormat">datetimeFormat</a></code> is not quoted (in TDD it was, as the string contains spaces and coma), it is just entered directly.</li>
+  <li>The <code>{</code> and <code>}</code> for the <code><a href="settings.html#key_data">data</a></code> hash and the <code>[</code> and <code>]</code> for the <code><a href="settings.html#key_removeExtensions">removeExtensions</a></code> sequence is omitted. This is because the value of a hash setting is parsed as hash mode TDD, and the value of a sequence setting is parsed as sequence mode TDD, so the brackets are implied.</li>
+  <li>For boolean settings, empty-string is considered as <code>true</code> (see the line that sets <code><a href="settings.html#key_caseSensitive">caseSensitive</a></code>).</li>
+  <li>Setting names can be written with lower case dashed form (as <code>output-root</code>) instead of mixed case (as <code><a href="settings.html#key_outputRoot">outputRoot</a></code>). This is for backward compatibility with FMPP 0.8.X, where configuration files were use to store options to the command-line tool. The two forms can be used mixed in the same configuration file.</li>
+</ul>
+
+<p>Otherwise "properties" configuration files work in the same way as TDD configuration files. For example, they can inherit an other configuration file. It is not a problem if a "properties" configuration file inherits TDD configuration file or the opposite.</p>
+
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="settings.html">Prev</a></li><li><a class="pager-icon next" href="pphash.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

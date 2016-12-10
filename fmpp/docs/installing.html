@@ -1,0 +1,163 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, installing, install, setup">
+<title>Installing - FMPP</title>
+<meta property="og:title" content="Installing - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/installing.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/installing.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/manual.html">
+<link rel="next" href="http://fmpp.sourceforge.net/basics.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="installing.html" itemprop="url"><span itemprop="title">Installing</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="manual.html">Prev</a></li><li><a class="pager-icon next" href="basics.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">Installing</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#sect1">Warning!</a></li>
+    <li><a href="#sect2">Pre-requirements</a></li>
+    <li><a href="#sect3">Extracting</a></li>
+    <li><a href="#commandLineTool">Setup the command-line tool</a></li>
+    <li><a href="#sect8">Setup the Ant task</a></li>
+    <li><a href="#sect9">Installing optional parts and custom extensions</a></li>
+    <li><a href="#updatingFreeMarker">Updating FreeMarker</a></li>
+  </ul>
+  <div class="clear"></div>
+              </div>
+            <div class="page-content content-right">
+              
+<a name="sect1"></a>
+     <h2>Warning!</h2>
+<p>Please understand that FMPP, as a bulk file processor, may generates high amount of output files, and <strong>overwrites all files</strong> with the same names as the names of output files without warning. It's a practical decision comes from the usage pattern of the tool. So watch where will the output files go.</p>
+
+<p>Also note that, according <a href="license.html">the license</a>, the author does not take responsibly if the usage of FMPP causes harm for you somehow.</p>
+
+<a name="sect2"></a>
+     <h2>Pre-requirements</h2>
+<ul>
+  <li>Java must be installed on your machine (version 1.4 or later). Note that Java is available for free, and on various platforms (Windows, OS X, "Linux", etc.), so FMPP works on many platforms.
+  <li>If you want to use the FMPP Ant task, you need Ant 1.5.1 or later. If you don't know what's Ant then don't worry, you will not need it.
+</ul>
+
+<a name="sect3"></a>
+     <h2>Extracting</h2>
+<p>Extract the downloaded archive file (<code>fmpp_<em>X</em>.<em>X</em>.<em>X</em>.tar.gz</code> or <code>fmpp_<em>X</em>.<em>X</em>.<em>X</em>.zip</code>) into the directory where you prefer to store FMPP. For Windows users it is typically <code>C:\fmpp</code> or <code>C:\Program Files\fmpp</code>, for UN*X users it is typically <code>~/opt/fmpp</code> or <code>/opt/fmpp</code> or <code>/usr/lib/fmpp</code> (where <code>fmpp</code> is the extracted <code>fmpp_<em>X</em>.<em>X</em>.<em>X</em></code> directory after renaming). From now on I will refer to this directory as <code><em>&lt;FMPP_HOME></em></code>.</p>
+
+<p>
+
+
+<a name="commandLineTool"></a>
+     <h2>Setup the command-line tool</h2>
+
+<a name="sect5"></a>
+     <h3>On Windows</h3>
+<p>The steps are:</p>
+<ol>
+  <li>Extract the downloaded archive file (<code>fmpp_0.9.15.tar.gz</code> or <code>fmpp_0.9.15.zip</code>) into <code>C:\Program Files\fmpp</code> (note that "Program Files" may be shown in a localized form, like "Programme") or <code>C:\fmpp</code> or wherever you prefer to. From now on I will refer to this directory as <code><em>&lt;FMPP_HOME></em></code></li>
+  <li>For convenience, add <code><em>&lt;FMPP_HOME></em>/bin</code> to the <code>PATH</code> environment variable. (How? Google: set path windows)</li>
+  <li>Check if <code>fmpp.bat</code> isn't present in <code>C:\Windows</code> (or in another directory in the <code>PATH</code>) from an earlier installation. Delete it if it does.</li>
+  <li>Check if the <code>JAVA_HOME</code> environment variable is set correctly (should point to your Java installation directory, not its <code>bin</code> subdirectory), or else that the intended version of the <code>java</code> executable is in the <code>PATH</code>.</li>
+  <li>To check that everything works, open a command line window and issue: <code>fmpp --version</code></li>
+</ol>
+
+<p>Note: Because of the limitations of <code>.bat</code> files, you may get error messages as "The input line is too long". To solve this, install FMPP in a more "shallow" directory, so that the path to the FMPP related files will be shorter.</p>
+
+
+<a name="sect6"></a>
+     <h3>On UN*X (Linux, FreeBSD, OS X, etc.)</h3>
+<p>The steps are:</p>
+<ol>
+  <li>Extract the downloaded archive file (<code>fmpp_0.9.15.tar.gz</code> or <code>fmpp_0.9.15.zip</code>) into the <code>/usr/lib/fmpp</code> or  <code>/opt/fmpp</code> directory (conventions vary by distribution), or wherever you prefer to. From now on I will refer to this directory as <code><em>&lt;FMPP_HOME></em></code>.
+  </li>
+  <li>For convenience, create a soft link somewhere in the <code>PATH</code>, like <code>sudo ln -s <em>&lt;FMPP_HOME></em>/bin/fmpp /usr/bin/fmpp</code>.</li>
+  <li>Issue <code>which fmpp</code> to see if it's not shadowed by an earlier installation elsewhere.</li>
+  <li>Check if the intended version of the <code>java</code> executable is in the <code>PATH</code>, or else that the <code>JAVA_HOME</code> environment variable is set correctly (should point to your Java installation directory, not its <code>bin</code> subdirectory).</li>
+  <li>To check that everything works, open a command line window and issue: <code>fmpp --version</code></li>
+</ol>
+
+<a name="sect7"></a>
+     <h3>Notes</h3>
+<ul>
+  <li>If there's a <code>FMPP_HOME</code> environment variable, it <code><em>&lt;FMPP_HOME></em>\bin\fmpp.bat</code> and <code><em>&lt;FMPP_HOME></em>\bin\fmpp</code> will use that directory instead of its own grandparent directory.</li>
+  <li>You can run FMPP without the provided shell scripts directly with the <code>java</code> command, like <code>java -jar <em>&lt;FMPP_HOME></em>/lib/fmpp.jar</code>. (You can also put all required jar-s and class directories into the <code>CLASSPATH</code> and then issue <code>java fmpp.tools.CommandLine</code>.) Note though that you will lose console width detection with these approaches.</li>
+  <li>You can move the jars into the <code>lib</code> subdirectory of Ant (if you want to use the Ant task anyway). If you do this, the command line tool need Ant be installed on a "standard" location (like <code>C:\Program Files\ant</code>), or <code>ANT_HOME</code> must be correctly set.</li>
+</ul>
+  
+
+
+<a name="sect8"></a>
+     <h2>Setup the Ant task</h2>
+
+<p>If you want to use FMPP as Ant task, copy the required jar files from <code><em>&lt;FMPP_HOME></em>/lib</code> into the <code>lib</code> directory of your Ant installation (issuing <code>ant&nbsp;install</code> from <code><em>&lt;FMPP_HOME></em></code> will do this for you), or ensure that the jars are in the <code>CLASSPATH</code> environment variable. Then, whenever you need the FMPP task in a project, add this line to your <code>build.xml</code>:</p>
+
+<pre>&lt;taskdef name=&quot;fmpp&quot; classname=&quot;fmpp.tools.AntTask&quot;/&gt;</pre>
+
+<p>And then you can use the <code>&lt;fmpp <em>...</em>></code> task.
+
+
+<a name="sect9"></a>
+     <h2>Installing optional parts and custom extensions</h2>
+
+<p>For the command-line tool, simply drop the jar file that contains the required classes into the <code><em>&lt;FMPP_HOME></em>/lib</code> directory (or, into the Ant <code>lib</code> directory, if you store <code>fmpp.jar</code> there only). For the Ant task, either ensure that the required jars are in the <code>CLASSPATH</code>, or drop the jars into the <code>lib</code> directory of your Ant installation.</p>
+
+
+<a name="updatingFreeMarker"></a>
+     <h2>Updating FreeMarker</h2>
+
+<p>You can replace the included FreeMarker version with a later version. <a href="http://freemarker.org/freemarkerdownload.html">Download the latest backward compatible FreeMarker release</a>, and overwrite <code><em>&lt;FMPP_HOME></em>/lib/freemarker.jar</code> with the <code>freemarker.jar</code> of the FreeMarker release. (Of course, if you are using the FMPP Ant task, you may need to replace the <code>freemarker.jar</code> in the <code>lib</code> directory of the Ant installation too.)</p>
+
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="manual.html">Prev</a></li><li><a class="pager-icon next" href="basics.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

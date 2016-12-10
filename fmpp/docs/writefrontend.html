@@ -1,0 +1,136 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, front-end, front-ends, custom, write, embed">
+<title>Writing New Front-ends - FMPP</title>
+<meta property="og:title" content="Writing New Front-ends - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/writefrontend.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/writefrontend.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/ant.html">
+<link rel="next" href="http://fmpp.sourceforge.net/languages.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="frontends.html" itemprop="url"><span itemprop="title">Front-ends</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="writefrontend.html" itemprop="url"><span itemprop="title">Writing New Front-ends</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="ant.html">Prev</a></li><li><a class="pager-icon next" href="languages.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">Writing New Front-ends</h1>
+
+          <div class="content-inner">
+            <div class="page-content content-right">
+              
+<p><em><strong>Note:</strong> I'm talking about writing front-ends here, but of course the same technique can be used to embed FMPP into your application that you couldn't call a front-end.</em></p>
+
+<p>The low-level method is to create an <code>fmpp.Engine</code> object, and then set it up with its methods, and then call its <code>process(<em>...</em>)</code> method to execute a processing session. The API of this object reflects the internal architecture of FMPP. Higher-level concepts as <a href="settings.html">settings</a> or <a href="configfile.html">configuration files</a> doesn't exist on this level. So I don't recommend you to work with <code>fmpp.Engine</code> objects directly.</p>
+
+<p>The high-level method is to create an <code>fmpp.setting.Settings</code> object, and fill it with the setting values. This object can load configuration files, and its API uses a higher level approach in general. This is the object where <a href="settings.html">FMPP settings</a> are implemented. After you set the setting values (and also you have added progress listeners and engine attributes you wanted), invoke <code>Settings.execute()</code> to execute a processing session.</p>
+
+    <p align=center>
+<img src="figures/fmpparch.png" alt="FMPP architecture" width="527" height="252"><br>
+    <br><strong>Figure:</strong> <em>  The components involved in typical FMPP usage. Red arrow shows direct method invocation (or constructor invocation, or static field access) between the components. The arrow points from the caller towards the called. Dashed lines indicate unimportant or occasional access.
+</em>
+    </p>
+
+<p>Note that some settings are not implemented by <code>Settings</code> (as <code><a href="settings.html#key_echoFormat">echoFormat</a></code>, <code><a href="settings.html#key_logFile">logFile</a></code>, ...etc.), and should be implemented by the front-end.</p>
+
+<p>For more information, please see <a href="api/index.html">the API documentation</a>. Also, you can look into the source code of <code>fmpp.tools.CommandLine</code> and <code>fmpp.tools.AntTask</code>.</p>
+
+<p>Example: Below is the source code of a very simple command-line front-end. It accepts one argument, the name of the configuration file to use. If that's omitted, it tries to load a configuration file from the current directory.</p>
+
+<pre>package fmpp.testsuite;
+
+import java.io.File;
+
+import fmpp.ProcessingException;
+import fmpp.progresslisteners.ConsoleProgressListener;
+import fmpp.setting.SettingException;
+import fmpp.setting.Settings;
+import fmpp.util.MiscUtil;
+import freemarker.log.Logger;
+
+public class AdhocFrontEnd {
+    public static void main(String[] args) {
+        // Parse command-line args
+        File cfgFile = null;
+        if (args.length == 0) {
+            cfgFile = new File(&quot;.&quot;); // load the cfg. of the the current dir.
+        } else if (args.length == 1) {
+            cfgFile = new File(args[0]);
+        } else {
+            System.err.println(
+                    &quot;Usage: java AdhocFrontEnd [configuration-file]&quot;);
+            System.exit(-1);
+        }
+
+        // Shut FreeMarker logger up
+        try {
+            Logger.selectLoggerLibrary(Logger.LIBRARY_NONE);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(
+                    &quot;Failed to disable FreeMarker logging.&quot;);
+        }
+
+        // Now comes the meat...
+        try {
+            Settings ss = new Settings(new File(&quot;.&quot;));
+            ss.load(cfgFile);
+            ss.addProgressListener(new ConsoleProgressListener());
+            ss.execute();
+            System.out.println(&quot;Done.&quot;);
+        } catch (SettingException e) {
+            System.err.println(MiscUtil.causeMessages(e));
+            System.exit(-2);
+        } catch (ProcessingException e) {
+            System.err.println(MiscUtil.causeMessages(e));
+            System.exit(-3);
+        }
+    }
+}</pre>
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="ant.html">Prev</a></li><li><a class="pager-icon next" href="languages.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:29Z" title="November 4, 2014 11:05:29 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

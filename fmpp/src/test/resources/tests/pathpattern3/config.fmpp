@@ -1,0 +1,11 @@
+sourceRoot: src
+outputRoot: out
+borders: [
+    header("*.txt_", **/*.txt)
+    layer()
+    header("foo.*_", foo.*)
+    layer()
+    header("Bar.*_", Bar.*)
+    layer()
+    header("SUB/*_", SUB/*)
+]

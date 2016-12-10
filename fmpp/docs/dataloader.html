@@ -1,0 +1,769 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, data loader">
+<title>Data Loaders - FMPP</title>
+<meta property="og:title" content="Data Loaders - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/dataloader.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/dataloader.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/pphash.html">
+<link rel="next" href="http://fmpp.sourceforge.net/frontends.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="details.html" itemprop="url"><span itemprop="title">Core Details</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="dataloader.html" itemprop="url"><span itemprop="title">Data Loaders</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="pphash.html">Prev</a></li><li><a class="pager-icon next" href="frontends.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">Data Loaders</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#sect1">Introduction</a></li>
+    <li><a href="#sect2">Predefined data loaders</a></li>
+    <li><a href="#sect20">Custom data loaders</a></li>
+  </ul>
+  <div class="clear"></div>
+                  <p class="toc-header alphabetical-index">Alphabetical index of keys:</p>
+                  <ul class="table-of-contents">
+                      <li><a href="#key_antProject">antProject</a>
+                      <li><a href="#key_antProperites">antProperites</a>
+                      <li><a href="#key_antProperty">antProperty</a>
+                      <li><a href="#key_antTask">antTask</a>
+                      <li><a href="#key_csv">csv</a>
+                      <li><a href="#key_eval">eval</a>
+                      <li><a href="#key_get">get</a>
+                      <li><a href="#key_htmlUtils">htmlUtils</a>
+                      <li><a href="#key_json">json</a>
+                      <li><a href="#key_now">now</a>
+                      <li><a href="#key_properties">properties</a>
+                      <li><a href="#key_slicedText">slicedText</a>
+                      <li><a href="#key_tdd">tdd</a>
+                      <li><a href="#key_tddSequence">tddSequence</a>
+                      <li><a href="#key_text">text</a>
+                      <li><a href="#key_xhtmlUtils">xhtmlUtils</a>
+                      <li><a href="#key_xml">xml</a>
+                  </ul>
+              </div>
+            <div class="page-content content-right">
+              
+<a name="sect1"></a>
+     <h2>Introduction</h2>
+
+<p>Data loaders are Java objects that load data from certain type of data source, such as a CSV file or MySQL data-base, and expose the data as variables for the templates. For example, a data loader was invoked in the <a href="qtour.html">Quick Tour</a> when you have written <code>csv(data/birds.csv)</code>.</p>
+
+<p>Data loaders are typically invoked:
+  <ul>
+    <li>... by <a href="tdd.html">TDD</a> functions used in the <code><a href="settings.html#key_data">data</a></code> setting
+    <li>... by TDD functions used in the <code><a href="settings.html#key_localData">localData</a></code> setting
+    <li>... by the <a href="pphash.html#key_loadData">pp.loadData</a> method used in FreeMarker templates
+  </ul>
+ 
+
+
+<a name="sect2"></a>
+     <h2>Predefined data loaders</h2>
+
+<p>Data loaders that load data directly from files will want you to give the path of the file as parameter. There you have to give <a href="overview.html#realPath">real path</a>. If you give a relative path, then it will be interpreted relatively to the <code><a href="settings.html#key_dataRoot">dataRoot</a></code>, which defaults to the <code><a href="settings.html#key_sourceRoot">sourceRoot</a></code> if you didn't specified it. The data files can be outside the <code><a href="settings.html#key_dataRoot">dataRoot</a></code> directory; it is used only as a base directory.</p>
+
+<p><em><strong>Note:</strong> I have not written a database/SQL/JDBC data loader yet... Of coruse, you can write a such data loader yourself. Contributions are welcome!</em></p>
+
+<a name="key_csv"></a>
+<a name="sect3"></a>
+     <h3>csv</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>path</strong>: string.
+          The path of the CSV file.
+        <li><strong>options</strong>: hash, optional.
+          The list of valid options:
+    <ul>
+      <li><code>separator</code>: The character that separates the columns. Defaults to <code>";"</code>. It can be any character. It also understands the string <code>"tab"</code>, which means that the separtor character will be the tab character.</li>
+      
+      <li><code>encoding</code>: The charset used for reading CSV file. Defaults to the value of the <code><a href="settings.html#key_sourceEncoding">sourceEncoding</a></code> setting.</li>
+
+      <li><code>trimCells</code>: Specifies if all cells will be trimmed (boolean). Trimming means the removal of all leading and trailing white-space. Defaults to no trimming (in which case only header cells are trimmed). <strong>For tables directly entered by humans (like in Excel) it is strongly recommended to turn this on.</strong>
+      
+      <li><code>decimalSeparator</code>: Alternative character used for the decimal dot in the CSV files. The dot will be always assumed as decimal separator, except if <code>groupingSeparator</code> is set to dot. Note that this option has significance only if you use <code>:n</code> (or <code>:number</code>) in the headers, so the data loader has to interpret the text as numbers.</li>
+      
+      <li><code>groupingSeparator</code>: The character used for grouping symbol in the CSV file (as the coma in $20,000,000). Be default, grouping is not allowed. Note that this option has significance only if you use <code>:n</code> (or <code>:number</code>) in the headers.</li>
+      
+      <li><code>altTrue</code>: Alternative word interpreted as boolean true. Note that this option has significance only if you use <code>:b</code> (or <code>:boolean</code>) in the headers, so the data loader has to parse the text as booleans.</li>
+      
+      <li><code>altFalse</code>: Alternative word interpreted as boolean false. Note that this option has significance only if you use <code>:b</code> (or <code>:boolean</code>) in the headers.</li>
+      
+      <li><code>emptyValue</code>: A string or a sequence of strings which define the values that are equal to an empty cell. For example, if this is <code>["-", "N/A"]</code>, then cells whose content is a minus sign or N/A will look like they were left empty. The comparison is case-sensitive. The header row is not affected by this option.
+      
+      <li><code>dateFormat</code>: The <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">pattern</a> used  for parsing date-only values. Note that this option has significance only if you use <code>:d</code> (or <code>:date</code>) in the headers.</li> 
+      
+      <li><code>timeFormat</code>: The <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">pattern</a> used  for parsing time-only values. Note that this option has significance only if you use <code>:t</code> (or <code>:time</code>) in the headers.</li> 
+      
+      <li><code>dateTimeFormat</code>: The <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">pattern</a> used for parsing date-time values. Note that this option has significance only if you use <code>:dt</code> (or <code>:dateTime</code>) in the headers.</li> 
+
+      <li><code>normalizeHeaders</code>: Specifies if the header names coming from the file will be normalized
+      or should be left as is (boolean). Normalization means:
+      <ol>
+        <li>Remove the part between the first <code>"("</code> and last
+            <code>")"</code>, before the header is parsed for column type
+            identifier (like <code>":n"</code>; column type identifiers are discussed somewhere later).
+        <li>After the type identifier was extracted and removed, the cell value is trimmed. (Note that this happens even if this option is off.)
+        <li>Then it's converted to lower case.
+        <li>Then the following characters are replaced with <code>"_"</code>:
+            space, comma, semicolon, colon. <li>Then all <code>"__"</code>
+            and <code>"___"</code> and so on is replaced with a single
+            <code>"_"</code>.
+      </ol>
+      For example, <code>"Price, old (category: A, B, F): n"</code> will be normailzed to <code>"price_old"</code>, and the column type identifier will be <code>n</code>.
+      </li>
+
+      <li><code>headers</code>: Use this if the CSV file has no header row, that is, if the first row doesn't store column names. The option value must be a sequence of strings. Each item in the sequence corresponds to a cell value of the imaginary (actually missing) header row, and will be parsed on the same way as a real header row would be.</li>
+      
+      <li><code>replaceHeaders</code>: Use this if the CSV file does have a header row, but you don't like/trust the content of it. The rules are the same as with the <code>header</code> option, except of course that it replaces the existing header row.</li>
+    </ul>
+
+      </ol>
+      
+    
+  <p>Examples (with TDD syntax):</p>
+  <ul>
+    <li><code>csv(data/foo.txt)</code>
+    <li><code>csv(data/foo.txt, {separator:tab, encoding:UTF-8})</code>
+    <li><code>csv(data/foo.txt, {separator:',', encoding:ISO-8859-2, headers:[name, size:n, lastModified:dt]})</code>
+  </ul>
+  
+  <p>The <code>csv</code> data loader parses CSV (Column Separated Values) file, or other file of similar formats (as tab divided text, comma separated values), and returns it as a sequence. The sequence is the list of the table rows, and each row is a hash, where you can access the cells with the column name. The column names (headers) are stored in the first row of the CSV file (unless you use the <code>headers</code> option), so this row is not part of the result sequence.</p>
+
+  <p>For example, if this is the CSV file:</p>
+  
+<pre>name;color;price
+rose;red;10
+rose;yellow;15
+tulip;white;6</pre>
+  <p>and you load it into the variable <code>flowers</code>, then you can print it as:</p>
+
+<pre>&lt;table border=1&gt;
+&lt;#list flowers as flower&gt;
+  &lt;tr&gt;&lt;td&gt;${flower.name}&lt;td&gt;${flower.color}&lt;td&gt;${flower.price}
+&lt;/#list&gt;
+&lt;/table&gt;</pre>
+  <p>and the output will be:</p>
+
+<pre>&lt;table border=1&gt;
+  &lt;tr&gt;&lt;td&gt;rose&lt;td&gt;red&lt;td&gt;10
+  &lt;tr&gt;&lt;td&gt;rose&lt;td&gt;yellow&lt;td&gt;15
+  &lt;tr&gt;&lt;td&gt;tulip&lt;td&gt;white&lt;td&gt;6
+&lt;/table&gt;</pre>
+  <p>The rows are not only hashes, but also sequences, so instead of the column name you can use the 0 based column index. Thus the above template could be written like this as well, just it is less readable:</p>
+  
+<pre>&lt;table border=1&gt;
+&lt;#list flowers as flower&gt;
+  &lt;tr&gt;&lt;td&gt;${flower[0]}&lt;td&gt;${flower[1]}&lt;td&gt;${flower[2]}
+&lt;/#list&gt;
+&lt;/table&gt;</pre>
+  <p>and actually then it would be simpler to write:</p>
+
+<pre>&lt;table border=1&gt;
+&lt;#list flowers as flower&gt;
+  &lt;tr&gt;&lt;#list flower as cell&gt;&lt;td&gt;${cell}&lt;/#list&gt;
+&lt;/#list&gt;
+&lt;/table&gt;</pre>  
+  <p>The values (cells) in the CSV file will be always exposed as string variables, unless you specify a different type in the header cells directly. To specify the type, type a colon after the column name, and a type identifier. The type identifier can be: <code>n</code> (or <code>number</code>) or <code>b</code> (or <code>boolean</code>) or <code>d</code> (or <code>date</code>) or <code>t</code> (or <code>time</code>) or <code>dt</code> (or <code>dateTime</code>) or <code>s</code> (or <code>string</code>). For example, if you want to expose the price column as number, and not as string (so you can do arithmetic with it, or use the number formatting facilities), then the CSV file would be:</p>
+
+<pre>name;color;price:n
+rose;red;10
+rose;yellow;15
+tulip;white;6</pre>
+  <p>Numerical values must use dot (<code>.</code>) as decimal separator, and no grouping, unless you change these with the <code>decimalSeparator</code> and/or <code>groupingSeparator</code> options.</p>
+
+  <p>Boolean values must be one of <code>true</code>, <code>yes</code>, <code>y</code>, <code>1</code>, <code>false</code>, <code>no</code>, <code>n</code>, <code>0</code>, or the words defined be the <code>altTrue</code> and <code>altFalse options</code>. Upper- and lower-case letters are not distinguished.</p>
+  
+  <p>Date, time and date-time values use common SQL format with optional time zone, as <code>"2003-06-25"</code>, <code>"22:30:08"</code>, <code>"2003-06-25 10:30:08 PM"</code>, <code>"2003-06-25 10:30:08 PM GMT+02:00"</code>. But if you use option <code>dateFormat</code>, <code>timeFormat</code>, or <code>datetimeFormat</code>, then that format has to be used for dates, times, and date-times respectively. If the time zone is not given in a value, the value of the <code><a href="settings.html#key_timeZone">timeZone</a></code> setting is used.</p>
+
+  <p>The variable returned by  the <code>csv</code> data loader is not only a sequence, but also a hash at the same time, that contains one key: <code>headers</code>. This is a sequence that stores the column names.</p>
+
+<pre>&lt;#list flowers.headers as h&gt;
+- ${h}
+&lt;/#list&gt;</pre>
+  <p>will print:</p>
+
+<pre>- name
+- color
+- price</pre>
+  <p>Note that only the name of the column is returned, not the type identifier stuff (as <code>:n</code>).</p>
+
+
+
+<a name="key_json"></a>
+<a name="sect4"></a>
+     <h3>json</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>path</strong>: string.
+          The path of the JSON file.
+        <li><strong>charset</strong>: string, optional.
+          The charset used for reading the JSON file. Defaults to the <code><a href="settings.html#key_sourceEncoding">sourceEncoding</a></code> setting.
+      </ol>
+      
+  
+  
+  <p>Examples (with TDD syntax):</p>
+  <ul>
+    <li><code>json(data/foo.json)</code>
+    <li><code>json(data/foo.json, UTF-8)</code>
+  </ul>
+  
+  <p>This data loader parses a JSON file. The JSON file must contain a single top-level JSON value of any type, like a JSON array, or a JSON object, or a JSON string, etc. Example file content (this contains a JSON array on the top-level):</p>
+  
+<pre>[
+  {
+    &quot;name&quot;: &quot;Jean Test&quot;,
+    &quot;maidenName&quot;: &quot;Jean Test&quot;,
+    &quot;age&quot;: 20,
+    &quot;skills&quot;: [ &quot;HTML&quot;, &quot;CSS&quot; ],
+    &quot;testResults&quot;: { &quot;a&quot;: 10.5, &quot;b&quot;: 20, &quot;c&quot;: 30 },
+    &quot;decided&quot;: true
+  },
+  {
+    &quot;name&quot;: &quot;José Test&quot;,
+    &quot;maidenName&quot;: null,
+    &quot;age&quot;: 30,
+    &quot;skills&quot;: [ &quot;Ruby&quot;, &quot;C++&quot;, &quot;Cuda&quot; ],
+    &quot;testResults&quot;: { &quot;a&quot;: 20, &quot;b&quot;: 30, &quot;c&quot;: 40 },
+    &quot;decided&quot;: false
+  }
+]</pre>  
+  <p>Assuming you have loaded the above JSON into the <code>applicants</code> variable, you could print the name and age of all applicants, and print their skills in nested listing like this:</p>
+
+<pre>&lt;#list applicants as applicant&gt;
+  ${applicant.name} (age: ${applicant.age})
+  &lt;#list applicant.skills as skill&gt;
+    - ${skill}
+  &lt;/#list&gt;
+&lt;/#list&gt;</pre>  
+  <p>That is, JSON arrays will be FTL (FreeMarker Template Language) sequences, JSON objects will be FTL hashes, JSON strings will be FTL strings, JSON numbers will be FTL numbers, JSON boolean will be FTL boolean. JSON null-s will be FTL undefined variables (Java <code>null</code>-s), so for <code>applicants[1].maindenName</code> FreeMarker would give an undefined variable error, and you need to write something like <code>applicants[1].maindenName!'N/A'</code> instead.</p>
+
+  <p>The loaded JSON will also act as an FTL node tree (and advanced FreeMarker feature), similarly to an XML. This means, among others, that you can get the parent of a value. The parent of a value is its containing array or object:</p>
+
+<pre>&lt;#-- We just pick some skill for the example below: --&gt;
+&lt;#assign skill = applicants[0].skills[0]&gt;
+&lt;#-- Now let&#39;s say we only have the skill variable, and we don&#39;t know
+     how was it get. We can still get whose skill it was: --&gt;
+${skill} is the skill of ${skill?parent?parent.name},
+&lt;#-- skill?parent is the array, the parent of that is the JSON object --&gt;</pre>
+  <p>More details about the node nature:</p>
+  <ul>
+    <li>The <code>?node_type</code> of a value will be the name of the JSON type, like <code>"string"</code>, <code>"array"</code>, <code>"object"</code>, etc.</li>
+    <li>If a value is the right-side of a key-value pair in a JSON object, its <code>?node_name</code> will be the value of the key (like <code>"name"</code>, <code>"age"</code>, etc.). Otherwise, it will be <code>"unnamed"</code> + capital node type, like <code>"unnamedString"</code>.</li>
+    <li>When traversing the tree with <code>&lt;#visit <em>...</em>></code>/<code>&lt;#recurse></code>, or using <code>?children</code>, JSON <code>null</code>-s will appear as existing nodes with <code>?node_type</code> <code>"null"</code> and no FTL type other than node (thus they are unprintable, uncomparable, unlistable, etc.).</li>
+  </ul>
+
+<p>See <a href="freemarker/index.html" rel="nofollow">the FreeMarker Manual</a> for more about nodes and the related directives and built-ins!</p>
+
+
+
+
+<a name="key_text"></a>
+<a name="sect5"></a>
+     <h3>text</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>path</strong>: string.
+          The path of the text file.
+        <li><strong>charset</strong>: string, optional.
+          The charset used for reading text file. Defaults to the <code><a href="settings.html#key_sourceEncoding">sourceEncoding</a></code> setting.
+      </ol>
+      
+  
+  
+  <p>Examples (with TDD syntax):</p>
+  <ul>
+    <li><code>text(C:/autoexec.bat)</code>
+    <li><code>text(C:/autoexec.bat, CP850)</code>
+  </ul>
+  
+  <p>This data loader loads a plain text file, and returns that as a string.</p>
+
+
+<a name="key_slicedText"></a>
+<a name="sect6"></a>
+     <h3>slicedText</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>path</strong>: string.
+          The path of the text file.
+        <li><strong>options</strong>: hash, optional.
+          The list of valid options:
+    <ul>
+      <li><code>separator</code>: The string that slices the text file into items, that is, the string between two adjoining items. It defaults to <code>"\n"</code>, so each line of the text will be an item. Examples: If you want the items to be separated with empty lines, then you should write <code>"\n\n"</code> (this is what is between two items if you imagine it). Of course in this case the items can contain single line-breaks (but not multiple consequent line breaks), not like in the default case. If you want to separate the items with a <code>"---"</code> that is considered as separator only if it's alone in a line (not in the middle of a line) then the separator should be <code>"\n---\n"</code>. If you simply want to separate the items with semicolon then the separator should be <code>";"</code> (in this case you certainly want to use the <code>trim</code> option described below). There is some "magic" involved in the handling of line-breaks: 1.: no mater if you are using UN*X, DOS/Windows or Mac line-breaks in the <code>separator</code> option and in the text file, they will be considered to be equal, 2.: when the text file is searched for a multi-line separator string, those evil invisible extra spaces and tabs at the end of the lines will be tolerated.</li> 
+      <li><code>trim</code>: If it's <code>true</code>, then each item will be trimmed individually, that is, the leading and trailing white space will be removed from them. Defaults to <code>false</code>.</li>
+      <li><code>dropEmptyLastItem</code>: If it's <code>true</code> then the last item will be removed from the result if it's a 0 length string (after trimming, if the <code>trim</code> option is <code>true</code>). Defaults to <code>true</code>, so if the text file ends with a separator or the text file is empty, you will not get a needless empty item.</li>
+      <li><code>encoding</code>: The charset used for reading text file. Defaults to the value of the <code><a href="settings.html#key_sourceEncoding">sourceEncoding</a></code> setting.</li>
+    </ul>
+
+      </ol>
+      
+    
+  <p>Examples (with TDD syntax):</p>
+  <ul>
+    <li><code>slicedText(data/foo.txt)</code></li>
+    <li><code>slicedText(data/foo.txt, {separator:\n---\n, encoding:UTF-8})</code></li>
+    <li><code>slicedText(data/foo.txt, {separator:';', trim})</code></li>
+  </ul>
+  
+  <p>This data loader loads a text file and slices it to items (strings) by cutting out all occurences of the separator string specified with the <code>separator</code> option. The result is a sequence of strings.</p>
+
+  <p>For example, if this is the <code>data/stuff.txt</code> file:</p>
+<pre>This is the first item.
+
+Still the first item...
+
+--8&lt;--
+
+The items are separated with this:
+--8&lt;--
+just don&#39;t forget to surround it with
+empty lines.
+
+--8&lt;--
+
+This is the last item.</pre>
+  <p>and it's loaded in the configuration file like:
+ 
+<pre>data: {
+    stuff: slicedText(data/stuff.txt, {separator:&quot;\n\n--8&lt;--\n\n&quot;})
+}</pre>
+  <p>then the output of this template file</p>
+  
+<pre>&lt;#escape x as x?html&gt;
+
+&lt;#list stuff as i&gt;
+&lt;pre&gt;
+${i}
+&lt;/pre&gt;
+&lt;/#list&gt;
+
+&lt;/#escape&gt;</pre>  
+  <p>will be this:</p>
+
+<pre>
+&lt;pre&gt;
+This is the first item.
+
+Still the first item...
+&lt;/pre&gt;
+&lt;pre&gt;
+The items are separated with this:
+--8&amp;lt;--
+just don&#39;t forget to surround it with
+empty lines.
+&lt;/pre&gt;
+&lt;pre&gt;
+This is the last item.
+&lt;/pre&gt;
+</pre>
+<p>Note the double <code>\n</code>-s in the separator that causes the data loader to treat <code>"–8&lt;--"</code> as separator only if it is surrounded with empty lines.</p>
+
+
+
+<a name="key_tdd"></a>
+<a name="sect7"></a>
+     <h3>tdd</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>path</strong>: string.
+          The path of the TDD file.
+        <li><strong>charset</strong>: string, optional.
+          The charset used for reading TDD file. Defaults to the <code><a href="settings.html#key_sourceEncoding">sourceEncoding</a></code> setting.
+      </ol>
+      
+  
+  
+  <p>Examples (with TDD syntax):</p>
+  <ul>
+    <li><code>tdd(data/foo.tdd)</code>
+    <li><code>tdd(data/foo.tdd, ISO-8859-5)</code>
+  </ul>
+  
+  <p>This data loader parses a <a href="tdd.html">TDD</a> file. The loaded TDD is interpreted in <a href="tdd.html#modes">hash mode</a>, and TDD functions will invoke data loaders, exactly like with the <code><a href="settings.html#key_data">data</a></code> setting.</p>
+  
+  <p>See <code><em>&lt;FMPP></em>/docs/examples/tdd</code> for a concrete example.</p>
+
+
+
+<a name="key_tddSequence"></a>
+<a name="sect8"></a>
+     <h3>tddSequence</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>path</strong>: string.
+          The path of the TDD file.
+        <li><strong>charset</strong>: string, optional.
+          The charset used for reading TDD file. Defaults to the <code><a href="settings.html#key_sourceEncoding">sourceEncoding</a></code> setting.
+      </ol>
+      
+  
+  
+  <p>This is like the <a href="#key_tdd"><code>tdd</code> dataloader</a>, except that it interprets the file as a <a href="tdd.html">TDD</a> sequence (TDD "sequence mode"), rather than as a TDD hash. So the result will be a sequence (a list), not a hash.</p>
+
+
+<a name="key_properties"></a>
+<a name="sect9"></a>
+     <h3>properties</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>path</strong>: string.
+          The path of the "properties" file.
+      </ol>
+      
+  
+  <p>Loads a <a href="properties.html">"properties" file</a>. The result is a hash.</p>
+
+
+
+<a name="key_xml"></a>
+<a name="sect10"></a>
+     <h3>xml</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>path</strong>: string.
+          The path of the XML file.
+        <li><strong>options</strong>: hash, optional.
+          Options. See later...
+      </ol>
+      
+  
+
+  <p><em><strong>Note:</strong> Sometimes XML files are rather source files (as the HTML-s and the JPG in the <a href="qtour.html">Quick Tour</a>) than data files (as <code>data/birds.tdd</code> in the Quick Tour), just you need to invoke a template to render them to their final form (e.g. to HTML pages). If this is the case, you should use <code>renderXml</code> processing mode (<a href="settings.html#key_modes">see here...</a>), not XML data loader. An example that uses this approach is <code><em>&lt;FMPP></em>/docs/examples/xml_rendering</code>.</em></p>
+  
+  <p>Loads an XML file. This uses the built-in XML wrapper of FreeMarker 2.3 and later; please read <a href="freemarker/xgui.html" rel="nofollow">FreeMarker Manual/XML Processing Guide</a> for more information about the usage of the returned variable.</p>
+  
+  <p>Notes:</p>
+  <ul>
+    <li>Comment nodes will be removed by default (see option <code>removeComments</code> below).
+    <li>Processing instruction well be keep by default (see option <code>removePIs</code> below).
+    <li>CDATA sections count as plain text nodes.
+    <li>There are no adjacent text nodes in the node tree; adjacent text nodes will be joined.
+  </ul>
+
+  <p>The example <code><em>&lt;FMPP></em>/docs/examples/xml_try</code> is a good tool to understand this data loader and its options.</p>
+  
+  <p>Options:</p>
+  <ul>
+    <li><code>removeComments</code>: Optional, defaults to <code>true</code>: Specifies if XML comment nodes will be removed from the node tree.
+      
+    <li><code>removePIs</code>: Optional, defaults to <code>false</code>: Specifies if XML processing instruction nodes will be removed from the node tree.
+
+    <li><code>validate</code>: Optional, defaults to the value of the <code><a href="settings.html#key_validateXml">validateXml</a></code> setting: Specifies if the XML file should be validated (checked agains the DTD). If it's true, and the XML is not valid, then the data loading fails. 
+
+    <li><code>namespaceAware</code>: Optional, defaults to <code>true</code>: Specifies if the XML parsing should be XML name-space aware or not. If the parsing is not name-space aware, colons in element and attribute names will not be considered as name-space prefix delimiters, so the "local name" of the node will contain the colon and the name-space prefix before that.
+
+    <li><code>xincludeAware</code>: Optional, defaults to <code>false</code>: Basically, it specifies whether the XML parsing should replace the XInclude-s with the included content. For most practical purposes you should set it to <code>true</code> (but due to backward-compatibility issues it defaults to <code>false</code>). Note that for setting this successfully to <code>true</code> you need at least Java 5.
+    
+    <li><code>xmlns</code>: Optional. This is a hash that maps prefixes to XML name-space URI-s. The prefixes can be used in the other options. This option has no impact outside the XML data loader invocation, so the prefixes will not be available in the templates. The XML name-space for prefixless elements (with other words, the default name-space) is "no name-space" initially, but it can be changed by assigning name-space URI to the reserved prefix <code>D</code> (similar as if you use <code>xmlns="<em>...</em>"</code> in an XML document).   
+    
+    <li><code>index</code>: Adds attributes to element nodes, that can be helpful when later you process the XML with the templates. We say on this, that you index the elements. Well, it's hard to explain... :) Look at the output of example <code><em>&lt;FMPP></em>/docs/examples/xml_try</code>; the <code>id</code> attributes were added by this option, they are not present in the XML file. Also you can easily try other aspects of indexing with that example. The value of this option is a hash that contains the indexing options, or a sequence of hashes if you want to do more indexing successively. The hash accepts these subvariables (sub-options):
+  
+    <ul>
+      <li><code>element</code>: Required. The name of the XML element or elements to index. If this is a string, then it selects a single element only. If this is a sequence, then it must be the sequence of element names that it selects. To use name-space prefixes, see option <code>xmlns</code>.
+  
+      <li><code>attribute</code>: Optional, defaults to <code>id</code>. This is the name of the XML attribute that will be added to the indexed elements (the indexed elements are the elements selected by the sub-option <code>element</code>). If the element has this attribute already, then the original value of the attribute will be kept. To use name-space prefixes, see option <code>xmlns</code>.
+      
+      <li><code>numbering</code>: Optional, defaults to <code>sequential</code>: The rule for the numbering of the indexed elements. The number is used in the attribute values; see option <code>value</code>. This must be one of the following strings:
+      <ul>
+        <li><code>sequential</code>: The number for the first indexed element is 1, for the second indexed element is 2, etc. The element numbering is done in the "document order", that is, in the order in which the first character of the XML representation of each node occurs (after expansion of general entities).
+        <li><code>hierarchical</code>: Similar to sequential numbering, but, for example, if we have an indexed element that got number <code>2</code>, then indexed elements nested into this element will get numbers <code>2_1</code>, <code>2_2</code>, <code>2_3</code>, etc. The indexed elements that are nested into the element numbered as <code>2_1</code>, will get numbers <code>2_1_1</code>, <code>2_1_2</code>, <code>2_1_3</code>, etc. For example, look at the output file names in <code><em>&lt;FMPP></em>/docs/examples/xml_rendering</code>; they are generated with the hierarchical indexing of the <code>part</code> and <code>chapter</code> elements. Or use <code><em>&lt;FMPP></em>/docs/examples/xml_try</code> to try it.
+      </ul>
+      
+      <li><code>value</code>: Optional, defaults to <code>'ppi_%n'</code>: A string that describes the format of index values. All character will go directly into the value, except that <code>%</code> is used for place holders. The valid place holders are:
+      <ul>
+        <li><code>'%n'</code>: This will be replaced with the value generated based on the value of option <code>numbering</code>.
+        <li><code>'%e'</code>: This will be replaced with the name (local, prefixless name) of the element
+        <li><code>'%%'</code>: This will be replaced with a single <code>%</code>.
+      </ul>
+    </ul>
+  </ul>
+
+
+
+<a name="key_eval"></a>
+<a name="sect11"></a>
+     <h3>eval</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>expression</strong>: string.
+          Expression in BeansShell language.
+        <li><strong>variables</strong>: hash, optional.
+          Values that will be visible for the expression as variables.
+      </ol>
+      
+  
+
+ <p>Evaluates a BeanShell expression, or runs a more complex BeanShell script and uses its <code>return</code>-ed value.</p>
+ <p>You can use the predefined variable <code>engine</code> to access the current FMPP engine instance.</p>
+  
+  <p>Examples (with TDD syntax):</p>
+  <ul>
+    <li><code>eval('System.getProperties()')</code>
+    <li><code>eval('fmpp.Engine.getVersionNumber()')</code>
+    <li><code>eval('<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;f = engine.getSourceRoot().getParentFile();<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;if (f == null) {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return new String[]{};<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;} else {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return f.list();<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+            ')</code>
+     <li>In a configuration file:<br>
+         <code>width: 100
+         <br>height: 50
+         <br>area: eval('a * b', {a:get(width), b:get(height)})</code>
+   </ul>
+
+
+
+<a name="key_htmlUtils"></a>
+<a name="sect12"></a>
+     <h3>htmlUtils</h3>
+  <em>Parameters:</em>
+    none<br>
+    <p>The returned hash contains custom directives that help HTML template development.</p> 
+
+<p>Currently it contains only 1 directive: <code>img</code>. This is used as HTML <code>img</code> element, but the <code>width</code> and <code>height</code> attributes are calculated automatically (unless these attributes are specified in the template). Also, the processing will stop with error, if the image file pointed by the <code>src</code> attribute is missing.</p>
+
+<p>Example: If you have loaded the hash into the <code>html</code> variable, then you can do this in a template:</p>
+
+<pre>&lt;@html.img src=&quot;falcon.png&quot; alt=&quot;Falcon&quot; /&gt;</pre>
+<p>and the output will be something like this (depending on the concrete dimensions of the image):</p>
+
+<pre>&lt;img src=&quot;falcon.png&quot; alt=&quot;Falcon&quot; width=&quot;80&quot; height=&quot;120&quot;&gt;</pre>
+<p>See also the example in <code><em>&lt;FMPP></em>/docs/examples/img_dims</code>.</p>
+
+<p>Directive <code>img</code> accepts any extra parameters (attributes). The extra parameters will be printed as the attributes of the HTML <code>img</code> element.     
+
+
+
+
+<a name="key_xhtmlUtils"></a>
+<a name="sect13"></a>
+     <h3>xhtmlUtils</h3>
+  <em>Parameters:</em>
+    none<br>
+    
+<p>This is the same as <code>htmlUtils</code>, but it is for XHTML output.</p>
+
+
+
+
+<a name="key_now"></a>
+<a name="sect14"></a>
+     <h3>now</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>options</strong>: hash, optional.
+          The supported options are:
+    <ul>
+      <li><code>locale</code>: The locale (language) used for displaying the date. It defaults to the "locale" setting of the FMPP engine. The value of the option is a usual java locale strings, such as <code>en_GB</code>, <code>fr</code>, <code>ar_SA</code>, ...etc. To see the complete list of locale codes, call the command line FMPP tool:<br><code>fmpp --print-locales</code>
+      <li><code>date</code>: The format of the date (year, month, day) part of the date: <code>short</code>, <code>medium</code>, <code>long</code>, <code>default</code>. The exact meaning of these formats are locale dependent, and it is defined by the Java platform implementation. You can't use this option together with the <code>pattern</code> option.
+      <li><code>time</code>: The format of the time (hour, minute, second, millisecond) part of the date: <code>short</code>, <code>medium</code>, <code>long</code>, <code>default</code>. The exact meaning of these formats are locale dependent, and it is defined by the Java platform implementation. You can't use this option together with the <code>pattern</code> option.
+      <li><code>pattern</code>: A <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html">pattern</a> that specifies the formatting of the date.
+      <li><code>zone</code>: The time zone you would like to use ford displaying the date. Defaults to the "time zone" FMPP engine setting. The zone is given with a string, for example: <code>GMT</code>, <code>GMT+02</code>, <code>GMT-02</code> or <code>GMT+02:30</code>.
+    </ul>
+
+      </ol>
+        
+  <p>Note: FreeMarker now has a <code>.now</code> variable, so you don't need this data loader any more. You can print the current date and time with <code>${.now}</code> (or <code>${.now?date}</code> or <code>${.now?time}</code>), and the format and zone is specified by the global <code><a href="settings.html#key_datetimeFormat">datetimeFormat</a></code> (or <code><a href="settings.html#key_dateFormat">dateFormat</a></code> or <code><a href="settings.html#key_timeFormat">timeFormat</a></code>) and <code><a href="settings.html#key_timeZone">timeZone</a></code> FMPP settings.</p>
+  
+  <p>Examples (with TDD syntax):
+  <ul>
+    <li><code>now()</code>
+    <li><code>now({pattern:"EEEE, MMMM dd, yyyy, hh:mm:ss a '('zzz')'"})</code>
+        <br>This will print something like: Tuesday, April 08, 2003, 09:24:44 PM (GMT+02)
+    <li><code>now({date:short, time:short, zone:GMT})</code>
+  </ul>
+  
+  <p>This data loader loads the current date and time from the system clock, and produces a string from it. Since FreeMarker has introduced native date/time value support, it is maybe better to use <a href="pphash.html#key_sessionStart"><code>pp.sessionStart</code></a> or <a href="pphash.html#key_now"><code>pp.now</code></a> instead of this data loader.</p>
+
+
+<a name="key_get"></a>
+<a name="sect15"></a>
+     <h3>get</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>varName</strong>: string.
+          The name of the variable.
+        <li><strong>subVarName</strong>: string, optional.
+          The name of the sub-variable.
+        <li><strong>subSubVarName</strong>: string, optional.
+          ...etc. You can specify any number of parameters.
+      </ol>
+      
+  
+  
+
+<p>This data loader returns the value of a variable that was already put into the <code><a href="settings.html#key_data">data</a></code> hash. For example:</p>
+
+<pre>data: {
+    a: 123
+    b: get(a)
+}</pre>
+<p>Here the value of <code>b</code> will be the same as the value of <code>a</code>, which is <code>123</code>. You can retrieve the value of subvariables with additional parameters:</p>
+
+<pre>data: {
+    a: {
+        x: 123
+        y: {
+            q:234
+        }
+    }
+    b: get(a, x)
+    c: get(a, y, q)
+}</pre>
+<p>Here <code>b</code> will be <code>123</code>, <code>c</code> will be <code>234</code>.</p>
+
+<p>The <code>get</code> data loader was introduced so that data loaders can get the values loaded by other data loaders previously. For example:</p>
+
+<pre>data: {
+    doc: xml(data/foo.xml)
+    index: com.example.MyIndexBuilderDataLoader(get(doc))
+}</pre>
+<p>The <code>get</code> data loader sees the variables that were already put into the hash in the same enclosing <code><a href="settings.html#key_data">data</a></code>/<code><a href="settings.html#key_localData">localData</a></code> hash TDD expression where it is called, but it doesn't see values that are put into the data model elsewhere, as in other (inherited or inheriting) configuration files. However, if you use <code>get</code> in the <code><a href="settings.html#key_localData">localData</a></code> setting, it will also see the session level data (see <code><a href="settings.html#key_data">data</a></code>).</p>
+
+
+
+<a name="key_antProperty"></a>
+<a name="sect16"></a>
+     <h3>antProperty</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>properyName</strong>: string.
+          The name of the Ant property.
+        <li><strong>defaultValue</strong>: any, optional.
+          The value returned if the Ant property does not exist.
+      </ol>
+      
+  
+
+  <p>This data loader returns the value of an Ant property. If no Ant property with the given name exists, it will return nothing (i.e. will not add new variable to the shared data model), or it will return the value of the second parameter if you use that. 
+
+  <p>The values of Ant properties are strings. But sometimes you want to see a property as numerical variable, or as boolean variable, etc. If the property name you give as data loader parameter ends with <code>?n</code>, then the string will be converted to number variable, and the <code>?n</code> itself will not count as the part of the actual property name. The complete list of postfixes:</p>
+  <ul>  
+    <li><code>?n</code>: Convert to number. The string value must follow Java language number format, that is, the decimal separator is always dot (<code>.</code>).</li>
+    <li><code>?b</code>: Convert to boolean. Valid values are: <code>true</code>, <code>false</code>, <code>yes</code>, <code>no</code>, <code>y</code>, <code>n</code>, <code>0</code>, <code>1</code>. Upper- and lowercase letters are considered as equivalent.</li>
+    <li><code>?d</code>: Convert to date. Use common SQL format with optional time zone, as <code>"2003-06-25 GMT"</code>. If the time zone is omitted, the value of the <code><a href="settings.html#key_timeZone">timeZone</a></code> setting is used.</li>
+    <li><code>?t</code>: Convert to time. Use common SQL format with optional time zone, as <code>"22:05:30 GMT-02:00"</code>. The usage of AM/PM is also supported, e.g. <code>"10:05:30 PM"</code>. If the time zone is omitted, then the value of the <code><a href="settings.html#key_timeZone">timeZone</a></code> setting is used.</li>
+    <li><code>?dt</code>: Convert to date-time. The date and time format is the same as with <code>?d</code> and <code>?t</code>, e.g. <code>"2003-06-25 10:05:30 PM GMT"</code>.</li>
+    <li><code>?s</code>: Keep the property as string. This can be useful if the actual property name ends with a prefix, so you must protect it against misinterpretation: <code>foo?t?s</code>.</li>
+  </ul>
+  
+  <p>To see a concrete example, look at <code><em>&lt;FMPP></em>/docs/examples/ant2</code>.</p>
+
+  <p>This data loader will work only if you execute FMPP as Ant task.</p>
+
+
+
+<a name="key_antProperites"></a>
+<a name="sect17"></a>
+     <h3>antProperites</h3>
+  <em>Parameters:</em>
+      <ol>
+        <li><strong>properyName1</strong>: string, optional.
+          The name of an Ant property to expose.
+        <li><strong>properyName2</strong>: string, optional.
+          The name of another Ant property to expose.
+        <li><strong>properyNameN</strong>: string, optional.
+          ...etc. You can specify any number of Ant parameters.
+      </ol>
+      
+  
+  
+  
+  <p>Returns the set of all Ant properties, or the set of selected ant properties, as a hash.
+
+  <p>If you use this data loader without parameters, then it returns the hash of <strong>all</strong> Ant properties. To see a concrete example, look at <code><em>&lt;FMPP></em>/docs/examples/ant</code>.</p>
+
+  <p>You can also give the name of properties to expose as parameters. For example if you want to put only the Ant properties <code>foo</code> and <code>bar</code> into the shared data model, then you write: <code>antProperties(foo, bar)</code>. Parameters that refer to not existing Ant properties will be silently ignored. The same postfixes (as <code>?n</code>) are supported as with <a href="#key_antProperty"><code>antProperty</code></a>.</p>
+  
+  <p>To see a concrete example, look at <code><em>&lt;FMPP></em>/docs/examples/ant2</code>.</p>
+
+  <p>This data loader will work only if you execute FMPP as Ant task.</p>
+
+
+
+<a name="key_antProject"></a>
+<a name="sect18"></a>
+     <h3>antProject</h3>
+  <em>Parameters:</em>
+    none<br>
+      <p>Returns the current Ant project object (<code>org.apache.tools.ant.Project</code>). See the example in <code><em>&lt;FMPP></em>/docs/examples/ant</code>.</p>
+  <p>This data loader will work only if you execute FMPP as Ant task.</p>
+
+
+
+<a name="key_antTask"></a>
+<a name="sect19"></a>
+     <h3>antTask</h3>
+  <em>Parameters:</em>
+    none<br>
+      <p>Returns the current Ant task object (<code>org.apache.tools.ant.Task</code>). See the example in <code><em>&lt;FMPP></em>/docs/examples/ant</code>.</p>
+  <p>This data loader will work only if you execute FMPP as Ant task.</p>
+
+
+
+
+<a name="sect20"></a>
+     <h2>Custom data loaders</h2>
+
+<p>If you want to write custom data loader, you have to write a Java class that implements the <code>fmpp.tdd.DataLoader</code> interface (see in the <a href="api/index.html">API documentation</a>). Then, if the class is available in the class path, or if you drop its jar into the <code>lib</code> directory of the FMPP installation, you can call it similarly as a predefined data loader, just you use the full-qualified class name as the data loader name. For example:<br> <code>com.example.fmpp.SQLDataLoader("SELECT&nbsp;*&nbsp;FROM&nbsp;products")</code>.</p>
+
+<p><strong>If you have written a data loader that can be useful for other FMPP users, I will be happy to make it available on the FMPP home page for download. So if you want to contribute with your data loader, drop me a mail (<a href="mailto:ddekanyREMOVETHIS@freemail.hu">ddekanyREMOVETHIS@freemail.hu</a> (delete the "REMOVETHIS"!)) or write to the mailing list. Thank you!</strong></p>
+
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="pphash.html">Prev</a></li><li><a class="pager-icon next" href="frontends.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

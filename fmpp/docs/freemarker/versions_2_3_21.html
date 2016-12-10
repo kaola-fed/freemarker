@@ -1,0 +1,1549 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="docgen-resources/docgen.css" type="text/css">
+  <meta name="generator" content="FreeMarker Docgen (DocBook 5)">
+  <title>
+    FreeMarker Manual - 2.3.21
+  </title>
+    <script type="text/javascript" src="docgen-resources/jquery.js"></script>
+    <script type="text/javascript" src="docgen-resources/linktargetmarker.js"></script>
+</head>
+<body>
+
+    <div class="navigation">
+    <div class="breadcrumb">
+<span class="breadcrumb">        You are here:
+          <a href="index.html">FreeMarker Manual</a>
+            <b>></b>
+          <a href="app.html">Appendixes</a>
+            <b>></b>
+          <a href="app_versions.html">Version history</a>
+            <b>></b>
+          2.3.21
+</span>    </div>
+    <div class="bookmarks">
+<span class="bookmarks">Bookmarks:
+<a href="alphaidx.html">Alpha. index</a>, <a href="dgui_template_exp.html#exp_cheatsheet">Expressions</a>, <a href="ref_builtins_alphaidx.html">?builtins</a>, <a href="ref_directive_alphaidx.html">#directives</a>, <a href="ref_specvar.html">.spec_vars</a>, <a href="app_faq.html">FAQ</a>, <a href="gloss.html">Glossary</a>, <a href="api/index.html">API</a>, <a href="../index.html">Home</a></span>    </div>
+    <div class="pagers">
+      <div class="pagersVerticalSpacer"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></div>
+<div class="pagerButton"><a href="versions_2_3_20.html"><span class="hideA">Next page: </span>2.3.20</a></div><div class="pagerButton"><a href="app_versions.html">Previous page</a></div><div class="pagerButton"><a href="app_versions.html">Parent page</a></div><div class="pagerButton"><a href="index.html">Contents</a></div>      <div class="pagersVerticalSpacer"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></div>
+    </div>
+    </div>
+
+<div id="mainContent">
+
+  
+  
+  
+  
+  <h1 class="rank_section1"
+        id="pageTopTitle">
+<a name="versions_2_3_21"></a>2.3.21  </h1>
+    
+    <div class="toc">
+      <p>
+        <b>
+            Page Contents
+        </b>
+      </p>
+      
+  <ul class="noMargin">
+      <li style="padding-bottom: 0.5em"><i><a href="#docgen_afterTheTOC">Intro.</a></i></li>
+      <li>
+        <a href="#autoid_134">Changes on the FTL side</a>
+      </li>
+      <li>
+        <a href="#autoid_135">Changes on the Java side</a>
+      </li>
+      <li>
+        <a href="#autoid_136">Other changes</a>
+      </li>
+  </ul>
+    </div>
+    <a name="docgen_afterTheTOC"></a>
+    
+<p>Date of release: 2014-10-12</p><p>Note that since 2.3.21 is designed to be backward compatible
+        with the previous 2.3.x releases, <i>some of the improvements
+        and fixes described below are only activated when you specifically ask
+        for 2.3.21 "incompatible improvements"</i>,
+        because they could, with very small chance, break existing
+        applications. If the dependent project is still actively developed,
+        allowing 2.3.21 &quot;incompatible improvements&quot; is highly recommended.
+        That can be achieved on various ways:</p>    <div class="itemizedlist">
+<ul>
+          <li>
+            <p>Create the
+            <tt style="color: #A03D10">freemarker.template.Configuration</tt> object like
+            <tt style="color: #A03D10">new
+            Configuration(Configuration.VERSION_2_3_21)</tt></p>
+          </li>
+
+          <li>
+            <p>Or alter the <tt style="color: #A03D10">Configuration</tt> where you
+            initialize its other settings like
+            <tt style="color: #A03D10">cfg.setIncompatibleImprovements(Configuration.VERSION_2_3_21)</tt></p>
+          </li>
+
+          <li>
+            <p>Or if you are configuring FreeMarker with properties
+            (<tt style="color: #A03D10">*.properties</tt> file or
+            <tt style="color: #A03D10">java.util.Properties</tt> object), add
+            <tt style="color: #A03D10">incompatible_improvements=2.3.21</tt> to
+            them.</p>
+          </li>
+
+          <li>
+            <p>Or if you are configuring FreeMarker through
+            <tt style="color: #A03D10">FreemarkerServlet</tt>, add this
+            <tt style="color: #A03D10">init-param</tt> to it in the
+            <tt style="color: #A03D10">web.xml</tt>:</p>
+
+            <div align="left" class="programlisting"><table bgcolor="#F8F8F8" cellspacing="0" cellpadding="0" border="0"><tr valign="top"><td height="1" width="1" bgcolor="black"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></td><td height="1" bgcolor="black"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></td><td height="1" width="1" bgcolor="black"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></td></tr><tr><td width="1" bgcolor="black"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></td><td><table bgcolor="#F8F8F8" cellspacing="0" cellpadding="4" border="0" width="100%" style="margin: 0px"><tr><td><pre style="margin: 0px">
+&lt;init-param&gt;
+    &lt;param-name&gt;incompatible_improvements&lt;/param-name&gt;
+    &lt;param-value&gt;2.3.21&lt;/param-value&gt;
+&lt;/init-param&gt;&nbsp;<span style="font-size: 1pt"> </span></pre></td></tr></table></td><td width="1" bgcolor="black"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></td></tr><tr valign="top"><td height="1" width="1" bgcolor="black"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></td><td height="1" bgcolor="black"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></td><td height="1" width="1" bgcolor="black"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></td>      </tr>
+</table>  </div>
+
+          </li>
+        </ul>    </div>
+<p>Note that we have changed our proprietary BSD-style license to
+        Apache License, Version 2.0. See the <a href="app_license.html">new
+        license here</a>.</p><p>Note that the minimum required Java version was increased from
+        1.2 to 1.4.</p>
+            
+  
+  
+  
+  <h2 class="rank_section2"
+        >
+<a name="autoid_134"></a>Changes on the FTL side  </h2>
+
+
+              <div class="itemizedlist">
+<ul>
+            <li>
+              <p>Improved ranges:</p>
+
+                  <div class="itemizedlist">
+<ul>
+                <li>
+                  <p>Added ranges with exclusive end:
+                  <tt style="color: #A03D10"><i style="color: #DD4400">start</i>..&lt;<i style="color: #DD4400">end</i></tt>
+                  (also can be written as
+                  <tt style="color: #A03D10"><i style="color: #DD4400">start</i>..!<i style="color: #DD4400">end</i></tt>).
+                  <a href="dgui_template_exp.html#dgui_template_exp_direct_ranges">More...</a></p>
+                </li>
+
+                <li>
+                  <p>Added length limited ranges:
+                  <tt style="color: #A03D10"><i style="color: #DD4400">start</i>..*<i style="color: #DD4400">length</i></tt>:
+                  For example, <tt style="color: #A03D10">10..*4</tt> gives <tt style="color: #A03D10">[10,
+                  11, 12, 13]</tt>, <tt style="color: #A03D10">10..*-4</tt> gives
+                  <tt style="color: #A03D10">[10, 9, 8, 7]</tt>, and
+                  <tt style="color: #A03D10">10..*0</tt> gives <tt style="color: #A03D10">[]</tt>. When
+                  these kind of ranges are used for slicing, the slice will
+                  end without error if the end of the sliced sequence or
+                  string is reached before the specified range length was
+                  reached. Thus, for example, to take the first 10 characters
+                  from the string <tt style="color: #A03D10">s</tt>, or less if
+                  <tt style="color: #A03D10">s</tt> is shorter than 10 characters, you can
+                  use <tt style="color: #A03D10">s[0..*10]</tt>. <a href="dgui_template_exp.html#dgui_template_exp_seqenceop_slice">More...</a></p>
+                </li>
+
+                <li>
+                  <p>Square bracket now accepts range values from any
+                  source, like <tt style="color: #A03D10">&lt;#assign r = 1..3&gt;
+                  ${'foobar'[r]}</tt> will print
+                  <tt style="color: #A03D10">&quot;oob&quot;</tt>. Earlier it has only supported
+                  ranges that were specified directly inside the square
+                  brackets, like <tt style="color: #A03D10">'foobar'[1..3]</tt>.</p>
+                </li>
+
+                <li>
+                  <p>When slicing a sequence with a right-unbounded range,
+                  it's now allowed to have a range start index that's one
+                  higher than the last index of the sliced sequence. For
+                  example, <tt style="color: #A03D10">['x', 'y'][2..]</tt> is not an error
+                  anymore, but an empty sequence. (Of course, <tt style="color: #A03D10">['x',
+                  'y'][3..]</tt> is still an error.)</p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?substring(<i style="color: #DD4400">from</i>,
+                  <i style="color: #DD4400">toExclusive</i>)</tt> and
+                  <tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?substring(<i style="color: #DD4400">from</i>)</tt>
+                  are now deprecated; use this slicing expression instead:
+                  <tt style="color: #A03D10"><i style="color: #DD4400">someString</i>[<i style="color: #DD4400">from</i>..&lt;<i style="color: #DD4400">toExclusive</i>]</tt>
+                  and
+                  <tt style="color: #A03D10"><i style="color: #DD4400">someString</i>[<i style="color: #DD4400">from</i>..]</tt>.
+                  A warning if you are processing XML: Since slicing
+                  expressions work both for sequences and strings, and XML
+                  nodes in FTL are typically both sequences and strings at the
+                  same time, there the equivalent expression is
+                  <tt style="color: #A03D10"><i style="color: #DD4400">someXmlNode</i>?string[<i style="color: #DD4400">from</i>..&lt;<i style="color: #DD4400">toExclusive</i>]</tt>
+                  and
+                  <tt style="color: #A03D10"><i style="color: #DD4400">exp</i>?string[<i style="color: #DD4400">from</i>..]</tt>,
+                  because without the <tt style="color: #A03D10">?string</tt> it would
+                  slice the node sequence instead of the text value of the
+                  node.</p>
+                </li>
+
+                <li>
+                  <p>If the <tt style="color: #A03D10">incompatible_improvements</tt> in
+                  the FreeMarker configuration is set to at least 2.3.21,
+                  right-unbounded ranges become readable (like
+                  <tt style="color: #A03D10">#list</tt>-able). Earlier they could only be
+                  used for slicing, and behaved like empty sequences
+                  otherwise.</p>
+                </li>
+              </ul>    </div>
+
+            </li>
+
+            <li>
+              <p>New built-in, <tt style="color: #A03D10">?url_path</tt>: This is the
+              same as <a href="ref_builtins_string.html#ref_builtin_url">the
+              <tt>url</tt> built-in</a>, except that it doesn't
+              escape slash (<tt style="color: #A03D10">/</tt>) characters. This meant to be
+              used for converting paths (like paths coming from the OS or some
+              content repository) that use slash (not backslash!) to a path
+              the can be inserted into the path part of an URL.</p>
+            </li>
+
+            <li>
+              <p>New built-ins for string manipulation:</p>
+
+                  <div class="itemizedlist">
+<ul>
+                <li>
+                  <p><tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?keep_before(<i style="color: #DD4400">substring</i>[,
+                  <i style="color: #DD4400">flags</i>])</tt>: <a href="ref_builtins_string.html#ref_builtin_keep_before">More...</a></p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?keep_after(<i style="color: #DD4400">substring</i>[,
+                  <i style="color: #DD4400">flags</i>])</tt>: <a href="ref_builtins_string.html#ref_builtin_keep_after">More...</a></p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?remove_beginning(<i style="color: #DD4400">substring</i>)</tt>:
+                  <a href="ref_builtins_string.html#ref_builtin_remove_beginning">More...</a></p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?remove_ending(<i style="color: #DD4400">substring</i>)</tt>:
+                  <a href="ref_builtins_string.html#ref_builtin_remove_ending">More...</a></p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?ensure_starts_with(<i style="color: #DD4400">substring</i>[,
+                  <i style="color: #DD4400">substitution</i>[,
+                  <i style="color: #DD4400">flags</i>]])</tt>: <a href="ref_builtins_string.html#ref_builtin_ensure_starts_with">More...</a></p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?ensure_ends_with(<i style="color: #DD4400">substring</i>)</tt>:
+                  <a href="ref_builtins_string.html#ref_builtin_ensure_ends_with">More...</a></p>
+                </li>
+              </ul>    </div>
+
+            </li>
+
+            <li>
+              <p><tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?number</tt>
+              now recognizes all XML Schema number formats, like
+              <tt style="color: #A03D10">NaN</tt>, <tt style="color: #A03D10">INF</tt>,
+              <tt style="color: #A03D10">-INF</tt>, plus the Java-native formats
+              <tt style="color: #A03D10">Infinity</tt> and
+              <tt style="color: #A03D10">-Infinity</tt>.</p>
+            </li>
+
+            <li>
+              <p>If <tt style="color: #A03D10">incompatible_improvements</tt> in the
+              FreeMarker configuration is set to at least 2.3.21,
+              <tt style="color: #A03D10"><i style="color: #DD4400">someNumber</i>?c</tt> will
+              return <tt style="color: #A03D10">&quot;INF&quot;</tt>, <tt style="color: #A03D10">&quot;-INF&quot;</tt> and
+              <tt style="color: #A03D10">&quot;NaN&quot;</tt> for positive/negative infinity and IEEE
+              floating point Not-a-Number, respectively. These are the XML
+              Schema compatible representations of these special values.
+              Earlier it has returned what
+              <tt style="color: #A03D10">java.text.DecimalFormat</tt> did with US locale,
+              none of which was understood by any (common) computer
+              language.</p>
+            </li>
+
+            <li>
+              <p>New built-in:
+              <tt style="color: #A03D10"><i style="color: #DD4400">someString</i>?boolean</tt>.
+              This is for example useful for converting &quot;true&quot; and &quot;false&quot;
+              strings coming from XML to real boolean values. <a href="ref_builtins_string.html#ref_builtin_boolean">More...</a></p>
+            </li>
+
+            <li>
+              <p>Date/time/date-time related changes:</p>
+
+                  <div class="itemizedlist">
+<ul>
+                <li>
+                  <p>Added new kind of
+                  <tt style="color: #A03D10">date_format</tt>/<tt style="color: #A03D10">datetime_format</tt>/<tt style="color: #A03D10">time_format</tt>
+                  setting values: XML Schema formats, starting with
+                  <tt style="color: #A03D10">&quot;xs&quot;</tt> and ISO 8601:2004 formats, starting
+                  with <tt style="color: #A03D10">&quot;iso&quot;</tt>. The format string can be
+                  continued with various space (or <tt style="color: #A03D10">_</tt>)
+                  separated options, like <tt style="color: #A03D10">h</tt> or
+                  <tt style="color: #A03D10">m</tt> or <tt style="color: #A03D10">s</tt> or
+                  <tt style="color: #A03D10">ms</tt> for setting shown accuracy,
+                  <tt style="color: #A03D10">nz</tt> or <tt style="color: #A03D10">fz</tt> for setting
+                  time zone offset visibility, and <tt style="color: #A03D10">u</tt> or,
+                  <tt style="color: #A03D10">fu</tt> for using UTC time zone . For example,
+                  to use ISO 8601 with minute precision and without the zone
+                  offset being shown, set the
+                  <tt style="color: #A03D10">datetime_format</tt> setting to <tt style="color: #A03D10">&quot;iso
+                  m nz&quot;</tt>, so then the output will be like
+                  <tt style="color: #A03D10">2014-09-03T20:56</tt>. <a href="ref_directive_setting.html#topic.dateTimeFormatSettings">More...</a></p>
+                </li>
+
+                <li>
+                  <p>Because anything that's accepted as
+                  <tt style="color: #A03D10">date_format</tt>/<tt style="color: #A03D10">datetime_format</tt>/<tt style="color: #A03D10">time_format</tt>
+                  setting value can also be used with the
+                  <tt style="color: #A03D10">?string</tt> and
+                  <tt style="color: #A03D10">?date</tt>/<tt style="color: #A03D10">?time</tt>/<tt style="color: #A03D10">?datetime</tt>
+                  build-ins, you can use the new formats like
+                  <tt style="color: #A03D10">someDate?string.xs</tt> and
+                  <tt style="color: #A03D10">someString?date.xs</tt>. (For the
+                  <tt style="color: #A03D10">&quot;xs&quot;</tt> and <tt style="color: #A03D10">&quot;iso&quot;</tt>
+                  formats, <tt style="color: #A03D10">_</tt> can be used instead of space,
+                  which means that, for example, you can write
+                  <tt style="color: #A03D10">lastModified?string.iso_m_u</tt> instead of
+                  the more verbose <tt style="color: #A03D10">lastModified?string[&quot;iso m
+                  u&quot;]</tt>.)</p>
+                </li>
+
+                <li>
+                  <p>That <tt style="color: #A03D10">&quot;iso&quot;</tt> and
+                  <tt style="color: #A03D10">&quot;xs&quot;</tt> are now possible
+                  <tt style="color: #A03D10">date_format</tt>/<tt style="color: #A03D10">datetime_format</tt>/<tt style="color: #A03D10">time_format</tt>
+                  setting values also means that such values can now be parsed
+                  too via
+                  <tt style="color: #A03D10">?date</tt>/<tt style="color: #A03D10">?time</tt>/<tt style="color: #A03D10">?datetime</tt>.
+                  The main application is with processing XML DOM-s, as there
+                  values are coming in as strings, and now you can do
+                  something like <tt style="color: #A03D10">order.confirmDate?date.xs</tt>
+                  to convert them to real dates.</p>
+                </li>
+
+                <li>
+                  <p>The <a href="ref_builtins_date.html#ref_builtin_date_iso"><tt>?iso_...</tt>
+                  built-ins</a> are now deprecated in favor of the new
+                  setting values described above. They can be set as the
+                  default date/time/date-time format, seamlessly fit into the
+                  formatting architecture (and thus can parse strings too),
+                  and has more/better options (<tt style="color: #A03D10">ms</tt> always
+                  shows 3 millisecond digits, <tt style="color: #A03D10">fz</tt> for
+                  forcing showing time zone offset).</p>
+                </li>
+
+                <li>
+                  <p>If the "incompatible improvements"
+                  configuration setting is at least 2.3.21, the
+                  <tt style="color: #A03D10">?iso_...</tt> built-ins won't show time zone
+                  offset for <tt style="color: #A03D10">java.sql.Time</tt> values anymore.
+                  Most databases store time values that aren't in any time
+                  zone, but just store hour, minute, second, and decimal
+                  second field values, so showing the time zone doesn't make
+                  sense. (Notable exceptions are PostgreSQL &quot;time with time
+                  zone&quot; columns, where
+                  <tt style="color: #A03D10"><i style="color: #DD4400">mzTime</i>?string.iso_fz</tt>
+                  could be used.)</p>
+                </li>
+
+                <li>
+                  <p>Added <tt style="color: #A03D10">?is_time</tt>,
+                  <tt style="color: #A03D10">?is_datetime</tt>,
+                  <tt style="color: #A03D10">?is_date_only</tt> (should be called
+                  <tt style="color: #A03D10">?is_date</tt>, but that was already taken) and
+                  <tt style="color: #A03D10">?is_unknown_date_like</tt> to check the exact
+                  type of a date-like value.</p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10">?is_date</tt> is now a deprecated name,
+                  use <tt style="color: #A03D10">?is_date_like</tt> instead. This is
+                  because <tt style="color: #A03D10">?is_date</tt> sounds like it checks if
+                  the value is a date without time part, but actually it also
+                  returns <tt style="color: #A03D10">true</tt> for time, date-time, and
+                  unknown date-like values.</p>
+                </li>
+
+                <li>
+                  <p>Added <tt style="color: #A03D10">?date_if_unknown</tt>,
+                  <tt style="color: #A03D10">?time_if_unknown</tt> and
+                  <tt style="color: #A03D10">?datetime_if_unknown</tt> built-ins, which
+                  mark a date-like value with some of the sub-types: date
+                  without time, time, or date-time, respectively. However, if
+                  the value already holds this information, the built-in has
+                  no effect. That is, it will never convert the sub-type of a
+                  value, it only adds the sub-type if it was unknown.</p>
+                </li>
+
+                <li>
+                  <p>Bug fixed: ISO 8601 dates (via
+                  <tt style="color: #A03D10">?iso_...</tt> and <tt style="color: #A03D10">&quot;iso&quot;</tt>
+                  format settings) now use proleptic Gregorian calendar for
+                  the years before 1582, rather than Julian calendar. This is
+                  (indirectly) required by the standard, and it's also how the
+                  default Sun/Oracle Java XML Schema date/time/dateTime parser
+                  works.</p>
+                </li>
+              </ul>    </div>
+
+            </li>
+
+            <li>
+              <p>Error message quality improvements (targeting frequent
+              support requests and some error message bugs):</p>
+
+                  <div class="itemizedlist">
+<ul>
+                <li>
+                  <p>Fixed glitch where if an <tt style="color: #A03D10">#if</tt> had
+                  and <tt style="color: #A03D10">#else</tt> or <tt style="color: #A03D10">#elseif</tt>,
+                  the
+                  <tt style="color: #A03D10">#if</tt>/<tt style="color: #A03D10">#else</tt>/<tt style="color: #A03D10">#elseif</tt>
+                  wasn't hidden in the FTL stack trace when the error was
+                  inside its nested block.</p>
+                </li>
+
+                <li>
+                  <p>Some new context sensitive hints in undefined variable
+                  exception error messages.</p>
+                </li>
+
+                <li>
+                  <p>Fixed unclosed directive error messages at end of file
+                  where the wrong unclosed directive name was reported</p>
+                </li>
+
+                <li>
+                  <p>Better type error messages when accessing XML data
+                  (applies when wrapped with
+                  <tt style="color: #A03D10">freemarker.ext.dom</tt>):</p>
+
+                      <div class="itemizedlist">
+<ul>
+                    <li>
+                      <p>Trying to use
+                      <tt style="color: #A03D10">node.<i style="color: #DD4400">noSuchChildNodes</i></tt>
+                      on a place where scalar value is expected will explain
+                      that the problem is that you had no matches in the
+                      constructing XML query.</p>
+                    </li>
+
+                    <li>
+                      <p>Trying to use
+                      <tt style="color: #A03D10">node.<i style="color: #DD4400">multipleSuchChildNodes</i></tt>
+                      on a place where scalar value is expected will explain
+                      that the problem is that you had multiple matches in the
+                      constructing XML query.</p>
+                    </li>
+
+                    <li>
+                      <p>Trying to use
+                      <tt style="color: #A03D10">node.<i style="color: #DD4400">exactlyOneChildNode</i></tt>
+                      as number, date/time/date-time or boolean will explain
+                      that values coming from XML are always strings (text),
+                      and must be converted explicitly via
+                      <tt style="color: #A03D10">?number</tt>, <tt style="color: #A03D10">?boolean</tt>,
+                      <tt style="color: #A03D10">?date.xs</tt>, etc.</p>
+                    </li>
+                  </ul>    </div>
+
+                </li>
+
+                <li>
+                  <p>Trying to use <tt style="color: #A03D10">obj.someMethod</tt>
+                  without <tt style="color: #A03D10">()</tt> on a place where method value
+                  is not expected will recommend calling the method.</p>
+                </li>
+
+                <li>
+                  <p>Trying to use methods like
+                  <tt style="color: #A03D10">obj.getFoo</tt> or
+                  <tt style="color: #A03D10">obj.isFoo</tt> without <tt style="color: #A03D10">()</tt>on
+                  a place where method value is not expected will recommend
+                  using the <tt style="color: #A03D10">obj.foo</tt> form.</p>
+                </li>
+
+                <li>
+                  <p>Messages are now much more readable when rendered in
+                  environments that don't obey to line-breaks. (This often
+                  happens in improperly implemented HTML error pages and logs
+                  viewers.)</p>
+                </li>
+
+                <li>
+                  <p>Better FTL instruction stack traces:</p>
+
+                      <div class="itemizedlist">
+<ul>
+                    <li>
+                      <p>Error messages now contain up to 10 lines of FTL
+                      stack trace (unless it's on the top of a full FTL stack
+                      trace), because the FTL stack trace wasn't printed at
+                      all when the exception was a cause exception in a Java
+                      stack trace, or when only the value of
+                      <tt style="color: #A03D10">getMessage()</tt> was printed instead of a
+                      stack trace.</p>
+                    </li>
+
+                    <li>
+                      <p>The FTL stack trace is now more self explanatory
+                      as it contains more text labels.</p>
+                    </li>
+
+                    <li>
+                      <p>Stack frames that belong to nestings are now
+                      marked differently, and are filtered out when the stack
+                      trace wouldn't fit into the error message otherwise.
+                      </p>
+                    </li>
+                  </ul>    </div>
+
+                </li>
+
+                <li>
+                  <p>Bug fixed: <tt style="color: #A03D10">?substring</tt> has thrown
+                  low level
+                  <tt style="color: #A03D10">java.lang.IndexOutOfBoundsException</tt>-s
+                  instead of more descriptive
+                  <tt style="color: #A03D10">TemplateModelException</tt>-s with FTL stack
+                  trace.</p>
+                </li>
+
+                <li>
+                  <p>Bug fixed: Slicing with ranges sometimes thrown low
+                  level
+                  <tt style="color: #A03D10">java.lang.IndexOutOfBoundsException</tt>-s
+                  instead of more descriptive
+                  <tt style="color: #A03D10">TemplateModelException</tt>-s with FTL stack
+                  trace.</p>
+                </li>
+
+                <li>
+                  <p>Bug fixed [<a href="https://sourceforge.net/p/freemarker/bugs/402/">402</a>]:
+                  Fixed misleading parser error message when a directive
+                  called without its required parameters (like
+                  <tt style="color: #A03D10">&lt;#list&gt;</tt>) was reported as unknown
+                  directive.</p>
+                </li>
+
+                <li>
+                  <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/222/">222</a>]:
+                  Poor quality error message when
+                  <tt style="color: #A03D10"><i style="color: #DD4400">someString</i>[<i style="color: #DD4400">someIndex</i>]</tt>
+                  fails with string index out of bounds.</p>
+                </li>
+
+                <li>
+                  <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/27/">27</a>]:
+                  Not very good quality error messages when
+                  <tt style="color: #A03D10">#import</tt>-ing a template whose parsing
+                  fails.</p>
+                </li>
+              </ul>    </div>
+
+            </li>
+
+            <li>
+              <p>New <tt style="color: #A03D10">include</tt> directive option,
+              <tt style="color: #A03D10">ignore_missing=<i style="color: #DD4400">boolean</i></tt>.
+              When this is set to <tt style="color: #A03D10">true</tt>, and the template to
+              include is missing, the error will be silently ignored, and
+              nothing will be included.</p>
+            </li>
+
+            <li>
+              <p>The <tt style="color: #A03D10">setting</tt> directive can now set the
+              <tt style="color: #A03D10">output_encoding</tt> setting.</p>
+            </li>
+
+            <li>
+              <p>New special variable: <tt style="color: #A03D10">.locale_object</tt>.
+              This is like <tt style="color: #A03D10">.locale</tt>, except that it's a
+              <tt style="color: #A03D10">java.util.Locale</tt> object, not a string. This
+              is handy if you want to pass the current locale to Java
+              methods.</p>
+            </li>
+
+            <li>
+              <p>If <tt style="color: #A03D10">incompatible_improvements</tt> in the
+              FreeMarker configuration is set to at least 2.3.21, hash
+              <i>literals</i> that repeat keys now only have the
+              key once with <tt style="color: #A03D10">?keys</tt>, and only has the last
+              value associated to that key with <tt style="color: #A03D10">?values</tt>.
+              This is consistent with the behavior of
+              <tt style="color: #A03D10"><i style="color: #DD4400">hash</i>[<i style="color: #DD4400">key</i>]</tt>
+              and how maps work in Java.</p>
+            </li>
+
+            <li>
+              <p>Bug fixed: <tt style="color: #A03D10">?is_enumerable</tt> has returned
+              <tt style="color: #A03D10">true</tt> for Java methods get from Java objects,
+              despite that those values aren't <tt style="color: #A03D10">&lt;#list
+              ...&gt;</tt>-able. (This is actually a historical quirk of
+              <tt style="color: #A03D10">BeansWrapper</tt>, not a bug in
+              <tt style="color: #A03D10">?is_enumerable</tt>, but now
+              <tt style="color: #A03D10">?is_enumerable</tt> is aware of this exceptional
+              case.)</p>
+            </li>
+
+            <li>
+              <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/257/">257</a>]:
+              The result value of <tt style="color: #A03D10">?matches</tt> wasn't
+              "reentrant". For example, you couldn't list the
+              matches inside another listing where you are also listing
+              exactly the same result value (stored in a common variable), as
+              they would consume from the same iterator. Most importantly,
+              even accessing the <tt style="color: #A03D10">?size</tt> of the same result
+              value has terminated the outer listing of the same value.</p>
+            </li>
+
+            <li>
+              <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/229/">229</a>]:
+              If you set <tt style="color: #A03D10">incompatible_improvements</tt> to
+              2.3.21 (or higher), unclosed comments (<tt style="color: #A03D10">&lt;#--
+              <i style="color: #DD4400">...</i></tt>) and
+              <tt style="color: #A03D10">#noparse</tt>-s won't be silently closed at the
+              end of template anymore, but cause a parsing error
+              instead.</p>
+            </li>
+          </ul>    </div>
+
+        
+            
+  
+  
+  
+  <h2 class="rank_section2"
+        >
+<a name="autoid_135"></a>Changes on the Java side  </h2>
+
+
+              <div class="itemizedlist">
+<ul>
+            <li>
+              <p>Added new <tt style="color: #A03D10">Configuration</tt> constructor,
+              <tt style="color: #A03D10">Configuration(Version
+              incompatibleImprovements)</tt>. This deprecates the vague
+              <tt style="color: #A03D10">Configuration()</tt> constructor, and makes using
+              <tt style="color: #A03D10">setIncompatibleImprovements(Version)</tt> needless
+              in most cases. See an example <a href="pgui_quickstart_createconfiguration.html">here...</a></p>
+            </li>
+
+            <li>
+              <p>When setting the
+              <tt style="color: #A03D10">incompatible_improvements</tt> setting (like with
+              the constructor above) to 2.3.21, two setting defaults
+              change:</p>
+
+                  <div class="itemizedlist">
+<ul>
+                <li>
+                  <p>The default of the <tt style="color: #A03D10">object_wrapper</tt>
+                  setting
+                  (<tt style="color: #A03D10">Configuration.getObjectWrapper()</tt>)
+                  changes from
+                  <tt style="color: #A03D10">ObjectWrapper.DEFAULT_WRAPPER</tt> to another
+                  almost identical <tt style="color: #A03D10">DefaultObjectWrapper</tt>
+                  singleton, returned by <tt style="color: #A03D10">new
+                  DefaultObjectWrapperBuilder(Version).build()</tt>. The
+                  new default object wrapper's "incompatible
+                  improvements" version is set to the same as of the
+                  <tt style="color: #A03D10">Configuration</tt>. (See later regarding the
+                  2.3.21 "incompatible improvements" of
+                  <tt style="color: #A03D10">BeansWrapper</tt> and
+                  <tt style="color: #A03D10">DefaultObjectWrapper</tt>). Furthermore, the
+                  new default object wrapper doesn't allow changing its
+                  settings; setter methods will throw
+                  <tt style="color: #A03D10">IllegalStateException</tt>. (If anything tries
+                  to call setters on the old default in your application,
+                  that's a dangerous bug that won't remain hidden now. As the
+                  old default is a singleton too, potentially shared by
+                  independently developed components, most of them expects the
+                  out-of-the-box behavior from it (and the others are
+                  necessarily buggy). Also, then concurrency glitches can
+                  occur (and even pollute the class introspection cache)
+                  because the singleton is modified after publishing.)</p>
+                </li>
+
+                <li>
+                  <p>The default of the <tt style="color: #A03D10">template_loader</tt>
+                  setting
+                  (<tt style="color: #A03D10">Configuration.getTemplateLoader()</tt>})
+                  changes to <tt style="color: #A03D10">null</tt>, which means that
+                  FreeMarker will not find any templates. Earlier the default
+                  was a <tt style="color: #A03D10">FileTemplateLoader</tt> that used the
+                  current directory as the root. This was dangerous and
+                  fragile as you usually don't have good control over what the
+                  current directory will be. Luckily, the old default almost
+                  never looked for the templates at the right place anyway, so
+                  pretty much all applications had to set
+                  <tt style="color: #A03D10">template_loader</tt>, so it's unlikely that
+                  changing the default breaks your application.</p>
+                </li>
+              </ul>    </div>
+
+            </li>
+
+            <li>
+              <p>New <tt style="color: #A03D10">BeansWrapper</tt>,
+              <tt style="color: #A03D10">DefaultObjectWrapper</tt> and
+              <tt style="color: #A03D10">SimpleObjectWrapper</tt> constructor that takes a
+              <tt style="color: #A03D10">Version</tt>
+              <tt style="color: #A03D10">incompatibleImprovements</tt> argument. This has
+              the same role as the
+              <tt style="color: #A03D10">incompatible_improvements</tt> setting of the
+              <tt style="color: #A03D10">Configuration</tt>, but it applies to the
+              <tt style="color: #A03D10">ObjectWrapper</tt> instead. (As
+              <tt style="color: #A03D10">ObjectWrapper</tt>-s are often shared among
+              multiple <tt style="color: #A03D10">Configuration</tt>-s, so they can't use
+              that setting of the <tt style="color: #A03D10">Configuration</tt>.) In new or
+              actively developed projects it's recommended to use
+              <tt style="color: #A03D10">Configuration.VERSION_2_3_21</tt> now. The
+              constructor without the <tt style="color: #A03D10">Version</tt> parameter is
+              now deprecated.</p>
+            </li>
+
+            <li>
+              <p>Safer and more memory-efficient way of managing singletons
+              of <tt style="color: #A03D10">DefaultObjectWrapper</tt>-s and
+              <tt style="color: #A03D10">BeansWrapper</tt>-s that are possibly shared by
+              independently developed subsystems:</p>
+
+                  <div class="itemizedlist">
+<ul>
+                <li>
+                  <p>Instead of <tt style="color: #A03D10">new
+                  DefaultObjectWrapper(<i style="color: #DD4400">...</i>)</tt>
+                  and <tt style="color: #A03D10">new
+                  BeansWrapper(<i style="color: #DD4400">...</i>)</tt>, from
+                  now on you should use <tt style="color: #A03D10">new
+                  DefaultObjectWrapperBuilder(version).build()</tt> and
+                  <tt style="color: #A03D10">new BeansWrapperBuilder(version).build()</tt>.
+                  (The builder objects have properties (configuration
+                  settings) like <tt style="color: #A03D10">BeansWrapper</tt> has, which
+                  specify the properties of the objects created.) The created
+                  objects are <i>singletons</i> (VM-wide, or at
+                  least Web-Application-wide) and read-only (means,
+                  non-configurable, hence safe to share). The main benefit of
+                  using these factories instead of creating new instances is
+                  that it allows FreeMarker to share the class introspection
+                  caches (an internal part of
+                  <tt style="color: #A03D10">BeansWrapper</tt>-s/<tt style="color: #A03D10">DefaultObjectWrapper</tt>-s
+                  that is expensive to populate) among the returned instances.
+                  This allow sharing the caches (and the object wrappers)
+                  between components that aren't aware of each other and use
+                  FreeMarker internally.</p>
+                </li>
+
+                <li>
+                  <p>Deprecated the static fields
+                  <tt style="color: #A03D10">ObjectWrapper.DEFAULT_WRAPPER</tt>,
+                  <tt style="color: #A03D10">BEANS_WRAPPER</tt> and
+                  <tt style="color: #A03D10">SIMPLE_WRAPPER</tt>, because these
+                  <tt style="color: #A03D10">ObjectWrapper</tt>-s are configurable (not
+                  read-only), and thus dangerous to use as singletons (a badly
+                  behaving 3rd party component can mess them up). Use the
+                  factories described above instead. They are also more
+                  flexible, as you can specify the desired
+                  incompatible-improvements version for them and various other
+                  <tt style="color: #A03D10">BeansWrapper</tt> settings.</p>
+                </li>
+
+                <li>
+                  <p>Deprecated all <tt style="color: #A03D10">SimpleHash</tt>,
+                  <tt style="color: #A03D10">SimpleCollection</tt> and
+                  <tt style="color: #A03D10">SimpleSequence</tt> constructors that didn't
+                  take an <tt style="color: #A03D10">ObjectWrapper</tt> argument, as they
+                  have usually used
+                  <tt style="color: #A03D10">ObjectWrapper.DEFAULT_WRAPPER</tt> as the
+                  default, which itself is deprecated.</p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10">BeansWrapper</tt>,
+                  <tt style="color: #A03D10">DefaultObjectWrapper</tt> and
+                  <tt style="color: #A03D10">SimpleObjectWrapper</tt> now implements the
+                  <tt style="color: #A03D10">freemarker.template.utility.WriteProtectable</tt>
+                  interface with which the configuration properties of the
+                  object wrapper can be set permanently to read-only by
+                  calling <tt style="color: #A03D10">writeProtect()</tt>. An attempt to
+                  call a setter on a such <tt style="color: #A03D10">ObjectWrapper</tt>
+                  will immediately cause
+                  <tt style="color: #A03D10">IllegalStateException</tt>. (This is what's
+                  used for the singletons returned by the
+                  <tt style="color: #A03D10">getInstance</tt> methods too; see
+                  earlier).</p>
+                </li>
+              </ul>    </div>
+
+            </li>
+
+            <li>
+              <p>The value of the <tt style="color: #A03D10">time_zone</tt> setting,
+              when you specify it with a <tt style="color: #A03D10">String</tt> (in a
+              <tt style="color: #A03D10">java.util.Properties</tt> object, or via
+              <tt style="color: #A03D10">&lt;#setting
+              <i style="color: #DD4400">...</i>&gt;</tt>) can now be
+              <tt style="color: #A03D10">&quot;JVM default&quot;</tt> to use the JVM default time
+              zone. The JVM default is the default value of that setting
+              anyway, but now you can state this explicitly, or restore this
+              value if it was overridden earlier.</p>
+            </li>
+
+            <li>
+              <p>Added new configuration setting,
+              <tt style="color: #A03D10">sql_date_and_time_time_zone</tt>
+              (<tt style="color: #A03D10">Configurable.setSQLDateAndTimeTimeZone(TimeZone)</tt>).
+              When this is set to non-<tt style="color: #A03D10">null</tt>, the time zone
+              used when dealing with <tt style="color: #A03D10">java.sql.Date</tt> and
+              <tt style="color: #A03D10">java.sql.Time</tt> values will be this time zone
+              instead of the value of the <tt style="color: #A03D10">time_zone</tt>
+              FreeMarker configuration setting. This is useful because JDBC
+              will, usually, construct the Java <tt style="color: #A03D10">Date</tt>
+              objects so that they will show the year-month-day and
+              hour-minute-seconds values from the database "as
+              is" if you render them using the JVM default time zone.
+              As time zone conversions for SQL date-only and SQL time-only
+              values doesn't make much sense (unlike for SQL timestamps), you
+              should certainly set this setting to the JVM default time zone
+              (<tt style="color: #A03D10">TimeZone.getDefault()</tt>, or if you configure
+              FreeMarker via <tt style="color: #A03D10">java.util.Properties</tt>, as
+              property value &quot;JVM default&quot;). The default value is
+              <tt style="color: #A03D10">null</tt> for backward compatibility. For more
+              details see the JavaDoc of
+              <tt style="color: #A03D10">Configurable.setSQLDateAndTimeTimeZone(TimeZone)</tt>.</p>
+            </li>
+
+            <li>
+              <p>When configuring FreeMarker with
+              <tt style="color: #A03D10">java.util.Properties</tt> (typically, when the
+              configuration is stored in a <tt style="color: #A03D10">.properties</tt>
+              file), for the settings where you could specify a fully
+              qualified class name (most notably for the
+              <tt style="color: #A03D10">object_wrapper</tt> setting) now you can also
+              specify constructor arguments and JavaBean property assignments.
+              For example, now you can write
+              <tt style="color: #A03D10">object_wrapper=com.example.MyObjectWrapper(1, 2,
+              exposeFields=true, cacheSize=5000)</tt>that's nearly
+              equivalent with this Java code: <tt style="color: #A03D10">obj = new
+              com.example.MyObjectWrapper(1, 2); obj.setExposeFields(true);
+              obj.setCacheSize(5000); object_wrapper = obj;</tt>. If you
+              are using this new syntax (i.e., if you have parentheses after
+              the class name, even if they are empty), and there's a builder
+              class for the requested class, that will be automatically used.
+              For example,
+              <tt style="color: #A03D10">object_wrapper=DefaultObjectWrapper(2.3.21)</tt>
+              will create a <tt style="color: #A03D10">DefaultObjectWrapperBuilder</tt> to
+              build the final instance, thus the object wrapper will be a
+              singleton instead of a new instance. The new syntax will also
+              look for a public static <tt style="color: #A03D10">INSTANCE</tt> field if
+              there are 0 arguments and property assignments. For more details
+              see the Java API documentation of
+              <tt style="color: #A03D10">Configuration.setSetting</tt>.</p>
+            </li>
+
+            <li>
+              <p>Template not found exceptions now explain that the
+              template path is interpreted by a template loader, and show the
+              <tt style="color: #A03D10">toString</tt> of the
+              <tt style="color: #A03D10">TemplateLoader</tt>. The out-of-the-box
+              <tt style="color: #A03D10">TemplateLoader</tt> implementations now have an
+              overridden <tt style="color: #A03D10">toString</tt> to show the actual base
+              directory and such details. Custom
+              <tt style="color: #A03D10">TemplateLoader</tt> implementations are encouraged
+              to override <tt style="color: #A03D10">toString</tt>.</p>
+            </li>
+
+            <li>
+              <p>Added
+              <tt style="color: #A03D10">Configuration.setSharedVariables(Map/*&lt;String,
+              Object&gt;*/)</tt> for setting the shared variables from
+              Spring IoC and other IoC solutions. The already existing
+              <tt style="color: #A03D10">Configuration.setSharedVariable(String,
+              Object)</tt> isn't a JavaBean property so it was hard to
+              use for that. Furthermore, the order in which
+              <tt style="color: #A03D10">Configuration.setObjectWrapper</tt> and
+              <tt style="color: #A03D10">Configuration.setSharedVariables</tt> are called
+              doesn't mater (unlike in the case of
+              <tt style="color: #A03D10">Configuration.setSharedVariable</tt>), which is
+              essential in most IoC solutions.</p>
+            </li>
+
+            <li>
+              <p>Mostly concerning tool (like IDE plugin) authors:</p>
+
+                  <div class="itemizedlist">
+<ul>
+                <li>
+                  <p><tt style="color: #A03D10">ParseException</tt>-s now also store the
+                  end-location of the error, not just its start-location. This
+                  is useful if you want to underline the error in the source
+                  code, not just point at it.</p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10">Configuration.getSupportedBuiltInDirectiveNames()</tt>
+                  can be used to return the names of directives supported by
+                  FreeMarker.</p>
+                </li>
+
+                <li>
+                  <p><tt style="color: #A03D10">TemplateExceptions</tt> now expose the
+                  position of the error (template name, line, column, end
+                  line, end column) similarly to
+                  <tt style="color: #A03D10">ParseException</tt>-s. Where applicable, they
+                  also expose the blamed expression in its canonical FTL
+                  source form; this is mostly useful for
+                  <tt style="color: #A03D10">InvalidReferenceException</tt>-s.</p>
+                </li>
+              </ul>    </div>
+
+            </li>
+
+            <li>
+              <p>The concurrent performance of overloaded method lookups
+              (from the cache) was improved under Java 5 and later.</p>
+            </li>
+
+            <li>
+              <p>The <tt style="color: #A03D10">Version</tt> instances that are
+              "incompatible improvements" break points are now
+              available via constants like:
+              <tt style="color: #A03D10">Configuration.VERSION_2_3_21</tt>.</p>
+            </li>
+
+            <li>
+              <p>From now on, if you try to set the "incompatible
+              improvements" to greater than the current FreeMarker
+              version, or less than 2.3.0, an
+              <tt style="color: #A03D10">IllegalArgumentException</tt> will be thrown.
+              Thus, <tt style="color: #A03D10">new
+              Configuration(<i style="color: #DD4400">someVersion</i>)</tt>
+              not only activates the fixes up to that version, but ensures
+              that the application will not run in an environment with an
+              older FreeMarker version. (On an older FreeMarker version the
+              improvements that you have requested aren't implemented yet, so
+              you should get an exception.)</p>
+            </li>
+
+            <li>
+              <p>Added new configuration setting,
+              <tt style="color: #A03D10">show_error_tips</tt>, defaults to
+              <tt style="color: #A03D10">true</tt>. Sets if tips should be shown in error
+              messages of errors arising during template processing.</p>
+            </li>
+
+            <li>
+              <p>Instead of overriding
+              <tt style="color: #A03D10">BeansWrapper.finetuneMethodAppearance</tt> (now
+              deprecated), now you can use
+              <tt style="color: #A03D10">BeansWrapper.setMethodAppearanceFineTuner(MethodAppearanceFineTuner)</tt>,
+              so you don't need to extend the object wrapper class to
+              customize this aspect.</p>
+            </li>
+
+            <li>
+              <p>Added
+              <tt style="color: #A03D10">Configuration.getCoreDirecticeNames()</tt> which
+              returns the names of all directives that are provided by
+              FreeMarker. This can useful for IDE-s.</p>
+            </li>
+
+            <li>
+              <p><tt style="color: #A03D10">template_loader</tt> was added as possible
+              configuration setting <tt style="color: #A03D10">Properties</tt> key.</p>
+            </li>
+
+            <li>
+              <p>The standard <tt style="color: #A03D10">CacheStorage</tt>
+              implementations now have a <tt style="color: #A03D10">getSize()</tt> method
+              for monitoring the cache size.
+              <tt style="color: #A03D10">MruCacheStorage</tt> also has
+              <tt style="color: #A03D10">getSoftSize()</tt> and
+              <tt style="color: #A03D10">getStrongSize()</tt>.</p>
+            </li>
+
+            <li>
+              <p>Various smaller improvements in configuration setting
+              errors messages.</p>
+            </li>
+
+            <li>
+              <p>With incompatible improvements 2.3.21 only: Empty ranges
+              return <tt style="color: #A03D10">Constants.EMPTY_SEQUENCE</tt> instead of an
+              empty <tt style="color: #A03D10">SimpleSequence</tt>. This is in theory
+              backward compatible, as the API only promises to give something
+              that implements <tt style="color: #A03D10">TemplateSequenceModel</tt>.</p>
+            </li>
+
+            <li>
+              <p>FreeMarker now requires Java version has changed from 1.2
+              to 1.4.</p>
+            </li>
+
+            <li>
+              <p>Bugs fixed and improvements in overloaded method
+              selection/invocation, but only if you create the
+              <tt style="color: #A03D10">BeansWrapper</tt>/<tt style="color: #A03D10">DefaultObjectWrapper</tt>
+              with constructor parameter
+              <tt style="color: #A03D10">Configuration.VERSION_2_3_21</tt> (or if you are
+              using <tt style="color: #A03D10">Properties</tt> to configure FreeMarker, you
+              can do that like
+              <tt style="color: #A03D10">object_wrapper=BeansWrapper(2.3.21)</tt>), or if
+              you have a <tt style="color: #A03D10">Configuration</tt> with similar
+              <tt style="color: #A03D10">incompatible_improvements</tt> 2.3.21
+              <i>and</i> you leave the
+              <tt style="color: #A03D10">object_wrapper</tt> setting on its default value.
+              There's a little chance that because of these changes, a
+              different overloaded method will be chosen than before, or even
+              that ambiguity errors will arise where earlier they didn't
+              (although the opposite is far more frequent), hence the fixes
+              aren't automatically activated. But the fix mostly only effect
+              calls that were failing or have chosen then wrong method
+              earlier, so it's recommended to activate it for projects that
+              are still actively developed. This fix includes numerous
+              changes:</p>
+
+                  <div class="itemizedlist">
+<ul>
+                <li>
+                  <p>Earlier, <tt style="color: #A03D10">null</tt> argument values has
+                  only matched overloaded methods where the corresponding
+                  parameter had <tt style="color: #A03D10">Object</tt> type, not a subclass
+                  of it. That's clearly a bug. Now it considers all overloads
+                  where the parameter type is non-primitive, and just like the
+                  Java language, it choses the one with the most specific type
+                  among them. This is the most important fix, and also the
+                  most risky one regarding backward-compatibility. Like if you
+                  have <tt style="color: #A03D10">m(Object o)</tt> and <tt style="color: #A03D10">m(String
+                  s)</tt> in a Java class, earlier for a
+                  <tt style="color: #A03D10">m(null)</tt> call in the template it has
+                  chosen <tt style="color: #A03D10">m(Object o)</tt>, but now it will
+                  choose <tt style="color: #A03D10">m(String s)</tt> instead (because
+                  <tt style="color: #A03D10">String</tt> is also
+                  <tt style="color: #A03D10">null</tt>-able and is more specific than
+                  <tt style="color: #A03D10">Object</tt>). Furthermore, if you also had
+                  <tt style="color: #A03D10">m(File f)</tt> in the same class, now it will
+                  cause an ambiguity exception, since the specificity of
+                  <tt style="color: #A03D10">File</tt> and <tt style="color: #A03D10">String</tt> can't
+                  be compared (same rule as under Java language), while
+                  earlier that wasn't a problem as only <tt style="color: #A03D10">m(Object
+                  o)</tt> was seen as applicable.</p>
+                </li>
+
+                <li>
+                  <p>The behavior of numbers with overloaded method
+                  selection was heavily reworked:</p>
+
+                      <div class="itemizedlist">
+<ul>
+                    <li>
+                      <p>If possible, it now always choses the overload
+                      where overflow and truncation to integer (like 1.5 to 1)
+                      is avoided. Among the methods where no such critical
+                      loss occurs, it choses the overload with the least risk
+                      of precision loss (unless other conditions with higher
+                      priority suggest otherwise). Earlier, the method
+                      selection was prone to do choices that led to overflow
+                      or precision loss, especially when the parameter was a
+                      literal with decimals.</p>
+                    </li>
+
+                    <li>
+                      <p>Overloaded method call can now convert to
+                      non-primitive numerical types, like a
+                      <tt style="color: #A03D10">Byte</tt> or <tt style="color: #A03D10">byte</tt> value
+                      is automatically converted to <tt style="color: #A03D10">Integer</tt>
+                      if the parameter type is <tt style="color: #A03D10">Integer</tt>.
+                      (This has always worked for non-overloaded methods.)
+                      Earlier where such conversion was needed, the method
+                      wasn't seen seen applicable.</p>
+                    </li>
+
+                    <li>
+                      <p>Method selection is now not only based on the type
+                      of the wrapped number, but also on its value. For
+                      example, a <tt style="color: #A03D10">Long</tt> with value
+                      <tt style="color: #A03D10">1</tt> is now seen as compatible with a
+                      method with parameter type <tt style="color: #A03D10">int</tt> or
+                      <tt style="color: #A03D10">short</tt> or <tt style="color: #A03D10">byte</tt>, as
+                      <tt style="color: #A03D10">1</tt> can be stored in those without
+                      loss. This is important as unlike in Java language, in
+                      FTL you doesn't have strict control over the numerical
+                      types (the type of the wrapped number, actually), as FTL
+                      has no type declarations. (If multiple compatible
+                      methods are available, it will still try to chose the
+                      one with the same or bigger numerical type.)</p>
+                    </li>
+
+                    <li>
+                      <p>Conversion from/to <tt style="color: #A03D10">BigInteger</tt>
+                      is now supported.</p>
+                    </li>
+                  </ul>    </div>
+
+                </li>
+
+                <li>
+                  <p>Method choice ambiguity errors now occur much less
+                  often. Ambiguities was and are resolved by selecting the
+                  compatible methods then choosing the one with the most
+                  specific parameter types among them. The changes are:</p>
+
+                      <div class="itemizedlist">
+<ul>
+                    <li>
+                      <p>When comparing the overall specificity of two
+                      parameter lists: Earlier the parameter list seen as more
+                      specific was the one that had some parameters that won
+                      in specificity, and if both had such parameters then it
+                      was an ambiguity. Now it's enough if a method has more
+                      such parameters where it's a better match than the other
+                      has, or if the two methods are still equal, if it has
+                      the first better matching parameter. This can lead to
+                      choices that seem arbitrary (but are still
+                      deterministic), but as there's no automated way of
+                      discovering method selection ambiguities in templates
+                      (unlike in Java source code, where they will be detected
+                      during compilation), especially as overloaded selection
+                      has to rely on the <i>runtime</i> type of
+                      the values which even make proper testing hard, this was
+                      considered to be a better compromise than throwing an
+                      exception whenever the choice of the method is not
+                      obvious. Also note that in fact this mechanism is more
+                      complicated than just counting the "winner"
+                      parameter positions for each methods, as certain kind of
+                      wins are stronger than any number of the others: wins
+                      where the other possibility is risking of substantial
+                      mantissa precision loss are the strongest (like dropping
+                      decimals versus not to), wins where the primitive type
+                      wins over the boxed class is the weakest (like
+                      <tt style="color: #A03D10">int</tt> versus
+                      <tt style="color: #A03D10">Integer</tt>), subclassing wins (like
+                      <tt style="color: #A03D10">String</tt> versus
+                      <tt style="color: #A03D10">Object</tt>) are between these two.</p>
+                    </li>
+
+                    <li>
+                      <p>When comparing the specificity of two parameters
+                      types at the same parameter position: The algorithm now
+                      considers a primitive type as more specific that its
+                      corresponding boxing class (like <tt style="color: #A03D10">int</tt>
+                      is considered to be more specific than
+                      <tt style="color: #A03D10">Integer</tt>).</p>
+                    </li>
+
+                    <li>
+                      <p>There was a bug with overloaded varargs methods of
+                      different parameter counts, where sometimes the last
+                      parameters of the compared methods was ignored, which is
+                      taking away a potential deciding factor and thus can
+                      lead to ambiguity error. Whether this happened depends
+                      on the order in which the Java reflection API has
+                      returned the methods, which is undocumented and known to
+                      change at least after some Java updates, breaking the
+                      application.</p>
+                    </li>
+
+                    <li>
+                      <p>When comparing the specificity of two array types,
+                      until now they were seen as equal. Now the component
+                      types are compared, and then that with the less specific
+                      component type is preferred. For example, among
+                      <tt style="color: #A03D10">f(String[])</tt> and
+                      <tt style="color: #A03D10">f(Object[])</tt>, the last will always
+                      win. This might sounds controversial, but as we can't
+                      efficiently tell the common type of all the items in a
+                      sequence or <tt style="color: #A03D10">List</tt>, an so we don't know
+                      if both arrays are indeed valid targets, we go for the
+                      safest choice.</p>
+                    </li>
+                  </ul>    </div>
+
+                </li>
+
+                <li>
+                  <p>FTL sequence values (like Java
+                  <tt style="color: #A03D10">List</tt>-s or FTL
+                  <tt style="color: #A03D10">[<i style="color: #DD4400">x</i>,
+                  <i style="color: #DD4400">y</i>,
+                  <i style="color: #DD4400">...</i>]</tt> constants) were
+                  not seen as applicable to a parameter with array type if
+                  there were multiple overloaded methods with the same number
+                  of parameters but with different types on the position of
+                  the array parameter. That is, if you had
+                  <tt style="color: #A03D10">f(String[])</tt> and
+                  <tt style="color: #A03D10">f(String)</tt> in Java, then
+                  <tt style="color: #A03D10">f(['foo', 'bar'])</tt> in the template
+                  reported no compatible overloads. Now it will choose
+                  <tt style="color: #A03D10">f(String[])</tt>. Note that if there's also an
+                  <tt style="color: #A03D10">f(List)</tt> or even an
+                  <tt style="color: #A03D10">f(Collection)</tt>, it will prefer those over
+                  arrays. (For consistency, this conversion will work even if
+                  the argument is a <tt style="color: #A03D10">List</tt> that come directly
+                  from Java (as opposed to be created inside FTL), i.e., when
+                  it was wrapped then unwrapped to the original
+                  <tt style="color: #A03D10">List</tt> object.) For a multidimensional
+                  array parameter type, this conversion works recursively, so
+                  you can pass in a sequence-of-sequences as the
+                  argument.</p>
+                </li>
+
+                <li>
+                  <p>FTL sequence values that wrapped a Java array (when
+                  FreeMarker was also aware of that via
+                  <tt style="color: #A03D10">AdapterTemplateModel</tt> or
+                  <tt style="color: #A03D10">WrapperTemplateModel</tt>) were not seen as
+                  applicable to a parameter with <tt style="color: #A03D10">List</tt> type
+                  if there were multiple overloaded methods with the same
+                  number of parameters but with different types on the
+                  position of the array parameter. So this is pretty much like
+                  the issue described in the previous point, but for array to
+                  <tt style="color: #A03D10">List</tt> conversion. The array to
+                  <tt style="color: #A03D10">List</tt> conversion will be avoided if
+                  possible, but it will be attempted if there's no other
+                  alternative. Note that unlike with <tt style="color: #A03D10">List</tt>
+                  to array conversions, here FreeMarker can't cope with
+                  multi-dimensional lists, that is, an array-of-arrays won't
+                  be converted to a
+                  <tt style="color: #A03D10">List</tt>-of-<tt style="color: #A03D10">List</tt>-s.</p>
+                </li>
+
+                <li>
+                  <p>FTL string to Java
+                  <tt style="color: #A03D10">char</tt>/<tt style="color: #A03D10">Character</tt>
+                  conversion now works for overloaded method parameters;
+                  earlier it has worked for non-overloaded methods only. If
+                  the string length is 1, it will be seen as compatible with
+                  parameters with <tt style="color: #A03D10">char</tt> or
+                  <tt style="color: #A03D10">Character</tt> type.</p>
+                </li>
+
+                <li>
+                  <p>Decreased the chance of choosing the wrong target Java
+                  type when unwrapping multi-typed FTL values: When unwrapping
+                  a parameter value that implements multiple FTL types (e.g.
+                  string and hash) but doesn't implement
+                  <tt style="color: #A03D10">AdapterTemplateModel</tt> or
+                  <tt style="color: #A03D10">WrapperTemplateModel</tt>, a decision has to
+                  be made if to what Java type the value should be unwrapped
+                  to (e.g. to <tt style="color: #A03D10">String</tt> or to
+                  <tt style="color: #A03D10">Map</tt>). In earlier versions that decision
+                  was made based on the most specific common super type of the
+                  parameters types of the given parameter position. However,
+                  it's quite common that the common super type is too generic,
+                  usually <tt style="color: #A03D10">Object</tt>. Now
+                  <tt style="color: #A03D10">BeansWrapper</tt> stores "type
+                  flags" for each parameter position of overloaded
+                  methods, from which it can tell whether a potential target
+                  Java type occurs in any of the overloads on the given
+                  parameter position.</p>
+                </li>
+
+                <li>
+                  <p>In many cases, less specific hint class was used for
+                  unwrapping than that was possible within the limitations of
+                  the applied hint generation algorithm. (The unwrapping hint
+                  has influence when there's an ambiguity regarding how to
+                  create a Java object form an FTL value. In the vast majority
+                  of the cases, a too generic hint has no effect.) (This is a
+                  highly technical topic. The way it works is that a single
+                  common unwrapping hint class is chosen for a given argument
+                  position shared by the overloads that has the same number of
+                  parameters, and that hint class has to be as specific as
+                  possible while it must fit all those parameter types. The
+                  issue with the too generic hints had several instances: (a)
+                  When the most specific common class/interface of two
+                  same-position parameter types was searched, if there was
+                  multiple common classes/interfaces that had no relationship
+                  (this is always at most one class and one or more unrelated
+                  interfaces), due to the ambiguity it has felt back to using
+                  <tt style="color: #A03D10">Object</tt> as the unwrapping hint. Now if
+                  there's a non-<tt style="color: #A03D10">Object</tt> class among them in
+                  such case, it will be chosen as the hint (i.e., we ignore
+                  the common interfaces). Otherwise if only a single interface
+                  remains by removing <tt style="color: #A03D10">Cloneable</tt>,
+                  <tt style="color: #A03D10">Serializable</tt>, and
+                  <tt style="color: #A03D10">Comparable</tt> (in that order), that will be
+                  chosen. Only then it falls back to
+                  <tt style="color: #A03D10">Object</tt>. (b) The common most specific
+                  class of a primitive type and the corresponding boxing class
+                  was sometimes <tt style="color: #A03D10">Object</tt> instead of the
+                  boxing class. This has depended on Java's internal ordering
+                  of the methods, and so were quite unpredictable, like the
+                  result could change after upgrading Java under the
+                  application. (c) The common superclass of a numerical
+                  primitive value and a numerical non-primitive value was
+                  always <tt style="color: #A03D10">Object</tt>, now if they are a
+                  primitive-boxing class pair, then it's the boxing class,
+                  otherwise it's <tt style="color: #A03D10">Number</tt>. (d) If the varags
+                  parameter position was not the same in all the overloaded
+                  varargs methods, sometimes some varargs arguments where
+                  unwrapped with too generic hints. When this happened was
+                  unpredictable as it depended on Java's internal method
+                  ordering again.)</p>
+                </li>
+
+                <li>
+                  <p>When unwrapping method call arguments before calling a
+                  Java method, if the argument was an
+                  <tt style="color: #A03D10">AdapterTemplateModel</tt> and the target
+                  parameter type was primitive,
+                  <tt style="color: #A03D10">AdapterTemplateModel.getAdaptedObject(Class
+                  hint)</tt> has received the primitive type of the
+                  target parameter (like <tt style="color: #A03D10">int</tt> instead of
+                  <tt style="color: #A03D10">Integer</tt>) as the hint. This did not make
+                  sense since <tt style="color: #A03D10">getAdaptedObject</tt> can only
+                  return <tt style="color: #A03D10">Object</tt>-s, not primitive values.
+                  Yet, <tt style="color: #A03D10">BeansWrapper</tt> has expected the
+                  returned value to be of the primitive type, otherwise it has
+                  discarded it. Exactly the same problem occurs with
+                  <tt style="color: #A03D10">WrapperTemplateModel</tt>. Thus, ultimately,
+                  if the target parameter type was primitive and some of these
+                  interfaces were implemented, their return value was always
+                  discarded and FreeMarker has felt back to other means of
+                  unwrapping. Now <tt style="color: #A03D10">BeansWrapper</tt> always
+                  passes in and expects the boxing type (like
+                  <tt style="color: #A03D10">Integer</tt>) instead of the primitive
+                  type.</p>
+                </li>
+              </ul>    </div>
+
+            </li>
+
+            <li>
+              <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/373/">373</a>]:
+              These are three bugs actually, which can cause problems when
+              FreeMarker re-loads a template because of a charset override
+              with <tt style="color: #A03D10">&lt;#ftl encoding=&quot;...&quot;&gt;</tt>: First, if
+              the template loader was a <tt style="color: #A03D10">URLTemplateLoader</tt>,
+              when <tt style="color: #A03D10">TemplateLoader.getReader()</tt> was called
+              for the second time, and the <tt style="color: #A03D10">Reader</tt> returned
+              for the first time was already used, it might returned an empty
+              or corrupted template, depending on the backing URL
+              implementation. Secondly, when FreeMarer has decided if a
+              template file has to be re-loaded because its encoding specified
+              with <tt style="color: #A03D10">&lt;#ftl encoding=&quot;...&quot;&gt;</tt> differs from
+              the encoding used for loading the template first, it has used
+              case-sensitive comparison, thus often re-loaded needlessly (like
+              &quot;UTF-8&quot; and &quot;utf-8&quot; mean the same). Now this comparison is
+              case-insensitive. Last not least, when retrying with the second
+              charset, the <tt style="color: #A03D10">TemplateCache</tt> has forgotten to
+              close the first <tt style="color: #A03D10">Reader</tt>, which can be a handle
+              leak.</p>
+            </li>
+
+            <li>
+              <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/411/">411</a>]:
+              Invalid and redundant execution environment names from the OSGi
+              bundle manifest were removed. It looks like this now:
+              <tt style="color: #A03D10">Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+              J2SE-1.4</tt>. That is, we prefer (and compile against)
+              1.5, but only require 1.4.</p>
+            </li>
+
+            <li>
+              <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/409/">409</a>]:
+              <tt style="color: #A03D10">SimpleHash</tt>'s internal <tt style="color: #A03D10">Map</tt>
+              is concurrently modified on a non-safe way when getting length-1
+              <tt style="color: #A03D10">String</tt> key that exists but maps to
+              <tt style="color: #A03D10">null</tt>. This operation will accidentally add a
+              <tt style="color: #A03D10">Character</tt> key to the internal map, which is
+              not a thread-safe operation.</p>
+            </li>
+
+            <li>
+              <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/273/">273</a>]:
+              <tt style="color: #A03D10">TemplateLoader</tt>-s that use
+              <tt style="color: #A03D10">java.net.URLConnection</tt>-s should set
+              <tt style="color: #A03D10">URLConnection.useCaches</tt> to
+              <tt style="color: #A03D10">false</tt>, or else it won't detect template
+              caches on certain configurations.</p>
+
+                  <div class="itemizedlist">
+<ul>
+                <li>
+                  <p><tt style="color: #A03D10">URLTemplateLoader</tt> and its
+                  subclasses and
+                  <tt style="color: #A03D10">WebApplicationTemplateLoader</tt> now has a
+                  <tt style="color: #A03D10">setURLConnectionUsesCaches(Boolean)</tt>
+                  method. It's recommended to set this property to
+                  <tt style="color: #A03D10">false</tt> from its default backward
+                  compatible value, <tt style="color: #A03D10">null</tt>. As FreeMarker has
+                  its own template cache with its own update delay setting
+                  (<tt style="color: #A03D10">template_update_delay</tt>,
+                  <tt style="color: #A03D10">Configuration.setTemplateUpdateDelay(int)</tt>),
+                  it shouldn't cause performance problems. The
+                  <tt style="color: #A03D10">null</tt> value will leave the caching of the
+                  <tt style="color: #A03D10">java.net.URLConnection</tt> on its default,
+                  which is usually <tt style="color: #A03D10">true</tt>.</p>
+                </li>
+
+                <li>
+                  <p>If <tt style="color: #A03D10">incompatible_improvements</tt> is set
+                  to 2.3.21 (or higher) and templates are loaded through
+                  <tt style="color: #A03D10">Configuration.getTemplate</tt>, and the
+                  <tt style="color: #A03D10">TemplateLoader</tt> in use has
+                  <tt style="color: #A03D10">URLConnectionUsesCaches</tt> left on
+                  <tt style="color: #A03D10">null</tt>, it will behave as if it was set to
+                  <tt style="color: #A03D10">false</tt>. Note that this
+                  <tt style="color: #A03D10">incompatible_improvements</tt> trick only
+                  works if the template is loaded through
+                  <tt style="color: #A03D10">Configuration.getTemplate</tt> (or
+                  <tt style="color: #A03D10">TemplateCache</tt>).</p>
+                </li>
+              </ul>    </div>
+
+            </li>
+
+            <li>
+              <p>Bug fixed: When changing the properties of
+              <tt style="color: #A03D10">DefaultObjectWrapper</tt> or
+              <tt style="color: #A03D10">BeansWrapper</tt> that influenced class
+              introspection results (like <tt style="color: #A03D10">exposureLevel</tt> or
+              <tt style="color: #A03D10">exposeFields</tt>), the introspection cache wasn't
+              cleared, and thus returned stale information for the classes
+              that were introspected before those properties were changed. Now
+              changing such properties always clears the introspection
+              caches.</p>
+            </li>
+
+            <li>
+              <p>Bug fixed: Constants used for empty sequence, empty hash,
+              empty collection and empty iterator weren't
+              <tt style="color: #A03D10">Serializable</tt>.</p>
+            </li>
+
+            <li>
+              <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/311/">300</a>]:
+              Logger class availability check was incorrect in that it has
+              checked the availability of logger libraries with the thread
+              context class loader, then later it tried to link to them with
+              the defining class loader of the FreeMarker classes. With some
+              class loader setups (notably under Netbeans sometimes) this led
+              to <tt style="color: #A03D10">ClassDefNotFoundError</tt>-s that made
+              FreeMarker unusable. (The check itself was also not very
+              durable, as it didn't expected <tt style="color: #A03D10">LinakeError</tt>-s,
+              only <tt style="color: #A03D10">ClassNotFoundException</tt>.)</p>
+            </li>
+
+            <li>
+              <p>Bug fixed: <tt style="color: #A03D10">ClassUtil.forName</tt>, used
+              inside FreeMarker everywhere to resolve class names to classes,
+              if the thread context class loader is <tt style="color: #A03D10">null</tt>,
+              no longer tries to load with the bootstrap class loader before
+              loading with the defining class loader of FreeMarker.</p>
+            </li>
+
+            <li>
+              <p>Bug fixed [<a href="http://sourceforge.net/p/freemarker/bugs/311/">311</a>]:
+              <tt style="color: #A03D10">TemplateBooleanModel.TRUE</tt> and
+              <tt style="color: #A03D10">FALSE</tt> are now serializable</p>
+            </li>
+
+            <li>
+              <p>Bug fixed: Various issues in <tt style="color: #A03D10">Version</tt>
+              class, such as wrong <tt style="color: #A03D10">hashCode</tt>, possible
+              concurrency glitches, and acceptance of some malformed version
+              strings.</p>
+            </li>
+
+            <li>
+              <p>Bug fixed [<a href="https://sourceforge.net/p/freemarker/bugs/414/">414</a>]:
+              Eclipse debug mode running was suspended during FreeMarker
+              static initialization on the JRebel availability checked if
+              JRebel wasn't available.</p>
+            </li>
+          </ul>    </div>
+
+        
+            
+  
+  
+  
+  <h2 class="rank_section2"
+        >
+<a name="autoid_136"></a>Other changes  </h2>
+
+
+              <div class="itemizedlist">
+<ul>
+            <li>
+              <p>The license has changed from our proprietary BSD-Style
+              license to the well know &quot;Apache License, Version 2.0&quot;.
+              Furthermore, the copyright owner has changed from &quot;Visigoth
+              Software Society&quot; (which was founded by Jonathan Revusky) to the
+              three main FreeMarker 2 developers/contributors, &quot;Attila
+              Szegedi, Daniel Dekany, and Jonathan Revusky&quot;. See the <a href="app_license.html">new license here</a>.</p>
+            </li>
+
+            <li>
+              <p>The required minimum Java version was raised from 1.2 to
+              1.4. FreeMarker will not work on Java 1.2 or 1.3.</p>
+            </li>
+
+            <li>
+              <p>Many smaller improvements and fixes in the Manual and API
+              JavaDocs.</p>
+            </li>
+          </ul>    </div>
+
+          
+</div>
+
+    <div class="navigation">
+    <div class="pagers">
+      <div class="pagersVerticalSpacer"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></div>
+<div class="pagerButton"><a href="versions_2_3_20.html"><span class="hideA">Next page: </span>2.3.20</a></div><div class="pagerButton"><a href="app_versions.html">Previous page</a></div><div class="pagerButton"><a href="app_versions.html">Parent page</a></div><div class="pagerButton"><a href="index.html">Contents</a></div>      <div class="pagersVerticalSpacer"><img src="docgen-resources/img/none.gif" width="1" height="1" alt="" hspace="0" vspace="0" border="0"/></div>
+    </div>
+    <div class="breadcrumb">
+<span class="breadcrumb">        You are here:
+          <a href="index.html">FreeMarker Manual</a>
+            <b>></b>
+          <a href="app.html">Appendixes</a>
+            <b>></b>
+          <a href="app_versions.html">Version history</a>
+            <b>></b>
+          2.3.21
+</span>    </div>
+    </div>
+
+<table border=0 cellspacing=0 cellpadding=0 width="100%">
+    <tr>
+      <td colspan=2><img src="docgen-resources/img/none.gif" width=1 height=8 alt=""></td>
+    <tr>
+      <td align="left" valign="top"><span class="smallFooter">
+            FreeMarker Manual -- For FreeMarker 2.3.21
+            <br>
+          HTML generated: 2014-10-12 18:53:30 GMT
+      </span></td>
+      <td align="right" valign="top"><span class="smallFooter">
+          <a href="http://www.xmlmind.com/xmleditor/">
+            <img src="docgen-resources/img/xxe.gif" alt="Edited with XMLMind XML Editor">
+          </a>
+      </span></td>
+    </tr>
+</table>
+  <!-- Put pre-loaded images here: -->
+  <div style="display: none">
+    <img src="docgen-resources/img/linktargetmarker.gif" alt="Here!" />
+  </div>
+</body>
+</html>
+

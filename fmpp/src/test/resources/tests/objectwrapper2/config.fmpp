@@ -1,0 +1,6 @@
+sourceRoot: src
+outputRoot: out
+objectWrapper: "new freemarker.ext.beans.BeansWrapper()"
+data: {
+    o: {'x':'X'}
+}

@@ -1,0 +1,165 @@
+﻿Before next release
+-------------------
+
+. Re-run test on Java 1.4
+. Run FMPP manually on some projects
+. Test Maven artifact
+
+
+Roadmap
+-------
+
+- Use mountable vfs-es, at least for sources. This would deprecate
+  freemarerLinks, and would work not only for #include but for pp too.
+  - Add zip (jar) vfs.
+
+- UN*X FS awareness
+  - `copyPermissions` setting (copies mod+owner+group)
+  - Symlink handling (follow symlinks without confusing source paths, copy symlinks)
+
+- Stream filtering mode
+
+- Filters
+  - On output (for Markdown, Haml, Jade to HTML conversation, LESS, minification, etc.)
+  - On input: for template transformations (will need FM improvements)
+
+- Persistent output file dependency tracking (including #include/#import
+  dependencies, also "data" dependency as far as possible). Why:
+  - Dependency-aware incremental updates
+  - Smart/safe output directory cleaning (only deletes files created by FMPP)
+
+
+Sideband
+--------
+
+These are the things that aren't on the road map and usually can be fixed in any order.
+
+Tooling (most efficient places for contributions!):
+- Check existing Maven task, contribute/fork if necessary
+- Check Gardle support
+- Improve JEdit FreeMarker support and JBoss FreeMarker IDE (Eclipse) support
+  (This actually belongs to the FreeMarker project.)
+
+High:
+- emptyOutputRootAfterCheckingIfExists=<rootRelativePath> // "." for no check
+- Allow UN*X tools to be invoked as FreeMarke transforms
+- More convenient way of putting OS environment variables into the data-model
+- Excel and Calc data loader
+- sql(...) data-loader. See below in the Drafts section...
+- Add logging via SLF4J as a possible ProgressListener.
+- TDD inheritance deep-merging:
+  - Idea for the solution: "merging hash" type should be introduced. In TDD
+     a merging hash should be constructed with ~ prefix (~exp) when exp is a hash.
+     When a value has to be replaced with a merging hash during hash merging,
+     the merging hash should copy the items of the replaced value into itself that
+     were not present in the merging hash. During this copying, item values that
+     are to be replaced with a merging hash value should be merged too.
+  - Where are the places where this should be handled:
+    - Merging of setting layers:
+      data: { someConfig: ~{ a: 1 } }  <-inherit-  data: { someConfig: { a: 2, b: 3 }}
+      =>
+      data: { someConfig: ~{ a: 1, b :3 } }
+    - Local data layers with each-other
+    - Local data merging with session level data.
+    - TDD hash additions:
+      { { a: {x: 1} }, { a: ~{ y: 2 } } }
+      =>
+      { { a: { x: 1, y: 2 } } }
+    - `~seq` creates a merging sequence.
+       ~[1, 2]  <-inherit- [3, 4]
+       =>
+       ~[1, 2, 3, 4]
+    - `!~` operator creates a non-merging sequence or hash
+       Now "freemarkerLinks" could use merging sequence by default,
+       but user could use `!~` to prevent merging.
+- Inheriting multiple configuration files
+
+Medium:
+- Add FreeMarker feature for position mapping
+- Console charset detection on Windows (extract from `mode con` output)
+- Ant task: The "logger" setting is missing (it should be like objectWrapper).
+
+Low:
+- Native Windows exe instead of fmpp.bat+lcp.bat
+- GUI front-end
+- Add add(...) data-loader for string and sequence concatenation, and arithmetical addition.
+- Add bsh(...) data loader: Evaluates a BSH file.
+
+Lowest:
+- DB schema data source
+- W3C XML Schema and Relax NG validation, pre-loaded schema validation
+- Add xmlDir data-loader (loads all XML files in a directory)
+
+- Improve pp directive error messages so that they write out if the parameter was null
+  (instead of complaining that it was missing or not of the proper type)
+- Add new processing mode that processes the file with an user written class.
+- @pp.warning and @pp.debug should print the location too (file name, line).
+  However, maybe they should be core FM directives.
+- pp.compressHtml
+
+
+====================================================================================
+DRAFTS
+====================================================================================
+
+The SQL data loader (JDBC data loader)
+--------------------------------------
+
+Maybe the best would be to introduce a new setting, "sqlDataSources":
+
+  sqlDataSources: {
+      default: {driver: com.exampe.jdbc.Driver, url: jdbc://someurl, user: joe, password: secret}
+      foo: {driver: com.exampe.jdbc.Driver, url: jdbc://someurl2, user: fred, password: blah}
+  }
+
+Then, the sql data loader would look as:
+
+  sql(sqlSentence, substitutions...)
+  
+It should use the "default" data source, unless the SQL sentence starts
+with dataLoaderName+':', for example 'foo: select * from foo'
+
+As pp.loadData('sql', 'select * from foo') is too verbose, a shorthand
+form could be introduced: pp.sql('select * from foo')
+
+The return value should be a list-of-maps for SELECT-s. This list-of-map
+should be a copy of the ResultSet content, so the ResultSet can be
+released immediately. Thus, FMPP user doesn't have to deal with fetching
+and releasing ResultSet-s. Also, it's crucial in the "data" setting, since
+there is no way to do explicit fetching/releasing there.
+
+The map in the list-of-maps should also function as a list-of-lists,
+where the 2nd index is the index of the column.
+
+If the result set contains only a single cell, then the list-of-maps
+should also serve as a scalar, so things like
+${pp.loadData('sql', 'select max(price) from products)'} will work.
+
+If the result set contains only a single row, then it should also
+function as a map, that reads the columns of the 1st row. The ?size
+buit-in for these vars must return the size of the list.
+(Unfortunately, because of the ambiguities, for reading columns by
+column index, the result[0][index] form must be used.
+
+As the SQL data loading is certainly frequently used, a short-cut should be
+added to the pp hash: pp.sql(...).
+
+The result set should function as a map that stores the "headers" key.
+As with the CSV reader, it returns the sequence of column names.
+
+The values of binary data should be wrapped as hash that has a
+"storeInto" method. Example:
+
+<#list pp.sql('select id, title, data from photos') as photo>
+  <p align=center>
+    <#assign fileName = 'img/${photo.id}.jpg'>
+    <@photo.data.storeInto(fileName) />
+    <img src="${pp.home}${fileName}" alt="${title}">
+    <br>${title}
+  </p>
+</#list>
+
+
+Add these to the TemplateEnvironment:
+java.sql.Connection getSqlConnection()
+java.sql.Connection getSqlConnection(String dataSourceName)

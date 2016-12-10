@@ -1,0 +1,243 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, ant, ant task">
+<title>The Ant Task - FMPP</title>
+<meta property="og:title" content="The Ant Task - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/ant.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/ant.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/commandline.html">
+<link rel="next" href="http://fmpp.sourceforge.net/writefrontend.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="frontends.html" itemprop="url"><span itemprop="title">Front-ends</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="ant.html" itemprop="url"><span itemprop="title">The Ant Task</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="commandline.html">Prev</a></li><li><a class="pager-icon next" href="writefrontend.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">The Ant Task</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#sect1">Description</a></li>
+    <li><a href="#sect2">Parameters</a></li>
+    <li><a href="#sect3">Nested elements</a></li>
+    <li><a href="#sect4">Examples</a></li>
+  </ul>
+  <div class="clear"></div>
+              </div>
+            <div class="page-content content-right">
+              
+<a name="sect1"></a>
+     <h2>Description</h2>
+
+<p>If you need the FMPP Ant task in a project xml (<code>build.xml</code>), use the <code>taskdef</code> core task:</p>
+
+<pre>&lt;taskdef name=&quot;fmpp&quot; classname=&quot;fmpp.tools.AntTask&quot; /&gt;</pre>
+
+<p>Then you can use the <code>&lt;fmpp <em>...</em>></code> task further down. You may remember the 4th step of <a href="qtour.html">Quick Tour</a>. This is an Ant equivalent:</p>
+
+<pre>&lt;project name=&quot;FMPP test&quot; default=&quot;build&quot;&gt;
+    &lt;taskdef name=&quot;fmpp&quot; classname=&quot;fmpp.tools.AntTask&quot; /&gt;
+    
+    &lt;target name=&quot;build&quot;&gt;
+        &lt;fmpp
+              sourceRoot=&quot;src&quot; outputRoot=&quot;out&quot;
+              data=&quot;tdd(data/style.tdd), birds:csv(data/birds.csv)&quot;
+        /&gt;
+    &lt;/target&gt;
+&lt;/project&gt;</pre>
+<p>Almost all parameters of the Ant task correspond to the <a href="settings.html">FMPP settings</a>. If the setting value is of scalar type (as string, boolean, number) then just enter the value simply with Ant-ish syntax, not with TDD syntax. If the setting value is of more tricky type, as hash or sequence, then use <a href="tdd.html">TDD syntax</a> for it. For hash settings the value is <a href="tdd.html#modes">hash mode TDD</a>, and for sequence setting it is sequence mode TDD, so the brackets should be omitted, as with <code><a href="settings.html#key_data">data</a></code> above.</p>
+
+<p>The <a href="configfile.html#configurationBase">configuration base</a> for the setting values given with Ant parameters is the Ant project base directory. That is, if you enter <code>sourceRoot="src"</code>, then <code>src</code> is interpreted relatively to the project base directory.</p>
+
+<p>There is no parameter that directly corresponds to the <code><a href="settings.html#key_sources">sources</a></code> setting. The sources are chosen with nested <code>&lt;fileset></code>-style parameters and nested elements (as <code>include</code> and <code>exclude</code>). However, if you use the <code><a href="settings.html#key_outputFile">outputFile</a></code> setting, you can't use <code>&lt;fileset></code>-style stuff, and <code><a href="settings.html#key_sources">sources</a></code> will be specified with the  <code>sourceFile</code> parameter.
+
+<p>Alternatively, the <code><a href="settings.html#key_data">data</a></code>, <code><a href="settings.html#key_localData">localData</a></code>, <code><a href="settings.html#key_borders">borders</a></code>, <code><a href="settings.html#key_modes">modes</a></code>, <code><a href="settings.html#key_turns">turns</a></code>, <code><a href="settings.html#key_xmlRenderings">xmlRenderings</a></code> and <code><a href="settings.html#key_freemarkerLinks">freemarkerLinks</a></code> settings can be specified with nested elements instead of parameters. For example, this is equivalent with the above example:</p>
+
+<pre>&lt;project name=&quot;FMPP test&quot; default=&quot;build&quot;&gt;
+    &lt;taskdef name=&quot;fmpp&quot; classname=&quot;fmpp.tools.AntTask&quot; /&gt;
+    
+    &lt;target name=&quot;build&quot;&gt;
+        &lt;fmpp sourceRoot=&quot;src&quot; outputRoot=&quot;out&quot;&gt;
+            &lt;data&gt;
+                 tdd(data/style.tdd)
+                 birds: csv(data/birds.csv)
+            &lt;/data&gt;
+        &lt;/fmpp&gt;
+    &lt;/target&gt;
+&lt;/project&gt;</pre>
+<p>This can be useful, if the setting value is long. The content of the element can be a CDATA section, which is useful if the setting value contains HTML or XML fragments. Unlike with attributes, Ant property interpolations (<code>${foo}</code>) in the text are not expanded, unless you force that with the <code>expandProperties</code> attribute of the element (<code>&lt;data expandProperties="yes"><em>...</em></code>).</p> 
+
+<p>About the support and interpretation of FMPP settings:</p>
+<ul>
+  <li>The values of settings <code><a href="settings.html#key_ignoreCvsFiles">ignoreCvsFiles</a></code>, <code><a href="settings.html#key_ignoreSvnFiles">ignoreSvnFiles</a></code> and <code><a href="settings.html#key_ignoreTemporaryFiles">ignoreTemporaryFiles</a></code> are always set to <code>false</code>, and there is no Ant task parameter for them. This is so that they don't interfere with Ant's standard <code>defaultExcludes</code> parameter.</li>
+  <li>Settings <code><a href="settings.html#key_echoFormat">echoFormat</a></code>, <code><a href="settings.html#key_printStackTrace">printStackTrace</a></code>, <code><a href="settings.html#key_snip">snip</a></code> and <code><a href="settings.html#key_columns">columns</a></code> are ignored, and there is no Ant task parameter for them.</li>
+  <li>The <code><a href="settings.html#key_quiet">quiet</a></code> setting implements only grades <code>true</code> and <code>false</code>. <code>reallyQuiet</code> is the same as <code>true</code>.</li>
+  <li>All <a href="settings.html#logging">logging related settings</a> are supported.</li>
+</ul>
+
+<p>To access the Ant properties and other Ant specific data in the templates, you can use data loaders such as <code>antProperty()</code>, <code>antProperties()</code>, <code>antProject()</code> and <code>antTask()</code>. Read the <a href="dataloader.html">chapter about data loaders</a> for more details.</p>
+
+
+
+<a name="sect2"></a>
+     <h2>Parameters</h2>
+
+<p>The FMPP task accepts the following parameters:</p>
+<ul>
+  <li><a href="settings.html">All FMPP settings</a> except <code><a href="settings.html#key_sources">sources</a></code>, <code><a href="settings.html#key_ignoreCvsFiles">ignoreCvsFiles</a></code>, <code><a href="settings.html#key_ignoreSvnFiles">ignoreSvnFiles</a></code>, <code><a href="settings.html#key_ignoreTemporaryFiles">ignoreTemporaryFiles</a></code>, <code><a href="settings.html#key_echoFormat">echoFormat</a></code>, <code><a href="settings.html#key_printStackTrace">printStackTrace</a></code>, <code><a href="settings.html#key_snip">snip</a></code> and <code><a href="settings.html#key_columns">columns</a></code>. If the setting value is of scalar type (as string, boolean, number) then just enter the value simply with Ant-ish syntax, not with TDD syntax. If the setting value is of more tricky type, as hash or sequence, then use TDD syntax for it. For hash settings the value is hash mode TDD, and for sequence setting it is sequence mode TDD, so the brackets should be omitted. The <a href="configfile.html#configurationBase">configuration base</a> for the setting values is the Ant project base directory.</li>
+  
+  <li>To follow the Ant conventions, <code>srcdir</code> and <code>destdir</code> attribute names can be optionally used instead of <code>sourceRoot</code> and <code>outputRoot</code> attribute names. These are just alias names.</li>
+  
+  <li>Configuration file handling:
+    <ul>
+      <li><code>configuration</code>: Loads a <a href="configfile.html">configuration file</a>. The setting values given with the parameters has higher precedence.</li>
+
+      <li><code>configurationBase</code>: Emulates that <code><a href="settings.html#key_configurationBase">configurationBase</a></code> meta setting is present in configuration file with the given value.</li>
+  
+      <li><code>inheritConfiguration</code>: Emulates that <code><a href="settings.html#key_inheritConfiguration">inheritConfiguration</a></code> meta setting is present in configuration file with the given value.</li>
+    </ul>
+  </li>
+  
+  <li>Ant <code>&lt;fileset></code>-style attributes (see the Ant documentation for more details). Used for specifing the value of the <code><a href="settings.html#key_sources">sources</a></code> setting:
+    <ul>
+      <li><code>dir</code>: The directory that the patterns are relative to. If this attribute is omitted, then the FMPP source root will be used as the base. Note that regardless of the value of this attribute, all source files must be inside the source root.
+      <li><code>casesensitive</code>: Sets case sensitivity of the file names. (Same as the FMPP setting)
+      <li><code>defaultexcludes</code>: Indicates whether default excludes should be used or not (<code>"yes"</code> or <code>"no"</code>); default excludes are used when omitted.
+      <li><code>excludes</code>: comma- or space-separated list of patterns of files that must be excluded; no files (except default excludes) are excluded when omitted.
+      <li><code>excludesfile</code>: the name of a file; each line of this file is taken to be an exclude pattern.
+      <li><code>followsymlinks</code>: Shall symbolic links be followed? Defaults to true.
+      <li><code>includes</code>: Comma- or space-separated list of patterns of files that must be included; all files are included when omitted. Note that be default all files of the source root directory are included.
+      <li><code>includesfile</code>: The name of a file; each line of this file is taken to be an include pattern.  
+    </ul>
+  </li>
+  
+  <li><code>sourceFile</code>: It can be used only if the <code><a href="settings.html#key_outputFile">outputFile</a></code> setting is specified. It specifies the value of the <code><a href="settings.html#key_sources">sources</a></code> setting, as a simple string (not a comma separated list) that specifies the path of a single file. <code>&lt;fileset></code>-style attributes/elements will be ignored.</li>
+  
+  <li><code>antTaskFailOnError</code>: Specifies if the Ant task should fail if there were errors during the execution of the processing session. Defaults to <code>true</code>. It has nothing to do with the <code><a href="settings.html#key_stopOnError">stopOnError</a></code> setting. If this parameter is <code>true</code>, the Ant task will fail if there were any failed file processing during the processing session, even if it was skipped because <code><a href="settings.html#key_stopOnError">stopOnError</a></code> was <code>true</code> (so the session wasn't aborted). If this parameter is <code>false</code>, then the Ant task will be successful regardless of the failed file processings or other errors during the processing session, even if the processing session was aborted. But, it never suppresses errors occurred during the initialization of the FMPP engine (i.e. errors occurred before the processing session could be stated).</li>
+</ul>
+
+<p>Either the <code>configuration</code> parameter, or <code>sourceRoot</code>+<code>outputRoot</code> parameters, or <code>sourceFile</code>+<code>outputFile</code> parameters are required. All other parameters are optional. When you use <code>configuration</code>, any Ant task parameters can become optional, when the value of the coressponding settings are given in the configuration file.</p>
+
+<p><strong>Attention!</strong> When you specify the <code><a href="settings.html#key_sources">sources</a></code> setting in a configuration file, its value will be added to the set of files and directories that the Ant task itself selects, which is, following the Ant tradition, by default all files and directories inside the source root. Thus, usually you will want to exclude all files in the Ant task, so only those specified in the configuration file will remain:
+<pre>&lt;fmpp configuration=&quot;config-with-sources-setting.fmpp&quot; excludes=&quot;**/*&quot; /&gt;</pre>
+
+
+<a name="sect3"></a>
+     <h2>Nested elements</h2>
+
+<p>The FMPP task accepts the following nested elements:
+<ul>
+  <li>Elements for attribute substitution: Using these elements is the same as if you were use the attributes (parameters) with the same name, and with the same value as the nested text (or CDATA section) of the elements. Ant property values (<code>${foo}</code>) are not expanded by default, but you can override this with a <code>expandProperties="yes"</code> attribute. Note that you etiher give a certain setting with attribute, or with element, but not both.
+    <ul>
+      <li><code>data</code>
+      <li><code>localData</code>
+      <li><code>borders</code>
+      <li><code>modes</code>
+      <li><code>turns</code>
+      <li><code>xmlRenderings</code>
+      <li><code>freemarkerLinks</code>
+    </ul>
+  <li><code>&lt;fileset></code>-style elements (see the Ant documentation for more details):
+    <ul>
+      <li><code>patternset</code>
+      <li><code>include</code>: Note that be default all files inside the source root directory are included.
+      <li><code>exclude</code>
+      <li><code>includesfile</code>
+      <li><code>excludesfile</code>
+    </ul> 
+</ul>
+
+
+
+<a name="sect4"></a>
+     <h2>Examples</h2>
+
+<p>Run processing session with the settings stored in <code><em>&lt;projectBaseDir></em>/config.fmpp</code> (or <code>fmpp.cfg</code>):</p>
+<pre>&lt;fmpp configuration=&quot;.&quot; /&gt;</pre>
+<p>As the previous, but override <code><a href="settings.html#key_outputEncoding">outputEncoding</a></code>:</p>
+<pre>&lt;fmpp configuration=&quot;.&quot; outputEncoding=&quot;UTF-8&quot; /&gt;</pre>
+<p>Processes all files in <code>src/www</code> and stores the output in <code>build/www</code>:</p>
+<pre>&lt;fmpp sourceRoot=&quot;src/www&quot; outputRoot=&quot;build/www&quot; /&gt;</pre>
+<p>Same as the previous, but processes files with extension <code>ftl</code> only:</p>
+<pre>&lt;fmpp
+    sourceRoot=&quot;src/www&quot; outputRoot=&quot;build/www&quot;
+    includes=&quot;**/*.ftl&quot;
+/&gt;</pre>
+<p>Same as the previous:</p>
+<pre>&lt;fmpp sourceRoot=&quot;src/www&quot; outputRoot=&quot;build/www&quot;&gt;
+    &lt;include name=&quot;**/*.ftl&quot; /&gt;
+&lt;/fmpp&gt;</pre>
+<p>Run processing session with the settings stored in <code><em>&lt;projectBaseDir></em>/src/wwwconfig.fmpp</code>, but process files with extension <code>ftl</code> only:</p>
+<pre>&lt;fmpp configuration=&quot;src/wwwconfig.fmpp&quot; includes=&quot;**/*.ftl&quot; /&gt;</pre>
+<p>Processes a single file:</p>
+<pre>&lt;fmpp sourceFile=&quot;src/test.txt&quot; outputFile=&quot;build/test.txt&quot; /&gt;</pre>
+<p>Exposes Ant properties <code>foo</code>, <code>bar</code> and <code>baaz</code> for the templates:</p>
+<pre>&lt;fmpp sourceRoot=&quot;src/www&quot; outputRoot=&quot;build/www&quot;
+        data=&quot;antProperties(foo, bar, baaz)&quot;
+/&gt;</pre>
+<p>Just to show something more complex...:</p>
+<pre>&lt;fmpp sourceRoot=&quot;src/www&quot; outputRoot=&quot;build/www&quot;
+        replaceExtension=&quot;ftl, html&quot;
+        modes=&quot;copy(**/*.html, **/*.htm)&quot;
+&gt;
+    &lt;borders&gt;&lt;![CDATA[
+        border(&#39;&lt;#escape x as x?html&gt;&#39;, &#39;&lt;/#escape&gt;&#39;, **/*.ftl)
+    ]]&gt;&lt;/borders&gt;
+    &lt;data&gt;
+        bgColor: white
+        fgColor: black
+        antProps: antProperties()
+    &lt;/data&gt;
+&lt;/fmpp&gt;</pre>
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="commandline.html">Prev</a></li><li><a class="pager-icon next" href="writefrontend.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

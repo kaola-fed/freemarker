@@ -1,0 +1,6 @@
+sourceRoot: src
+outputRoot: out
+data: {
+    htmlUtils()
+    sortAttrs: eval('new fmpp.testsuite.SortAttrsTransform()')
+}

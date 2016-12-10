@@ -1,0 +1,207 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, tutorial">
+<title>Tutorial - FMPP</title>
+<meta property="og:title" content="Tutorial - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/qtour.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/qtour.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/basics.html">
+<link rel="next" href="http://fmpp.sourceforge.net/overview.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="basics.html" itemprop="url"><span itemprop="title">Basics</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="qtour.html" itemprop="url"><span itemprop="title">Tutorial</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="basics.html">Prev</a></li><li><a class="pager-icon next" href="overview.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">Tutorial</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#sect1">Step 1: Process a directory</a></li>
+    <li><a href="#sect2">Step 2: Pulling data from a data source</a></li>
+    <li><a href="#sect3">Step 3: Even more data</a></li>
+    <li><a href="#sect4">Step 4: Multiple output files from the same source file</a></li>
+  </ul>
+  <div class="clear"></div>
+              </div>
+            <div class="page-content content-right">
+              
+<p>This chapter is a quick, practical, but rough introduction to FMPP.</p>
+
+<a name="sect1"></a>
+     <h2>Step 1: Process a directory</h2>
+
+<p>The basic idea is that you have <strong>source root directory</strong> and an <strong>output root directory</strong>. The source root directory contains the files to process, and the output root directory will contain the processed files.  Processing the file either means that FMPP will execute the file as FreeMarker template, or that it will copy the file as is (in the case of image files, archive files, etc.). (In fact there are other seldom used processing modes as well, like <a href="settings.html#xmlRendering">XML rendering</a>.)</p>
+
+<p>To see an example, go to the <code><em>&lt;FMPP></em>/docs/examples/qtour_step1</code> directory. Here we have a directory called <code>src</code>:</p>
+
+<p><img src="figures/qtour_step1_src.png" alt="Quick tour step 1 src" width="139" height="81"></p>
+
+<p>Also, you will find <code>config.fmpp</code> in the <code>qtour_step1</code> directory. This file contains the settings for FMPP, and now contains this:</p>
+
+<pre>sourceRoot: src
+outputRoot: out</pre>
+<p>If you issue <code>fmpp</code> command from the command-line while you are in the <code>qtour_step1</code> directory, then FMPP will process the <code>src</code> directory and places the output into the <code>out</code> directory. On the console you will see something like:</p>
+
+<pre>Note: Using the config.fmpp in the working directory.
+- Executing: index.html
+- Copying: falcon.png
+- Executing: subdir\something.html
+
+*** DONE ***
+
+2 executed + 1 copied = 3 processed
+0 failed, 0 warning(s)
+Time elapsed: 0.234 seconds</pre>
+<p>and the newly created <code>out</code> directory will contain exactly the same files and subdirectories as <code>src</code>.
+
+<p align="center"><img src="figures/qtour_step1.png" alt="Quick tour step 1 diagram" width="390" height="130"></p>
+
+<p>The above messages suggest that the PNG file was copied, while the two HTML-s were executed:</p>
+<ul>
+  <li>"Copying" means that the file is copied as is, without changing even a bit compared to the original file (binary copy).
+  <li>"Executing" means that the file is interpreted by FreeMarker as template file, and the content of the output file is generated by FreeMarker. Template files are plain text files that can contain special parts, which are instructions to FreeMarker. Since in this first example the HTML files don't contain any such special parts, the output files will be identical to the original HTML-s.
+</ul>
+
+
+<a name="sect2"></a>
+     <h2>Step 2: Pulling data from a data source</h2>
+
+<p>If you look into the two HTML-s of <code>qtour_step1/src</code>, you see that both contains this line:</p>
+
+<pre>&lt;body bgcolor=&quot;#FFFFE0&quot; text=&quot;#000000&quot;&gt;</pre>
+
+<p>Assume you want to store these colors in a single centralized place, so if you change them, all pages will change. For this, you have to tell FMPP what <strong>data</strong> to expose for the templates. For now, tell FMPP to load data from a TDD file. A TDD file is a simple text file that stores name-value pairs. (It happens to be the same format that <code>config.fmpp</code> uses, but it's just accidental coincidence. You could load data from other type of data source in the same way.) If you go to the <code><em>&lt;FMPP></em>/docs/examples/qtour_step2</code> directory, you will find <code>style.tdd</code> in <code>src/data</code> that contains this:</p>
+
+<pre>bgColor: #FFFFE0
+textColor: #000000</pre>
+<p>Both line in both HTML-s has been changed to:</p>
+
+<pre>&lt;body bgcolor=&quot;${bgColor}&quot; text=&quot;${textColor}&quot;&gt;</pre>
+<p>The two <code>${<em>...</em>}</code>-s are instructions to FreeMarker that insert the value of a variable. When I'm saying that FMPP exposes data for the templates, then it simply means that it creates variables for the templates, based on some data source. We tell FMPP to load data from <code>data/style.tdd</code> file before it starts to process the files, in the <code>config.tdd</code> of the <code>qtour_step2</code> directory:</p>
+
+<pre>sourceRoot: src
+outputRoot: out
+data: tdd(data/style.tdd)</pre>
+<p>If you issue an <code>fmpp</code> command in the <code>qtour_step2</code> directory, and look into the result in the <code>out</code> directory, then you will see that the <code>${<em>...</em>}</code>-s in the HTML files are replaced with the actual colors.</p>
+
+<p align="center"><img src="figures/qtour_step2.png" alt="Quick tour step 2 diagram" width="660" height="213"></p>
+
+<p>It is important that the <code>data</code> directory was not copied into the output (the files in it were not "executed" or "copied"). This is because <code>src/data</code> contains a file with name <code>ignoredir.fmpp</code>, and the presence of this file instructs FMPP not to process the directory.</p>
+
+
+<a name="sect3"></a>
+     <h2>Step 3: Even more data</h2>
+
+<p>You can use any number of data sources, not only a single file. In <code><em>&lt;FMPP></em>/docs/examples/qtour_step3</code> I have added one more data source: <code>data/birds.csv</code>. CSV is a primitive format often used to exchange data among spread sheet applications and other applications. <code>bird.csv</code> stores a table with "name", "description" and "favoriteFood" columns. I want to use the content of this table in the generated HTML pages later, so let load this table into variable <code>birds</code>, in <code>config.fmpp</code>:</p>
+
+<pre>sourceRoot: src
+outputRoot: out
+data: {
+    tdd(data/style.tdd)
+    birds: csv(data/birds.csv)
+}</pre>
+<p>Here FMPP creates variables for the templates from multiple data sources (<code>data/style.tdd</code>, <code>data/birds.csv</code>).</p>
+
+<p>The <code>index.html</code> now contains some new lines, that fetch the data form the CSV file via the <code>birds</code> variable, and print a list from it. The <code>&lt;#<em>...</em>></code> tags are instructions to FreeMarker (see in the <a href="freemarker/index.html" rel="nofollow">FreeMarker Manual</a>):</p>
+
+<pre>&lt;ul&gt;
+&lt;#list birds as bird&gt;
+  &lt;li&gt;${bird.name?cap_first}: ${bird.description}
+      Favorite food: ${bird.favoriteFood}
+&lt;/#list&gt;
+&lt;/ul&gt;</pre>
+<p>The output of the above template lines will be something like:</p>
+
+<pre>  &lt;ul&gt;
+    &lt;li&gt;Arctic-tern: Flies very long distances all years.
+        Favorite food: sardine
+    &lt;li&gt;House-sparrow: Don&#39;t you say you don&#39;t know it...
+        Favorite food: sunflower
+    &lt;li&gt;Sakeret: Great hunter of the sky.
+        Favorite food: pigeon
+  &lt;/ul&gt;</pre>
+<p>Note that the template uses <code>birds</code> variable independently of the actual file format (CSV) behind it. You could replace the CSV with whatever data source that can be interpreted as table (as a database table) and the templates could be the same, only the <code>config.fmpp</code> has to be adjusted. (However, FMPP supports only a few data source types out of the box yet, so maybe you have to write/obtain extension Java classes for it.)</p>
+
+<p>You can find more information about data and data loading <a href="overview.html#data">here</a>.</p>
+
+
+<a name="sect4"></a>
+     <h2>Step 4: Multiple output files from the same source file</h2>
+
+<p>Let's say you want to create separate HTML pages for each birds, rather than listing all information about them on the index page, and you want only link to those pages on <code>index.html</code>. <code><em>&lt;FMPP></em>/docs/examples/qtour_step4</code> does this. The index page had trivial changes to generate the links. The interesting is that we have a new file, <code>bird.html</code>. This single file is the template for all bird pages, and will generate a separate HTML file for each birds:</p>
+
+<p align="center"><img src="figures/qtour_step4.png" alt="Quick tour step 4 diagram" width="390" height="273"></p>
+
+<p>The <code>bird.html</code> looks as this:</p>
+
+<pre>&lt;@pp.dropOutputFile /&gt;
+&lt;#list birds as bird&gt;
+&lt;@pp.changeOutputFile name=bird.name+&quot;.html&quot; /&gt;
+&lt;html&gt;
+&lt;head&gt;  
+  &lt;title&gt;${bird.name?cap_first}&lt;/title&gt;
+&lt;/head&gt;  
+&lt;body bgcolor=&quot;${bgColor}&quot; text=&quot;${textColor}&quot;&gt;
+  &lt;h1&gt;${bird.name?cap_first}&lt;/h1&gt;
+  
+  &lt;p&gt;${bird.description}&lt;/p&gt;
+
+  &lt;p&gt;&lt;b&gt;Favorite food:&lt;/b&gt; ${bird.favoriteFood}&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;/#list&gt;</pre>
+<p>The <code>&lt;@<em>...</em>></code> tags are instructions to FreeMarker (see the <a href="freemarker/index.html" rel="nofollow">FreeMarker Manual</a>). The <a href="pphash.html"><strong>pp variable</strong></a> is defined by FMPP, and is always there, automatically. It stores the built-in variables of FMPP, e.g. directives as <code>dropOutputFile</code> above. <code>&lt;@pp.dropOutputFile /></code> instructs FMPP to drop the current output file, so we will not have <code>bird.html</code> in the output directory. <code>&lt;@pp.changeOutputFile <em>...</em>/></code> instructs FMPP to start a new output file with the given name. So <code>bird.html</code> will produce 3 output files (one output file for each row of the table): <code>arctic-tern.html</code>, <code>house-sparrow.html</code>, and <code>sakeret.html</code>.</p>
+
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="basics.html">Prev</a></li><li><a class="pager-icon next" href="overview.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, properties">
+<title>&quot;Properties&quot; Files - FMPP</title>
+<meta property="og:title" content="&quot;Properties&quot; Files - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/properties.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/properties.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/bsh.html">
+<link rel="next" href="http://fmpp.sourceforge.net/miscellaneous.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="languages.html" itemprop="url"><span itemprop="title">Languages (formats) used</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="properties.html" itemprop="url"><span itemprop="title">&quot;Properties&quot; Files</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="bsh.html">Prev</a></li><li><a class="pager-icon next" href="miscellaneous.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">&quot;Properties&quot; Files</h1>
+
+          <div class="content-inner">
+            <div class="page-content content-right">
+              
+<p>This is a standard format widely used in the Java world to specify set of name-value pairs, where all name is unique (a key).</p>
+
+<p>Name-value pairs are specified with <code><em>name</em>=<em>value</em></code> format, and each such pair is in its own line. For example:</p>
+
+<pre>bgColor=blue
+textColor=white
+copyright=Copyright (c) 2003, Big Joe All rights reserved.</pre>
+<p>If the last character on the line is backslash (<code>\</code>), then the next line is treated as a continuation of the current line; the <code>\</code> and line break are simply discarded, and any leading whitespace (space, tab, etc.) characters on the continuation line are also discarded and are not part of the value. It is useful if the line would be too long for conveniently reading/editing it:</p>
+
+<pre>copyright=Copyright (c) 2003, \
+          Big Joe \
+          All rights reserved.</pre>
+<p>Note that if you accidentally put a space after the <code>\</code>, then it will not work.</p>
+
+<p>In the name or value, Java language escape sequences <code>\t</code>, <code>\n</code>, <code>\r</code>, <code>\f</code>, <code>\\</code>, <code>\"</code>, <code>\'</code>, and <code>\u<em>xxxx</em></code> are recognized and converted to single characters. Any other escape sequence will be converted to the character after the backlash (e.g. <code>\x</code> will be converted to <code>x</code>). Note that because of the special meaning of backslash, to put a backslash into the name or value, you have to write two backslashes (<code>\\</code>).</p>
+
+<pre>aNativeWindowsPath=C:\\My Documents\\test
+someText=First line\nSecond line\nThrid line</pre>
+<p>Whitespace is ignored  after and before the <code>=</code>, so you can write:</p>
+
+<pre>bgColor = blue
+textColor = white</pre>
+<p>Alternatively, you can use colon or just whitespace to separate the name and value:</p>
+
+<pre>bgColor: blue
+textColor white</pre>
+<p>Thus, if the name contains <code>=</code>, <code>:</code> or whitespace, it must be escaped:</p>
+
+<pre>this\ is\ the\ name = something
+C\: = /mnt/win</pre>
+<p>Empty lines of the file, and the lines that start with <code>#</code> or <code>!</code>, will be ignored. This can be used for commenting:</p>
+
+<pre># colors
+bgColor=blue
+textColor=white
+
+# other text
+copyright=Copyright (c) 2003, Big Joe All rights reserved.</pre>
+<p>"properties" files always use ISO-8859-1 charset. If you have to enter a character that is not in the ISO-8859-1 repertoire, you have to use the <code>\u<em>xxxx</em></code> escape (where <code><em>xxxx</em></code> is the hexadecimal UCS code of the character).</p>
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="bsh.html">Prev</a></li><li><a class="pager-icon next" href="miscellaneous.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

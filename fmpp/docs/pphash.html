@@ -1,0 +1,974 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, pp hash">
+<title>The pp Hash - FMPP</title>
+<meta property="og:title" content="The pp Hash - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/pphash.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/pphash.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/configfile.html">
+<link rel="next" href="http://fmpp.sourceforge.net/dataloader.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="details.html" itemprop="url"><span itemprop="title">Core Details</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="pphash.html" itemprop="url"><span itemprop="title">The pp Hash</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="configfile.html">Prev</a></li><li><a class="pager-icon next" href="dataloader.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">The pp Hash</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#sect1">Information about the source</a></li>
+    <li><a href="#sect9">Information about the output</a></li>
+    <li><a href="#sect17">Changing the output file</a></li>
+    <li><a href="#sect24">Utilities for paths</a></li>
+    <li><a href="#sect33">Utilities for files</a></li>
+    <li><a href="#sect43">Writable hashes and sequences</a></li>
+    <li><a href="#sect51">Miscellaneous</a></li>
+  </ul>
+  <div class="clear"></div>
+                  <p class="toc-header alphabetical-index">Alphabetical index of keys:</p>
+                  <ul class="table-of-contents">
+                      <li><a href="#key_add">add</a>
+                      <li><a href="#key_changeOutputFile">changeOutputFile</a>
+                      <li><a href="#key_clear">clear</a>
+                      <li><a href="#key_copyWritable">copyWritable</a>
+                      <li><a href="#key_doc">doc</a>
+                      <li><a href="#key_dropOutputFile">dropOutputFile</a>
+                      <li><a href="#key_freemarkerVersion">freemarkerVersion</a>
+                      <li><a href="#key_home">home</a>
+                      <li><a href="#key_ignoreOutput">ignoreOutput</a>
+                      <li><a href="#key_loadData">loadData</a>
+                      <li><a href="#key_locale">locale</a>
+                      <li><a href="#key_nestOutputFile">nestOutputFile</a>
+                      <li><a href="#key_newWritableHash">newWritableHash</a>
+                      <li><a href="#key_newWritableSequence">newWritableSequence</a>
+                      <li><a href="#key_now">now</a>
+                      <li><a href="#key_outputDirectory">outputDirectory</a>
+                      <li><a href="#key_outputEncoding">outputEncoding</a>
+                      <li><a href="#key_outputFile">outputFile</a>
+                      <li><a href="#key_outputFileExists">outputFileExists</a>
+                      <li><a href="#key_outputFileLastModified">outputFileLastModified</a>
+                      <li><a href="#key_outputFileName">outputFileName</a>
+                      <li><a href="#key_outputFileSize">outputFileSize</a>
+                      <li><a href="#key_outputRoot">outputRoot</a>
+                      <li><a href="#key_outputRootRelativePath">outputRootRelativePath</a>
+                      <li><a href="#key_pathTo">pathTo</a>
+                      <li><a href="#key_realFileExists">realFileExists</a>
+                      <li><a href="#key_realFileLastModified">realFileLastModified</a>
+                      <li><a href="#key_realFileSize">realFileSize</a>
+                      <li><a href="#key_realOutput">realOutput</a>
+                      <li><a href="#key_realOutputDirectory">realOutputDirectory</a>
+                      <li><a href="#key_realSource">realSource</a>
+                      <li><a href="#key_realSourceDirectory">realSourceDirectory</a>
+                      <li><a href="#key_remove">remove</a>
+                      <li><a href="#key_renameOutputFile">renameOutputFile</a>
+                      <li><a href="#key_restartOutputFile">restartOutputFile</a>
+                      <li><a href="#key_s">s</a>
+                      <li><a href="#key_sessionStart">sessionStart</a>
+                      <li><a href="#key_set">set</a>
+                      <li><a href="#key_setOutputEncoding">setOutputEncoding</a>
+                      <li><a href="#key_slash">slash</a>
+                      <li><a href="#key_sourceDirectory">sourceDirectory</a>
+                      <li><a href="#key_sourceEncoding">sourceEncoding</a>
+                      <li><a href="#key_sourceFile">sourceFile</a>
+                      <li><a href="#key_sourceFileExists">sourceFileExists</a>
+                      <li><a href="#key_sourceFileLastModified">sourceFileLastModified</a>
+                      <li><a href="#key_sourceFileName">sourceFileName</a>
+                      <li><a href="#key_sourceFileSize">sourceFileSize</a>
+                      <li><a href="#key_sourcePathTo">sourcePathTo</a>
+                      <li><a href="#key_sourceRoot">sourceRoot</a>
+                      <li><a href="#key_sourceRootRelativePath">sourceRootRelativePath</a>
+                      <li><a href="#key_urlEnc">urlEnc</a>
+                      <li><a href="#key_urlPathEnc">urlPathEnc</a>
+                      <li><a href="#key_version">version</a>
+                      <li><a href="#key_warning">warning</a>
+                  </ul>
+              </div>
+            <div class="page-content content-right">
+              
+<p>The pp hash is a variable that is always present in the data model. This contains the built-in, standard variables of FMPP.</p>
+
+<p><em><strong>Note:</strong> For more information about variable types, directives, etc. in general, please read the <a href="freemarker/index.html" rel="nofollow">FreeMarker Manual</a>.</em></p>
+
+<a name="sect1"></a>
+     <h2>Information about the source</h2>
+
+<a name="key_sourceFile"></a>
+<a name="sect2"></a>
+     <h3>sourceFile</h3>
+    <em>Type:</em> string
+    <p>The path of the current source file (includes the file name), relatively to the source root directory. It does not start with slash. Uses UN*X path format.</p>
+
+
+
+<a name="key_sourceDirectory"></a>
+<a name="sect3"></a>
+     <h3>sourceDirectory</h3>
+    <em>Type:</em> string
+    <p>The path of the directory of the current source file, relatively to the source root directory. It is finished with a slash, except if the directory is the source root directory itself, in which case the result is an empty (0 length) string. The result never starts with slash. Uses UN*X path format.</p>
+
+
+<a name="key_sourceFileName"></a>
+<a name="sect4"></a>
+     <h3>sourceFileName</h3>
+    <em>Type:</em> string
+    <p>The filename of the current source file.</p>
+
+
+<a name="key_sourceEncoding"></a>
+<a name="sect5"></a>
+     <h3>sourceEncoding</h3>
+    <em>Type:</em> string
+    <p>The encoding (charset) of the source file, e.g. <code>ISO-8859-1</code>. It is always a concrete charset name, never <code>host</code>.</p>
+
+
+<a name="key_sourceRoot"></a>
+<a name="sect6"></a>
+     <h3>sourceRoot</h3>
+    <em>Type:</em> string
+    <p>The absolute real path of the source root directory, finished with a "native slash" (i.e. maybe a backslash). As it is a real path, it uses the native path format.</p>
+
+
+<a name="key_realSource"></a>
+<a name="sect7"></a>
+     <h3>realSource</h3>
+    <em>Type:</em> string
+    <p>The absolute real path of the current source file. As it is a real path, it uses the native path format.</p>
+
+
+<a name="key_realSourceDirectory"></a>
+<a name="sect8"></a>
+     <h3>realSourceDirectory</h3>
+    <em>Type:</em> string
+    <p>The absolute real path of the directory of the current source file, finished with a "native slash" (i.e. maybe a backslash). As it is a real path, it uses the native path format.</p>
+
+
+
+
+<a name="sect9"></a>
+     <h2>Information about the output</h2>
+
+<p>Note that as the output file name and directory, and the output encoding can be changed during the execution of template, the value of these variables can change during the execution of the template, to reflect the current situation.</p>
+
+<a name="key_outputFile"></a>
+<a name="sect10"></a>
+     <h3>outputFile</h3>
+    <em>Type:</em> string
+    <p>The path of the current output file (includes the file name), relatively to the output root directory. It does not start with slash. Uses UN*X path format.</p>
+
+
+<a name="key_outputDirectory"></a>
+<a name="sect11"></a>
+     <h3>outputDirectory</h3>
+    <em>Type:</em> string
+    <p>The path of the directory of the current output file, relatively to the output root directory. It is finished with a slash, except if the directory is the output root directory itself, in which case the result is an empty (0 length) string. The result never starts with slash. Uses UN*X path format.</p>
+
+
+<a name="key_outputFileName"></a>
+<a name="sect12"></a>
+     <h3>outputFileName</h3>
+    <em>Type:</em> string
+    <p>The filename of the current output file.</p>
+
+
+<a name="key_outputEncoding"></a>
+<a name="sect13"></a>
+     <h3>outputEncoding</h3>
+    <em>Type:</em> string
+    <p>The encoding (charset) of the output file, e.g. <code>ISO-8859-1</code>. It is always a concrete charset name, never <code>host</code> or <code>source</code>.</p>
+
+
+<a name="key_outputRoot"></a>
+<a name="sect14"></a>
+     <h3>outputRoot</h3>
+    <em>Type:</em> string
+    <p>The absolute real path of the output root directory, finished with a "native slash" (i.e. maybe a backslash). As it is a real path, it uses the native path format.</p>
+
+
+<a name="key_realOutput"></a>
+<a name="sect15"></a>
+     <h3>realOutput</h3>
+    <em>Type:</em> string
+    <p>The absolute real path of the current output file. As it is a real path, it uses the native path format.</p>
+
+
+<a name="key_realOutputDirectory"></a>
+<a name="sect16"></a>
+     <h3>realOutputDirectory</h3>
+    <em>Type:</em> string
+    <p>The absolute real path of the directory of the current output file, finished with a "native slash" (i.e. maybe a backslash). As it is a real path, it uses the native path format.</p>
+
+
+
+
+<a name="sect17"></a>
+     <h2>Changing the output file</h2>
+
+<a name="key_changeOutputFile"></a>
+<a name="sect18"></a>
+     <h3>changeOutputFile</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+          <ul>
+              <li><strong>name</strong>:
+                string.
+                  The new <a href="overview.html#virtualPath">virtual path</a> of the output file. The path can point into a different directory than the directory of the current output file.    
+
+              <li><strong>append</strong>=false:
+                boolean.
+                  If this is true, then if a file with the same name as the name of the new output file already exists, it will be continued, rather then overwritten.  If the file does not already exist, then this parameter has no effect.
+
+          </ul>
+      
+  <p>Closes the current output file, and starts a new output file with the new name. All further output goes into the new file. If the name of the new output file is the same as the current output file, then nothing happens.</p>
+  
+  <p>A word of warning: Don't forget that the path that you specifiy is interpreted relatively to the <strong>current</strong> output file. So using a relative path like <code>products/${productName}.html</code> ( instead of an absolute path like <code>/shop/products/${productName}.html</code>) inside a loop is most certainly not what you want, because then 2nd product will go into the <code>/shop/products/products/${productName}.html</code> directory, the 3rd into <code>/shop/products/products/products/${productName}.html</code>, and so on. Of course this problem doesn't occur if the relative path is just a file name, like <code>${productName}.html</code>.</p>
+
+
+<a name="key_renameOutputFile"></a>
+<a name="sect19"></a>
+     <h3>renameOutputFile</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+          <ul>
+              <li><strong>name</strong>:
+                string.
+                  The new <a href="overview.html#virtualPath">virtual path</a> of the output file. The path can point into a different directory than the directory of the current output file.
+
+              <li><strong>extension</strong>:
+                string.
+                  Replaces the extension (the part after the last dot in the file name) of the current output file, with the value of this parameter. If the file name has no extension (there is no dot in it), then a dot and the new extension is added to the end of the file name. (The parameter value should never contain the starting dot.)
+
+          </ul>
+      
+  <p>Changes the name of the current output file, or moves the output file if neccessary. If a file with the same name already exists, this will overwrite that file without warning. If the new name is the same as the name of the current output file, then nothing happens.</p>
+  
+  <p>Either the <code>name</code> or the <code>extension</code> parameter must be specified. You can't use both together.
+
+
+<a name="key_dropOutputFile"></a>
+<a name="sect20"></a>
+     <h3>dropOutputFile</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+        none
+      <p>Deletes the current output file, and drops all further output that would go into this file. Call this directive at the beginning of templates that need to be processed, but you don't want any output files from them. (Of course, you can call this directive even at the end of the template, just that's slower...)</p>
+  <p>Note that this directive can be neutralized with directive <code>pp.restartOutputFile</code>.</p>
+
+
+<a name="key_restartOutputFile"></a>
+<a name="sect21"></a>
+     <h3>restartOutputFile</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+        none
+      <p>Empties the current output file (but doesn't delete the file). The next character sent to the output will be the first character of the output file. Also, the charset of the output file can be safely set, exactly like if you were at the beginning of the output file creation.</p>
+  <p>Note that this directive neutralizes the effect of directive <code>pp.dropOutputFile</code>.</p>
+
+
+<a name="key_nestOutputFile"></a>
+<a name="sect22"></a>
+     <h3>nestOutputFile</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> yes
+      <br><em>Parameters:</em>
+          <ul>
+              <li><strong>name</strong>:
+                string.
+                  The new <a href="overview.html#virtualPath">virtual path</a> (includes the file name) of the output file. The path can point into a different directory than the directory of the current output file.    
+
+              <li><strong>append</strong>=false:
+                boolean.
+                  If this is true, then if a file with the same name as the name of the new output file already exists, it will be continued, rather then overwritten. If the file does not already exist, then this parameter has no effect.
+
+          </ul>
+    
+  <p>This is similar to <code>changeOutputFile</code>, but it writes only the content generated in its nested content into the new file, and then it restores things, so the output will go into the same output file as before the calling of the directive. For example:</p>
+
+<pre>The 1st line of the original file.
+&lt;@pp.nestOutputFile name=&quot;new.txt&quot;&gt;
+  The 1st line of new.txt.
+&lt;/@pp.nestOutputFile&gt;
+The 2nd line of the original file.
+&lt;@pp.nestOutputFile name=&quot;new.txt&quot; append=true&gt;
+  The 2nd line of new.txt.
+&lt;/@pp.nestOutputFile&gt;
+The 3rd line of the original file.</pre>
+<p>A file can be nested into itself. For example:</p>
+  
+<pre>&lt;@pp.nestOutputFile name=&#39;1.txt&#39;&gt;
+  The 1st line of 1.txt
+  &lt;@pp.nestOutputFile name=&#39;2.txt&#39;&gt;
+    The 1st line of 2.txt
+    &lt;@pp.nestOutputFile name=&#39;1.txt&#39;&gt;
+      The 2nd line of 1.txt
+    &lt;/@pp.nestOutputFile&gt;
+    The 2nd line of 2.txt
+  &lt;/@pp.nestOutputFile&gt;
+  The 3rd line of 1.txt
+&lt;/@pp.nestOutputFile&gt;  </pre>
+<p>Note that <code>append=true</code> was not needed for adding the 2nd line to the <code>1.txt</code>, since the directive just switched back to the already opened <code>1.txt</code>.</p>
+  
+
+
+<a name="key_setOutputEncoding"></a>
+<a name="sect23"></a>
+     <h3>setOutputEncoding</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+          <ul>
+              <li><strong>encoding</strong>:
+                string.
+                  The name of the charset, e.g. <code>ISO-8859-2</code>. It understands the special values <code>source</code> and <code>host</code>.     
+
+          </ul>
+      
+  <p>Sets the encoding of the output. This will die with error if the output file is already partially written to the disk. Thus, if you want to change the output encoding, do it as early as possible. FMPP buffers the output for the output file in the memory until the buffer size reaches 160 characters, but after that it starts to flush the buffer to the disk. Also, directives that change the current output file may flush the buffer. When you start a new file (say, with <code>changeOutputFile</code>), it starts a new buffer in the memory, so you can set the encoding of the new file.</p>
+
+
+
+
+<a name="sect24"></a>
+     <h2>Utilities for paths</h2>
+
+<a name="key_pathTo"></a>
+<a name="sect25"></a>
+     <h3>pathTo</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> string
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>destination</strong>: string.
+                  The <a href="overview.html#virtualPath">virtual path</a> in the output file system to the destination file or directory. The destination file or directory need not exist. 
+
+            </ol>
+      
+  <p>This method returns the relative virtual path that leads from the directory of the current output file, to the destination file or directory. For example, if you want to create a link that points to <code><em>&lt;outputroot></em>/products/index.html</code>, then you can write:</p>
+
+<pre>&lt;a href=&quot;${pp.pathTo(&#39;/products/index.html&#39;)}&quot;&gt;Product index&lt;/a&gt;</pre>
+  <p>and the link will always point to that file, does not mater where the file that contains the above link is.</p>
+
+  <p>The returned path never starts with <code>/</code>; it is always a relative path.</p>
+  
+  <p>If the destination path is finished with slash, then, and only then, the resulting path will be also finished with slash, except if the only character in the result would be that slash, in which case the result will be an empty (0 length) string instead.</p>
+
+
+
+<a name="key_home"></a>
+<a name="sect26"></a>
+     <h3>home</h3>
+    <em>Type:</em> string
+      <p>Same as what <code>pp.pathTo('/')</code> would return. That is, the virtual path to the output root directory, from the current output file. It is finished with a slash, except if the current output file is directly in the output root directory, in which case the result is an empty (0 length) string. The result never starts with slash. So the possible values are something like: <code>../../</code></p>
+  
+  <p>Example: The <code>src</code> will always point to the file in the <code>img</code> directory of the output root, does not mater if you move the HTML file in the directory hierarchy:</p>
+  
+<pre>&lt;img src=&quot;${pp.home}img/logo.jpg&quot; alt=&quot;Logo&quot;&gt;</pre>
+
+<a name="key_outputRootRelativePath"></a>
+<a name="sect27"></a>
+     <h3>outputRootRelativePath</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> string
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                   The <a href="overview.html#virtualPath">virtual output path</a> to convert. The output file pointed by the path need not exist.
+
+            </ol>
+      <p>Converts a virtual output path to a virtual output path that is relative to the output root directory. The resulting path will not start with slash.</p>
+
+
+<a name="key_sourceRootRelativePath"></a>
+<a name="sect28"></a>
+     <h3>sourceRootRelativePath</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> string
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                  Same as the parameter of <a href="#key_outputRootRelativePath">outputRootRelativePath</a>, but it uses the the source file system.
+
+            </ol>
+      <p>Same as <a href="#key_outputRootRelativePath">outputRootRelativePath</a>, but it uses the source root directory and the current source file respectively.</p>
+
+
+<a name="key_sourcePathTo"></a>
+<a name="sect29"></a>
+     <h3>sourcePathTo</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> string
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>destination</strong>: string.
+                  Same as the parameter of <a href="#key_pathTo">pathTo</a>, but it uses the source file system.
+
+            </ol>
+      <p>Same as <a href="#key_pathTo">pathTo</a>, but it uses the source root directory and the current source file respectively.</p>
+
+
+<a name="key_slash"></a>
+<a name="sect30"></a>
+     <h3>slash</h3>
+    <em>Type:</em> string
+      <p>The platform dependent slash character used in native paths. This will be backslash (<code>\</code>) on Windows.</p>
+
+
+<a name="key_urlEnc"></a>
+<a name="sect31"></a>
+     <h3>urlEnc</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> string
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>string to encode</strong>: string.
+                  The string to encode.
+
+            </ol>
+      
+  <p><strong>Deprecated:</strong> use the <code>url</code> built-in of FreeMarker instead. For example: <code>${"a+b/c"?url}</code>.</p>
+  
+  <p>Encodes a string with URL encoding. For example the result of <code>pp.urlEnc("a+b/c")</code> will be <code>a%2Bb%2Fc</code>, if the output charset is an US-ASCII based charset.</p>
+
+
+<a name="key_urlPathEnc"></a>
+<a name="sect32"></a>
+     <h3>urlPathEnc</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> string
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>string to encode</strong>: string.
+                  The string to encode.
+
+            </ol>
+    
+  <p>Same as FreeMarker's <code>url</code> built-in (<code>?url</code>), except that it does not encode slash characters. For example the result of <code>pp.urlPathEnc("new&nbsp;products/bálna.html")</code> will be <code>new%20products/b%E1lna.html</code>, if the output charset is ISO-8859-1.</p>
+
+
+
+
+<a name="sect33"></a>
+     <h2>Utilities for files</h2>
+
+<a name="key_sourceFileSize"></a>
+<a name="sect34"></a>
+     <h3>sourceFileSize</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> number
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                The <a href="overview.html#virtualPath">virtual path</a> of the file in the source file system.
+
+            </ol>
+    
+<p>Returns the size of the file in bytes. If the file does not exist, it returns 0.</p>
+
+
+<a name="key_sourceFileLastModified"></a>
+<a name="sect35"></a>
+     <h3>sourceFileLastModified</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> date (date+time)
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                The <a href="overview.html#virtualPath">virtual path</a> of the file in the source file system.
+
+            </ol>
+    
+<p>Tells the last modification date+time of file. If the file does not exist, it raises an error.</p>
+
+
+<a name="key_sourceFileExists"></a>
+<a name="sect36"></a>
+     <h3>sourceFileExists</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> boolean
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                The <a href="overview.html#virtualPath">virtual path</a> of the file in the source file system.
+
+            </ol>
+    
+<p>Tells if the file exists or not.</p>
+
+
+<a name="key_outputFileSize"></a>
+<a name="sect37"></a>
+     <h3>outputFileSize</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> number
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                The <a href="overview.html#virtualPath">virtual path</a> of the file in the output file system.
+
+            </ol>
+    
+<p>Returns the size of the file in bytes. If the file does not exist, it returns 0.</p>
+
+
+<a name="key_outputFileLastModified"></a>
+<a name="sect38"></a>
+     <h3>outputFileLastModified</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> date (date+time)
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                The <a href="overview.html#virtualPath">virtual path</a> of the file in the output file system.
+
+            </ol>
+    
+<p>Tells the last modification date+time of file. If the file does not exist, it raises an error.</p>
+
+
+<a name="key_outputFileExists"></a>
+<a name="sect39"></a>
+     <h3>outputFileExists</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> boolean
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                The <a href="overview.html#virtualPath">virtual path</a> of the file in the output file system.
+
+            </ol>
+    
+<p>Tells if the file exists or not.</p>
+
+
+<a name="key_realFileSize"></a>
+<a name="sect40"></a>
+     <h3>realFileSize</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> number
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                The real path (native path) of the file. The file can be outside all root directories. FMPP passes the resolving of relative paths to the host OS, so it is not defined by FMPP what the end result will be. In general, it is better to use absolute paths here.<br>
+  <strong>Windows users:</strong> According to the syntactical rules of FTL, you must use double backslashes in string literals: <code>"C:\\work\\foo\\bar.txt"</code>, or use raw strings: <code>r"C:\work\foo\bar.txt"</code>. Also, according to the Windows API rules, you can simply use slash: <code>"C:/work/foo/bar.txt"</code>, which is probably the best solution.
+
+            </ol>
+    
+<p>Returns the size of the file in bytes. If the file does not exist, it returns 0.</p>
+
+
+<a name="key_realFileLastModified"></a>
+<a name="sect41"></a>
+     <h3>realFileLastModified</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> date (date+time)
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                The real path (native path) of the file.  The rules are the same as with <a href="#key_realFileSize">realFileSize</a>. 
+
+            </ol>
+    
+<p>Tells the last modification date+time of file. If the file does not exist, it raises an error.</p>
+
+
+<a name="key_realFileExists"></a>
+<a name="sect42"></a>
+     <h3>realFileExists</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> boolean
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>file path</strong>: string.
+                The real path (native path) of the file.  The rules are the same as with <a href="#key_realFileSize">realFileSize</a>. 
+
+            </ol>
+    
+<p>Tells if the file exists or not.</p>
+
+
+
+
+
+<a name="sect43"></a>
+     <h2>Writable hashes and sequences</h2>
+
+<p>Writable sequences and hashes are an FMPP specific extension to FreeMarker, as FreeMarker does not support the modification of sequences and hashes. (This has good reasons in the on-the-fly dynamic page generation segment that FreeMarker mostly targets, but it can be a problem in extreme FreeMarker applications as FMPP.) To read the variables of these sequences and hashes, you can use the same expressions as with plain sequences and hashes. But, to modify the contents of them, you have to use the directives described below, since predefined directives as <code>&lt;#assign <em>...</em>></code> can't modify subvariables. Unfortunately, sequence addition, sub-sequence operator (like <code>seq[5..10]</code>) and <code>?reverse</code> do not copy the original sequence, just wraps it (for efficiency), so the resulting sequence will change if the original sequence is changed later (this is basically an abnormal aliasing effect). The same problem exists with the result of hash addition; it just wraps the two hashes, so the resulting hash will magically change if you modify the hashes you have added earlier. As a work-around, after you did the above problematic operations, either be sure you will not modify the objects that were used as input, or create a copy of the result like: <code>&lt;#assign b = pp.newWritableSequence(a[5..10])></code> and <code>&lt;#assign c = pp.newWritableHash(hashA + hashB)></code>). Of course this is easy to miss... so rather try to build the data model so you will not need to modify collections. Keeping templates simple and moving complex calculations out to custom <a href="dataloader.html">data loaders</a> or BeanShell scripts (see the <code>bsh</code> function of <code><a href="settings.html#key_localData">localData</a></code> <a href="settings.html#data">here...</a>) is advisable anyway.</p>
+
+<p>Note that only the sequences that were made with the <a href="#key_newWritableSequence"><code>newWritableSequence</code> method</a> are writable. Also, only the hashes that were made with the <a href="#key_newWritableHash"><code>newWritableHash</code> method</a> are writable. You can't modify plain sequences or hashes with the below directives.</p>
+
+<p>Also note that writable sequences and hashes suffer from the effect called aliasing (that most programmers will find natural). This effect, explained with an example, looks like this:</p>
+
+<pre>&lt;#assign a = pp.newWritableSequence()&gt;
+&lt;@pp.add seq=a value=&quot;red&quot; /&gt;
+&lt;#assign b = a&gt;
+&lt;@pp.add seq=b value=&quot;green&quot; /&gt;
+a: &lt;#list a as i&gt;${i} &lt;/#list&gt;
+b: &lt;#list b as i&gt;${i} &lt;/#list&gt;</pre>
+<p>Here the output will be:</p>
+
+<pre>a: red green
+b: red green</pre>
+<p>That is, FreeMarker variables just store a reference (pointer) to the sequence or hash, not the sequence or hash itself. So both <code>a</code> and <code>b</code> points to the same single sequence object, which floats somewhere in the memory. This fact becomes significant because you modify that object, otherwise you wouldn't notice it. To create individual copies, use <a href="#key_newWritableSequence"><code>newWritableSequence</code></a> or <a href="#key_newWritableHash"><code>newWritableHash</code></a>, for example:.</p>
+
+<pre>&lt;#assign a = pp.newWritableSequence()&gt;
+&lt;@pp.add seq=a value=&quot;red&quot; /&gt;
+&lt;#assign b = pp.newWritableSequence(a)&gt;
+&lt;@pp.add seq=b value=&quot;green&quot; /&gt;
+a: &lt;#list a as i&gt;${i} &lt;/#list&gt;
+b: &lt;#list b as i&gt;${i} &lt;/#list&gt;</pre>
+<p>Here <code>b</code> is a new sequence whose initial content is the same as the content of <code>a</code>. Thus, the output will be:</p>
+
+<pre>a: red
+b: red green</pre>
+<a name="key_newWritableSequence"></a>
+<a name="sect44"></a>
+     <h3>newWritableSequence</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> writable sequence
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>initial content</strong>: sequence, optional.
+              
+            </ol>
+    <p>Creates a new empty writable sequence. However, if called with parameter then adds the items in the parameter sequence to this new sequence (known as "shallow copy" among programmers). Example:</p>
+
+<pre>&lt;#assign a = pp.newWritableSequence()&gt;
+&lt;#assign b = pp.newWritableSequence([&#39;red&#39;, &#39;green&#39;, &#39;blue&#39;])&gt;
+${a?size}
+${b?size}</pre>
+<p>The output will be:</p>
+
+<pre>0
+3</pre>
+
+
+<a name="key_newWritableHash"></a>
+<a name="sect45"></a>
+     <h3>newWritableHash</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> writable hash
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>initial content</strong>: hash, optional.
+              
+            </ol>
+    <p>Creates a new empty writable hash. However, if called with parameter then adds the items in the parameter hash to this new hash (known as "shallow copy" among programmers). Example:</p>
+
+<pre>&lt;#assign a = pp.newWritableHash()&gt;
+&lt;#assign b = pp.newWritableHash({&#39;red&#39;:&#39;FE0000&#39;, &#39;green&#39;:&#39;10F000&#39;, &#39;blue&#39;:&#39;0007FF&#39;})&gt;
+${a?size}
+${b?size}</pre>
+<p>The output will be:</p>
+
+<pre>0
+3</pre>
+
+<a name="key_copyWritable"></a>
+<a name="sect46"></a>
+     <h3>copyWritable</h3>
+      <strong class="warning"><em>Deprecated:</em></strong> Use <a href="#key_newWritableSequence"><code>newWritableSequence</code></a> and <a href="#key_newWritableHash"><code>newWritableHash</code></a> instead.<br>
+    <em>Type:</em> method
+          <br><em>Result type:</em> writable hash or writable sequence
+      <br><em>Parameters:</em>
+        none
+    <p>Copies a writable hash or sequence. (It is used to prevent aliasing effect. The result is a "shallow copy" of the original hash or sequence.)</p>
+
+
+<a name="key_add"></a>
+<a name="sect47"></a>
+     <h3>add</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+          <ul>
+              <li><strong>seq</strong>:
+                writable sequence.
+              The sequence to modify.
+              <li><strong>index</strong>=seq?size:
+                number.
+              The index where you want to insert the subvariable into the sequence.  The index of the first subvariable is 0.
+              <li><strong>value</strong>:
+                any.
+              The new value of the subvariable.
+          </ul>
+      
+  
+  
+
+  <p>Inserts a new subvariable into the sequence, at the specified index. Shifts the subvariable currently at that position (if any) and any subsequent subvariables to the right (adds one to their indices). If you do not use the <code>index</code> parameter, or if its value is 1 higher than the index of the last subvariable, then it appends the new subvariable at the end of the sequence.</p>
+
+
+<a name="key_set"></a>
+<a name="sect48"></a>
+     <h3>set</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+          <ul>
+              <li><strong>seq</strong>:
+                writable sequence.
+              The sequence to modify.
+              <li><strong>index</strong>:
+                number.
+              The index of subvariable to set. The index of the first subvariable is 0.
+              <li><strong>hash</strong>:
+                writable hash.
+              The hash to modify.
+              <li><strong>key</strong>:
+                string.
+              The name of the subvariable that you want to add to the hash, or that you want to replace.
+              <li><strong>value</strong>:
+                any.
+              The value of the new subvariable.
+          </ul>
+      
+  
+  
+  
+  
+  
+  <p>This can be used for two purposes, depending on if you use the <code>seq</code> or the <code>hash</code> parameter:</p>
+  <ul>
+    <li>For sequences: Sets an already existing subvariable of the sequence or hash. The index must be the index of an existing subvariable, or an error will occur.
+    
+    <li>For hashes: Adds a new subvariable to the hash with the name specified with the <code>key</code> parameter, or replaces the subvariable with the same name if that already exists.
+  </ul>
+
+
+
+<a name="key_remove"></a>
+<a name="sect49"></a>
+     <h3>remove</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+          <ul>
+              <li><strong>seq</strong>:
+                writable sequence.
+              The sequence to modify.
+              <li><strong>index</strong>:
+                number.
+              The index of the subvariable to remove.
+              <li><strong>hash</strong>:
+                writable hash.
+              The hash to modify.
+              <li><strong>key</strong>:
+                string.
+              The name of the subvariable that you want to remove from the hash.
+          </ul>
+      
+  
+  
+  
+  
+  <p>This can be used for two purposes, depending on if you use the <code>seq</code> or the <code>hash</code> parameter:</p>
+  <ul>
+    <li>For sequences: Removes the subvariable on the specified index, and shifts any subsequent subvariables to the left (subtracts one from their indices). The <code>index</code> must denote an existing subvariable, or an error will be raised.
+    
+    <li>For hashes: Removes the subvariable with the name specified with the <code>key</code> parameter, or does nothing if no such subvariable exists.
+  </ul>
+
+
+<a name="key_clear"></a>
+<a name="sect50"></a>
+     <h3>clear</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+          <ul>
+              <li><strong>seq</strong>:
+                writable sequence.
+              The sequence to clear.
+              <li><strong>hash</strong>:
+                writable hash.
+              The hash to clear.
+          </ul>
+      
+  
+  
+  <p>Removes all subvariables of the sequence or hash.</p>
+
+
+
+
+<a name="sect51"></a>
+     <h2>Miscellaneous</h2>
+
+<a name="key_warning"></a>
+<a name="sect52"></a>
+     <h3>warning</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> no
+      <br><em>Parameters:</em>
+          <ul>
+              <li><strong>message</strong>:
+                string.
+              The warning message.
+          </ul>
+      
+  
+  <p>Issues a warning message. It depends on the concrete front-end in use and the settings, but usually the message will be displayed on the screen and/or will be added to the log file. The processing will not stop if you issue a warning. To stop processing with error message you should use <code>&lt;#stop "<em>message</em>"></code>.</p>
+
+
+<a name="key_ignoreOutput"></a>
+<a name="sect53"></a>
+     <h3>ignoreOutput</h3>
+    <em>Type:</em> directive
+          <br><em>Supports nested content:</em> yes
+      <br><em>Parameters:</em>
+        none
+      <p>All text generated inside the nested content of this directive will be thrown away.</p>
+
+
+<a name="key_locale"></a>
+<a name="sect54"></a>
+     <h3>locale</h3>
+    <em>Type:</em> string
+      <p>The currently used locale in the usual format. For example: <code>ar_SA</code>, <code>ar_IQ</code>, <code>en_US</code>, <code>en_UK</code>, <code>es_ES</code>, ...etc.
+
+
+<a name="key_loadData"></a>
+<a name="loadData"></a>
+     <h3>loadData</h3>
+    <em>Type:</em> method
+          <br><em>Result type:</em> any
+      <br><em>Parameters:</em>
+          <ol>
+            <li><strong>loader name</strong>: string.
+                  The name of the data loader.
+
+            <li><strong>arguments...</strong>: any.
+                  The arguments to the data loader. These are 0 or more arguments.
+
+            </ol>
+      
+  <p>Loads data using <a href="dataloader.html">data loaders</a>, and returns the loaded data as the result of the method call. For example this:</p>
+
+<pre>&lt;#assign foo = pp.loadData(&#39;csv&#39;, &#39;foo.txt&#39;, {&#39;separator&#39;:&#39;,&#39;, &#39;encoding&#39;:&#39;UTF-8&#39;})&gt;</pre>
+  <p>does something similar as when you use the below in an FMPP configuration file:</p>
+
+<pre>data: {foo:csv(foo.txt, {separator:&#39;,&#39;, encoding:UTF-8})}</pre>
+  <p>The difference is that with the <code>pp.loadData</code>, you load the data on demand, and into a temporary variable that will be available only for a single template processing.</p>
+  
+  <p>The <code>get</code> data loader can't be invoked with this method.
+
+
+<a name="key_now"></a>
+<a name="sect56"></a>
+     <h3>now</h3>
+    <em>Type:</em> date (date+time)
+      <p>Returns the current date and time.</p>
+  
+  <p>For example this:</p>
+  
+<pre>Current date and time: ${pp.now}
+Current time: ${pp.now?time}
+Current date: ${pp.now?date}
+Current day of week: ${pp.now?string(&quot;EEEE&quot;)}
+&lt;#setting datetime_format=&quot;yyyy-MM-dd HH:mm:ss zzzz&quot;&gt;
+Current date and time: ${pp.now}</pre>  
+  <p>will output something like this:</p>
+  
+<pre>Current date and time: Apr 12, 2003 5:28:50 PM
+Current time: 5:28:50 PM
+Current date: Apr 12, 2003
+Current day of week: Saturday  
+Current date and time: 2003-04-12 17:28:50 Central European Summer Time</pre>  
+  <p>For more information about using date/time values, please read the <a href="freemarker/index.html" rel="nofollow">FreeMarker Manual</a>.</p> 
+
+
+<a name="key_sessionStart"></a>
+<a name="sect57"></a>
+     <h3>sessionStart</h3>
+    <em>Type:</em> date (date+time)
+      <p>Returns the date and time of the processing session starting.</p>
+
+
+<a name="key_s"></a>
+<a name="sect58"></a>
+     <h3>s</h3>
+    <em>Type:</em> writable hash
+      <p>Stands for "shared". This is a writable hash that keeps its content during the whole processing session. That is, if you add a subvariable to it during the execution of a template, then that subvariable will be visible for all templates processed later in the same session. An example of the usage of <code>pp.s</code> can be found in <code><em>&lt;FMPP></em>/docs/examples/session</code></p>
+
+
+<a name="key_doc"></a>
+<a name="sect59"></a>
+     <h3>doc</h3>
+    <em>Type:</em> node
+      <p>This variable exists only while an XML file is processed in <code>renderXml</code> processing mode (see the documentation of the <code><a href="settings.html#key_modes">modes</a></code> setting). This variable stores the source file (the XML file) as a node variable that corresponds to the W3C DOM document object.</p>
+  
+  <p>An example that uses <code>renderXml</code> processing mode and <code>pp.doc</code> is <code><em>&lt;FMPP></em>/docs/examples/xml_rendering</code></p>
+
+
+<a name="key_version"></a>
+<a name="sect60"></a>
+     <h3>version</h3>
+    <em>Type:</em> string
+      <p>This is the version number of the FMPP engine.</p>
+
+
+<a name="key_freemarkerVersion"></a>
+<a name="sect61"></a>
+     <h3>freemarkerVersion</h3>
+    <em>Type:</em> string
+      <p>This is the version number of the FreeMarker the FMPP engine currently uses.</p>
+
+
+
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="configfile.html">Prev</a></li><li><a class="pager-icon next" href="dataloader.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

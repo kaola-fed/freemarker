@@ -1,0 +1,182 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, homepage">
+<meta property="og:description" content="Command-line/Ant-task/embeddable text file preprocessor. Macros, flow control, expressions. Recursive directory processing. Extendable in Java to display data from any data sources (as database). Can generate complete homepages (tree of HTML-s, images).">
+<meta name="Description" content="Command-line/Ant-task/embeddable text file preprocessor. Macros, flow control, expressions. Recursive directory processing. Extendable in Java to display data from any data sources (as database). Can generate complete homepages (tree of HTML-s, images).">
+<title>FMPP: Text file preprocessor (HTML preprocessor)</title>
+<meta property="og:title" content="FMPP: Text file preprocessor (HTML preprocessor)">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/index.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/index.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width home-site-header">
+<div class="home-header">
+<div class="logo">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</div>
+FMPP - FreeMarker-based file PreProcessor
+<br>Version 0.9.15
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+</div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">FMPP - FreeMarker-based file PreProcessor</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#sect1">What is FMPP?</a></li>
+    <li><a href="#sect3">Documentation</a></li>
+    <li><a href="#sect4">Download</a></li>
+    <li><a href="#sect5">Contact</a></li>
+  </ul>
+  <div class="clear"></div>
+              </div>
+            <div class="page-content content-right">
+              
+<a name="sect1"></a>
+     <h2>What is FMPP?</h2>
+  <p>FMPP is a general-purpose text file preprocessing tool that uses <a href="http://freemarker.org/">FreeMarker</a> templates. It process entire directories recursively. It can be used  for generating complete static websites, source code, configuration files, etc. It can insert data from sources like CSV, XML, and JSON into the generated files. (You can add new kind of data sources in Java.) <a href="qtour.html">See the Tutorial</a> for a more concrete introduction.</p>
+  
+  <p>FMPP can be used with UN*X-style command-line interface, or as <a href="http://ant.apache.org">Ant</a> task, or can be embedded into your application using its Java API.</p>
+
+  <p>FMPP was written in Java, thus it runs on all modern platforms (Windows, "Linux", OS X, etc.).</p>
+
+  <p>FMPP is Free software under Apache License 2.0. <a href="license.html">See license...</a></p>
+  
+<a name="sect2"></a>
+     <h3>Features</h3>
+    <p>A quick list of FMPP capabilities:</p>
+    <ul>
+      <li>FreeMarker as the preprocessor language:
+        <ul>
+          <li>All the usual template constructs, such as include, if/else/elseif, loop.</li>
+          <li>Macros with named arguments and nested content (body).</li>
+          <li>Variables (global, or local for a macro call)</li>
+          <li>Complex expressions using string, arithmetical and logical operations.</li>
+              Extensible with custom functions.</li>
+          <li>Automatic and manual escaping (HTML, XML, custom function)</li>
+          <li>Transforming (filtering) blocks of output; extensible with custom transformations in Java.</li>
+          <li>Capturing block of output into a variable.</li>
+          <li>Charset aware, internally uses UNICODE.</li>
+          <li>Number and date/time formatting with masks (patterns). Locale sensitive formatting.</li>
+        </ul>
+      </li>
+      <li>Bulk file processing:
+        <ul>
+          <li>Process entire directories recursively.</li>
+          <li>Different file processing mode can be chosen for each file, based on path patterns (as file extension): execute file as template, or parse it as XML and then render it to output with a template, or binary-copy it, or ignore it.</li>
+          <li>Can ignore bad source files and log the error message into a text file.</li>
+          <li>Can guarantee that certain files will be processed later than others.</li>
+        </ul>
+      </li>
+      <li>You can expose data from arbitrary data sources be writing extensions in Java.
+          Currently out-of-the-box supported data sources:
+            <ul>
+              <li>XML file</li>
+              <li>CSV and tab-separated text file</li>
+              <li>JSON file</li>
+              <li>Java "properties" file</li>
+              <li>Ant properties, Ant project and target information</li>
+              <li>System clock</li>
+              <li>Plain text file</li>
+            </ul>
+      </li>
+      <li>Other highlighted features:
+        <ul>
+          <li>Output splitting: a single source file can generate multiple output files (including 0 output files).</li>
+          <li>Automatic file inclusion, automatic escaping, and whatnot that can be done with automatically inserted headers and footers, chosen based on path patterns.</li>
+          <li>Generate HTML &lt;img>-s with calculated width and height.</li>
+          <li>Calculate the relative path to the home directory, or to any other file.</li>
+          <li>Rendering (transforming) XML files with FreeMarker templates. (Similar to the typical XSLT usage pattern.)</li>
+          <li>Query the size/existence of source files.</li>
+          <li>Query output encoding (charset).</li>
+          <li>URL-escaping (with the actual output charset).</li>
+        </ul>
+      </li>
+    </ul>
+  
+
+<a name="sect3"></a>
+     <h2>Documentation</h2>
+  <ul>
+    <li><a href="manual.html"><strong>FMPP Manual</strong></a></li>
+    <li><a href="api/index.html">FMPP Java API</a></li>
+    <li><a href="freemarker/index.html" rel="nofollow">FreeMarker Manual</a></li>
+    <li><a href="freemarker/api/index.html" rel="nofollow">FreeMarker Java API</a></li>
+  </ul>
+
+<a name="sect4"></a>
+     <h2>Download</h2>
+  <p>To download the latest release, please visit the FMPP homepage: <a href="http://fmpp.sourceforge.net/">http://fmpp.sourceforge.net/</a></p>
+  
+  <p>For <strong>text editor and IDE plug-ins</strong> and other FreeMarker template-related tools, please visit the FreeMarker homepage: <a href="http://freemarker.org/">http://freemarker.org/</a> (mirror: <a href="http://freemarker.sourceforge.net/">http://freemarker.sourceforge.net/)</a></p>
+
+<a name="sect5"></a>
+     <h2>Contact</h2>
+
+  <p>Ask for <strong>help</strong> or provide suggestions:</p>
+  <ul>
+    <li>on the <strong>mailing list</strong> (The preferred way. Low traffic.):</li>
+      <ul>
+        <li>Subscribe/unsubscribe: <a href="http://lists.sourceforge.net/mailman/listinfo/fmpp-open">http://lists.sourceforge.net/mailman/listinfo/fmpp-open</a></li>
+        <li>News group interface: <a href="nntp://news.gmane.org/gmane.comp.text.fmpp">nntp://news.gmane.org/gmane.comp.text.fmpp</a></li>
+        <li>Web interface (read only): <a href="http://news.gmane.org/thread.php?group=gmane.comp.text.fmpp">http://news.gmane.org/thread.php?group=gmane.comp.text.fmpp</a></li>
+      </ul>
+    </li>
+    <li>on the SourceForge.net Web forum: <a href="http://sourceforge.net/forum/forum.php?forum_id=254571">http://sourceforge.net/forum/forum.php?forum_id=254571</a></li>
+    <li>with private e-mail: <a href="mailto:ddekanyREMOVETHIS@freemail.hu">ddekanyREMOVETHIS@freemail.hu</a> (delete the "REMOVETHIS"!)</li>
+  </ul>
+
+  <div class="report-bugs">
+    <p class="strong"><strong>Please report bugs you find!</strong> Any programming, documentation content or grammatical mistakes (even minor typos). Thank you!</p>
+    <p>Use the <a href="http://sourceforge.net/tracker/?func=add&amp;group_id=74591&amp;atid=541453">bug reporting Web page</a>,<br>
+      or e-mail: <a href="mailto:ddekanyREMOVETHIS@freemail.hu">ddekanyREMOVETHIS@freemail.hu</a> (delete the "REMOVETHIS"!)</p>
+
+    <p>Please report FreeMarker bugs at the <a rel="nofollow" href="http://sourceforge.net/tracker/?func=add&amp;group_id=794&amp;atid=100794">FreeMarker bug reporting Web page</a>, not for me. If you are not sure if you have found a FreeMarker or FMPP bug, just report it as an FMPP bug.</p>
+  </div>
+
+  
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

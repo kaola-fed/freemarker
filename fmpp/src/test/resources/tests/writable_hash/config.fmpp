@@ -1,0 +1,5 @@
+sourceRoot: src
+outputRoot: out
+data: {
+    stuff: {a:A, b:B}
+}

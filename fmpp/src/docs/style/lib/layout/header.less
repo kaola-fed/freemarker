@@ -1,0 +1,89 @@
+.site-header {
+  border-bottom: 1px solid @border-gray;
+
+  .logo {
+    display: block;
+  }
+
+  .home-site-header {
+    text-align: center;
+    padding-top: 24px;
+
+    .social-icons {
+
+      background-color: rgba(255, 255, 255, 0.5);
+      padding: 3px 6px;
+      border: 1px solid @border-gray;
+      border-radius: 4px;
+      width: 200px;
+      margin: 12px auto;
+    }
+
+    .logo {
+      margin-bottom: 12px;
+
+      img {
+        width: 243px;
+        height: 70px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .inner-site-header {
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    @media (min-width: @screen-sm-min) {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .ie89 & {
+      display: block;
+      .clearfix();
+      height: 92px;
+    }
+
+    .header-left {
+      .ie89 & {
+        float: left;
+        width: 600px;
+
+        .breadcrumbs {
+          width: 600px;
+        }
+      }
+    }
+
+    .header-right {
+      text-align: center;
+      margin-top: 18px;
+
+      .ie89 & {
+        margin-top: 0;
+        float: right;
+        .clearfix();
+
+        nav {
+          .clearfix();
+        }
+
+        .pagers {
+          height: 55px;
+          width: 250px;
+          margin-top: 10px;
+        }
+      }
+    }
+
+    .logo {
+      img {
+        width: 121px;
+        height: 35px;
+      }
+    }
+  }
+}

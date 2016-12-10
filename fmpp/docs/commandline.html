@@ -1,0 +1,577 @@
+<!doctype html>
+<!--[if lte IE 9]><html class="ie89" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html lang="en"> <!--<![endif]-->
+<head prefix="og: http://ogp.me/ns#">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Keywords" content="FMPP, preprocessor, FreeMarker, template, templates, HTML, HTML template, HTML templates, text, macro, macros, text preprocessor, HTML preprocessor, static HTML, HTML generator, static HTML generator, Java, free, open source, open-source, command-line tool">
+<title>The Command-line Tool - FMPP</title>
+<meta property="og:title" content="The Command-line Tool - FMPP">
+<meta property="og:locale" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="og:url" content="http://fmpp.sourceforge.net/commandline.html">
+<link rel="canonical" href="http://fmpp.sourceforge.net/commandline.html">
+<link rel="prev" href="http://fmpp.sourceforge.net/frontends.html">
+<link rel="next" href="http://fmpp.sourceforge.net/ant.html">
+<!--[if lt IE 9]>
+<script>
+document.createElement('nav');
+</script>
+<![endif]-->
+<link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body itemscope itemtype="http://schema.org/Article">
+<div class="site-header">
+<div class="site-width inner-site-header">
+<div class="header-left"> <a href="index.html" class="logo" role="banner">
+<img src="style/fmpptitle.png" alt="FMPP" />
+</a>
+<nav><ul class="breadcrumbs"><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="index.html" itemprop="url"><span itemprop="title">Home</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="manual.html" itemprop="url"><span itemprop="title">FMPP Manual</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="frontends.html" itemprop="url"><span itemprop="title">Front-ends</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span class="icon icon-arrow-right2"></span><a href="commandline.html" itemprop="url"><span itemprop="title">The Command-line Tool</span></a></li></ul></nav></div><div class="header-right"> <nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="frontends.html">Prev</a></li><li><a class="pager-icon next" href="ant.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li> </ul>
+</nav>
+</div> </div>
+</div>
+<div class="page-wrapper">
+<div class="site-width">        <h1 itemprop="name">The Command-line Tool</h1>
+
+          <div class="content-inner">
+              <div class="content-left">
+    <p class="toc-header">Page contents</p>
+  <ul class="table-of-contents">
+    <li><a href="#cmdln_basics">Basic usage</a></li>
+    <li><a href="#cmdln_syntax_primer">Command-line argument syntax primer</a></li>
+    <li><a href="#fmpp_cmdline">FMPP command-line argument syntax</a></li>
+    <li><a href="#sect4">Invoking the command-line tool</a></li>
+    <li><a href="#sect5">Specifying settings in the command-line</a></li>
+    <li><a href="#sect6">Using configuration files</a></li>
+    <li><a href="#fmpprc">Global options</a></li>
+    <li><a href="#sect8">Supported front-end dependent settings</a></li>
+    <li><a href="#sect9">List of all options</a></li>
+  </ul>
+  <div class="clear"></div>
+              </div>
+            <div class="page-content content-right">
+              
+<a name="cmdln_basics"></a>
+     <h2>Basic usage</h2>
+
+<p>FMPP can work in two modes: as a recursive directory processor, or as single file processor.</p>
+
+<p>When you're using it as recursive directory processor, it needs a source root directory and an output root directory. It processes all files inside the source root (including the files in its subdirectories), and writes the processed files into the output root directory with similar path as in the source root (that is, the output of <code><em>&lt;source-root></em>/foo/bar.txt</code> will be <code><em>&lt;output-root></em>/foo/bar.txt</code>. If <code>/home/me/sample-project/src</code> is the source root and <code>/home/me/sample-project/out</code> is the output root, then you issue:</p>
+
+<pre>fmpp -S /home/me/sample-project/src -O /home/me/sample-project/out</pre>
+
+<p>It's possible to tell FMPP to process only certain files and/or directories of the source root directory:</p>
+
+<pre>fmpp -S /home/me/sample-project/src -O /home/me/sample-project/out index.html foo/bar.txt somedir</pre>
+
+<p>Note that these paths are interpreted relatively to the source root directory, not to the current working directory.</p>
+
+<p>When you use FMPP as single file processor, you specify a single input file, and then an output file with the <code>-o</code> option. It's the <code>-o</code> option is what triggers single file mode.</p>
+
+<pre>fmpp /home/me/file-to-process.txt -o /home/me/processed-file.txt</pre>
+
+<p>In single file mode, the source root and output root directory defaults to the directory of source and output files respectively. (It has significance for example if the source file wants to include another file), but you can override them with the <code>-S</code> and <code>-O</code> switches. The source file and output file path is always interpreted relatively to the current working directory.</p>
+
+<p>It's often more convenient and manageable to use a project configuration file instead of entering everything as command-line arguments. For example, create file <code>config.fmpp</code> with this content:</p>
+
+<pre>sourceRoot: src
+outputRoot: out
+logFile: fmpp.log
+modes: [ ignore(tmp/), copy(**/*.dwg, bin/) ]
+data: {
+  contact: me@example.com
+  clients: csv(data/clients.csv)
+}</pre>
+<p>then use it as:</p>
+
+<pre>fmpp -C /home/me/sample-project/config.fmpp</pre>
+
+<p>or since <code>config.fmpp</code> is the default configuration file name, you can simply issue:</p>
+
+<pre>fmpp -C /home/me/sample-project</pre>
+  
+<p>or if you are in the same directory as <code>config.fmpp</code> then just issue:</p>
+
+<pre>fmpp</pre>
+
+<p>Note that paths in the configuration file are resolved relatively to the configuration file's directory, so it doesn't mater where do you invoke it from. Also note that you can override the settings stored in the configuration file with the command line:</p>
+
+<pre>fmpp -C /home/me/sample-project/config.fmpp -O other/destination</pre>
+
+<p>Much of what should be known about FMPP is not specific to its command line interface, so look around in the Table of Contents for more information!</p>
+
+
+
+<a name="cmdln_syntax_primer"></a>
+     <h2>Command-line argument syntax primer</h2>
+
+<p>This section is for users who are not too familiar with using the command-line. No FMPP specific information can be found here, so you may <a href="#fmpp_cmdline">skip to the next section</a>.</p>
+
+<p>The exact command-line syntax depends on what shell do you use (sh, csh, DOS shell, etc.), because the shell is responsible to split the command-line to an executable name and a list of arguments. FMPP just gets the list from the shell.</p>
+
+<p>Most shells will parse this command-line:</p>
+
+<pre>test -f t 1.txt 2.txt</pre>
+
+<p>as the executable name is <code>test</code>, and the list of arguments is:</p>
+
+<ol>
+  <li><code>-f</code>
+  <li><code>t</code>
+  <li><code>1.txt</code>
+  <li><code>2.txt</code>
+</ol>
+
+<p>As you may guess, the arguments are delimited by the spaces. If you want to put spaces into the value of arguments, in most shells you should use quotation marks:</p>
+
+<pre>test -f t -D &quot;x:1, y:2&quot;</pre>
+
+<p>Here, the list of arguments will be:</p>
+
+<ol>
+  <li><code>-f</code>
+  <li><code>t</code>
+  <li><code>-D</code>
+  <li><code>x:1, y:2</code>
+</ol>
+
+<p>The shell has removed the quotation marks. Thus, command-line tools like FMPP will not know that there were quotation marks, as they just gets the above list from the shell.</p>
+
+<p>With shells as sh, you can use apostrophe-quotes (<code>'</code>) instead of quotation marks. In Windows/DOS shell you can use quotation marks (<code>"</code>) only.</p>
+
+<p>You have to quote the argument if you use characters that are reserved by the shell for other purposes. For example <code>></code> and <code>|</code> is reserved in most shells. <code>&amp;</code>, <code>;</code> and <code>(</code> is reserved in sh. Also, if you use an UN*X shell, sometimes you need to quote arguments that contain <code>*</code>, <code>?</code> or <code>~</code>, because otherwise the shell interprets the argument as a path, and replaces that with the list of matching files.</p>
+
+<p>Most shells understand partially quoted arguments. For example:</p>
+
+<pre>test -D&quot;x:1, y:2&quot;</pre>
+
+<p>will be interpreted as:</p>
+
+<ol>
+  <li><code>-Dx:1, y:2</code>
+</ol>
+
+<p>A tricky situation is when you want to use quotation marks in an argument value. To prevent this situations use apostrophe-quotes instead of plain quotes and vice versa. For example:</p>
+
+<pre>test -D&quot;x:&#39;red led&#39;, y:2&quot;</pre>
+
+<p>or (will not work in Windows/DOS shell!):</p>
+
+<pre>test -D&#39;x:&quot;red led&quot;, y:2&#39;</pre>
+
+
+
+<a name="fmpp_cmdline"></a>
+     <h2>FMPP command-line argument syntax</h2>
+
+<p>The FMPP command-line tool uses similar argument syntax to usual UN*X command-line tools, such as <code>ls</code>. UN*X users should be able to use the tool even without reading this section.</p>
+
+<p>This is a possible FMPP command-line:</p>
+
+<pre>fmpp -C mycfg.fmpp -q --case-sensitive products index.html</pre>
+
+<p>The FMPP command-line tool interprets command-line arguments as either:</p>
+<ul>
+  <li>Option, as <code>-q</code>, <code>--case-sensitive</code> and <code>-C mycfg.fmpp</code>
+  <li>Non-option, as <code>products</code> and <code>index.html</code>
+</ul>
+
+<p>An option always starts with dash (<code>-</code>), or with double dash.  (<code>--</code>), followed by the name of the option (e.g. <code>q</code>, <code>C</code>, <code>case-sensitive</code>). If the option requires parameter, then it is followed by the parameter to the option (as <code>mycfg.fmpp</code> in <code>-C mycfg.fmpp</code>), which counts as the part of the option, not as non-option.</p>
+
+<p>If the option uses single dash, then the name of the option is exactly 1 character long; this is called short form. If the option uses double dash, then the name can be arbitrary long; this is called long form. All options have long form, and many options have both long and short form versions, which are equivalent (for example <code>-q</code> and <code>--quiet</code>). Short form options can be grouped together, for example you can write<br><code>-qxs</code><br>instead of <br><code>-q -x -s</code></p>
+
+<p>Some options require a parameter. To demonstrate the syntactical rules with examples, here are the valid ways to give  <code>cp852</code> as parameter to option <code>-E</code> alias <code>--source-encoding</code>:</p>
+
+<ul>
+  <li><code>-E cp852</code>: here the parameter was the next argument after the option
+  <li><code>-Ecp852</code>: here I have utilized that a short option name is always 1 character long, and thus, since <code>-E</code> require parameter, the rest of this argument will be interpreted as the parameter of the option. (Note, that because if this, grouping (as <code>-qxs</code>) will not work if an option in the group, other than the very last option, requires parameter.) The next argument of the command-line will not be interpreted as parameter to <code>-E</code>.
+  <li><code>-E=cp852</code>: This is similar to the latest, but the option name and parameter value is separated with <code>=</code>
+  <li><code>--source-encoding cp852</code>
+  <li><code>--source-encoding=cp852</code>
+</ul>
+
+<p>I didn't show the combinations like <code>-E="cp852"</code>, as the usage of quotation marks is shell dependent. See <a href="#cmdln_syntax_primer">the section about using the command-line</a> for more information.</p>
+
+<p>The order in which options occur in the command-line argument list is not significant.</p>
+
+<p>Options are case sensitive. This means that <code>-c</code> and <code>-C</code> are not the same.</p> 
+
+<p>Any argument that does not start with dash and is not directly after an option that needs parameter, is a non-option. In FMPP, non-options are used to list the name of the files or directories that you want to process; see more about this later. The position of a non-option in the argument list relatively to the options is not significant. That is, these command-line argument lists are equivalent:</p>
+
+<ul>
+  <li><code>-C mycfg.fmpp -q products index.html</code>
+  <li><code>products index.html -C mycfg.fmpp -q</code>
+  <li><code>products -C mycfg.fmpp index.html -q</code>
+</ul>
+
+<p>Sometimes it happens that a non-option should start with dash (for example, because the name of the file you want to refer to starts with dash). In this case you can use a special character sequence, <code>--</code> followed by no option name, to indicate that all subsequent arguments are non-options:</p>
+
+<pre>fmpp -Cmycfg.fmpp -- -this-is-a-non-option</pre>
+
+
+<a name="sect4"></a>
+     <h2>Invoking the command-line tool</h2>
+
+<p>The command-line tool can be invoked with the <code>fmpp</code> shell script (<code><em>&lt;FMPP></em>/bin/fmpp</code> or <code><em>&lt;FMPP></em>/bin/fmpp.bat</code>), assuming you have <a href="installing.html#commandLineTool">installed it</a> properly.</p>
+
+<p>When you invoke this tool, it will immediately run a processing session, with the settings you have set with its arguments (see later how), and then terminates. (With some command-line options, however, it will do something else, as with <code>-h</code> it just prints help.)</p>
+
+
+
+<a name="sect5"></a>
+     <h2>Specifying settings in the command-line</h2>
+
+<p>Most command-line options specify <a href="settings.html">FMPP settings</a>. The option name is the name of the setting, but with lower case dashed form (as <code>source-root</code>) instead of the usual mixed case form (as <code>sourceRoot</code>). The value of the setting is given as the parameter of the option. The <a href="configfile.html#configurationBase">configuration base</a> for the values is the current working directory (i.e. the directory you are in).</p>
+
+<p>Example: Runs a processing session with <code><a href="settings.html#key_sourceRoot">sourceRoot</a></code> set to <code>src</code> and <code><a href="settings.html#key_outputRoot">outputRoot</a></code> set to <code>out</code> (so this will process all files in the <code>src</code> directory, and store the output in the <code>out</code> directory):</p>
+
+<pre>fmpp --source-root src --output-root out</pre>
+
+<p>For the most frequently used settings there is short option name too. For example, this is equivalent with the previous example:</p>
+
+<pre>fmpp -S src -O out</pre>
+
+<p>If the setting value is of scalar type (as string, boolean, number) then just enter the value simply as is, not with TDD syntax. If the setting value is of more tricky type, as hash or sequence, then you use TDD syntax for it. For hash settings the value is a <a href="tdd.html#modes">hash mode TDD</a>, and for sequence setting it is sequence mode TDD, so the brackets should be omitted. For example:</p>
+
+<pre>fmpp -S src -O out -D &quot;online:false, tdd(data/style.tdd)&quot; --replaceExtensions &quot;ftl, html&quot;</pre>
+
+<p>Note that the quotation marks were needed only for the command-line parser of the shell (see earlier on this page), so they are not visible for FMPP.</p>
+
+<p>Boolean settings (and <code><a href="settings.html#key_quiet">quiet</a></code>) are specified with parameterless options:</p>
+
+<table border=1 cellspacing=1 cellpadding=4>
+  <tr>
+    <th rowspan=2>Command-line option
+    <th colspan=2>Meaning
+  <tr>
+    <th>Setting name
+    <th>Value
+  <tr>
+    <td><code>-s</code>, <code>--stop-on-error</code>
+    <td><code><a href="settings.html#key_stopOnError">stopOnError</a></code>
+    <td><code>true</code>
+  <tr>
+    <td><code>-c</code>, <code>--continue-on-error</code>
+    <td><code><a href="settings.html#key_stopOnError">stopOnError</a></code>
+    <td><code>false</code>
+  <tr>
+    <td><code>--case-sensitive</code>
+    <td><code><a href="settings.html#key_caseSensitive">caseSensitive</a></code>
+    <td><code>true</code>
+  <tr>
+    <td><code>--ignore-case</code>
+    <td><code><a href="settings.html#key_caseSensitive">caseSensitive</a></code>
+    <td><code>false</code>
+  <tr>
+    <td><code>--ignore-cvs-files</code>
+    <td><code><a href="settings.html#key_ignoreCvsFiles">ignoreCvsFiles</a></code>
+    <td><code>true</code>
+  <tr>
+    <td><code>--dont-ignore-cvs-files</code>
+    <td><code><a href="settings.html#key_ignoreCvsFiles">ignoreCvsFiles</a></code>
+    <td><code>false</code>
+  <tr>
+    <td><code>--ignore-svn-files</code>
+    <td><code><a href="settings.html#key_ignoreSvnFiles">ignoreSvnFiles</a></code>
+    <td><code>true</code>
+  <tr>
+    <td><code>--dont-ignore-svn-files</code>
+    <td><code><a href="settings.html#key_ignoreSvnFiles">ignoreSvnFiles</a></code>
+    <td><code>false</code>
+  <tr>
+    <td><code>--ignore-temporary-files</code>
+    <td><code><a href="settings.html#key_ignoreTemporaryFiles">ignoreTemporaryFiles</a></code>
+    <td><code>true</code>
+  <tr>
+    <td><code>--dont-ignore-temporary-files</code>
+    <td><code><a href="settings.html#key_ignoreTemporaryFiles">ignoreTemporaryFiles</a></code>
+    <td><code>false</code>
+  <tr>
+    <td><code>--print-stack-trace</code>
+    <td><code><a href="settings.html#key_printStackTrace">printStackTrace</a></code>
+    <td><code>true</code>
+  <tr>
+    <td><code>--dont-print-stack-trace</code>
+    <td><code><a href="settings.html#key_printStackTrace">printStackTrace</a></code>
+    <td><code>false</code>
+  <tr>
+    <td><code>-x</code>, <code>--expert</code>
+    <td><code><a href="settings.html#key_expert">expert</a></code>
+    <td><code>true</code>
+  <tr>
+    <td><code>--not-expert</code>
+    <td><code><a href="settings.html#key_expert">expert</a></code>
+    <td><code>false</code>
+  <tr>
+    <td><code>--append-log-file</code>
+    <td><code><a href="settings.html#key_appendLogFile">appendLogFile</a></code>
+    <td><code>true</code>
+  <tr>
+    <td><code>--dont-append-log-file</code>
+    <td><code><a href="settings.html#key_appendLogFile">appendLogFile</a></code>
+    <td><code>false</code>
+  <tr>
+    <td><code>-q</code>, <code>--quiet</code>
+    <td><code><a href="settings.html#key_quiet">quiet</a></code>
+    <td><code>true</code>
+  <tr>
+    <td><code>-v</code>, <code>--verbose</code>
+    <td><code><a href="settings.html#key_quiet">quiet</a></code>
+    <td><code>false</code>
+  <tr>
+    <td><code>-Q</code>, <code>--really-quiet</code>
+    <td><code><a href="settings.html#key_quiet">quiet</a></code>
+    <td><code>reallyQuiet</code>
+</table>
+
+<p>Example:</p>
+
+<pre>fmpp -S src -O out --dont-ignore-cvs-files -cqx</pre>
+
+<p>where the last few options mean: <code><a href="settings.html#key_ignoreCvsFiles">ignoreCvsFiles</a></code> is <code>false</code>, <code><a href="settings.html#key_stopOnError">stopOnError</a></code> is <code>false</code>, <code><a href="settings.html#key_quiet">quiet</a></code> is <code>true</code>, <code><a href="settings.html#key_expert">expert</a></code> is <code>true</code>.</p>
+
+<p>The value of the <code><a href="settings.html#key_sources">sources</a></code> setting can be given as the non-option arguments to the tool. For example, to process only files <code>index.html</code> and directory <code>products</code> of the source root:</p>
+
+<pre>fmpp -S src -O out index.html products</pre>
+
+<p>Notes for Windows users:</p>
+<ul>
+  <li>In paths you can optionally use slash (<code>/</code>) instead of backslash (<code>\</code>) anywhere.</li>
+  <li>You can't use <code>*</code> and <code>?</code> in paths (except in settings that explicitly want <a href="pathpattern.html">path patterns</a>, e.g. <code><a href="settings.html#key_modes">modes</a></code>)</li>
+</ul>
+
+
+
+<a name="sect6"></a>
+     <h2>Using configuration files</h2>
+
+<p>With option <code>--configuration</code> or <code>-C</code> you can load a configuration file. As you may know it <a href="configfile.html">from the chapter about configuration files</a>, it is enough to give the directory of the configuration file, if the file uses one of the standard names. Example:</p>
+
+<pre>fmpp -C works/project1</pre>
+
+<p>If you don't use option <code>--configuration</code>/<code>-C</code>, <code>fmpp</code> will look for a configuration file in the current working directory, and if it finds one with standard name, it will load that automatically. To prevent this, use <code>--configuration</code>/<code>-C</code> with <code>none</code> parameter (as <code>-C&nbsp;none</code>).</p>
+
+
+<p>Settings loaded from the configuration file have lower priority than settings given as command-line arguments. For example, here you add an extra variable to the <code><a href="settings.html#key_data">data</a></code> specified in the configuration file, or if variable <code>online</code> was already created there then replace its value:</p>
+
+<pre>fmpp -C works/project1 -D online:true</pre>
+
+<p>Options <code>configurationBase</code> and <code>inheritConfiguration</code> can be used to emulate that settings <code><a href="settings.html#key_configurationBase">configurationBase</a></code> and <code><a href="settings.html#key_inheritConfiguration">inheritConfiguration</a></code> are present with the given value in the configuration file.</p>
+
+
+
+<a name="fmpprc"></a>
+     <h2>Global options</h2>
+
+<p>The default of some settings that can't influence the output files can be set in a configuration file called <code>.fmpprc</code>. This file is searched in these directories, in this order:</p>
+<ol>
+  <li>In your home directory.</li>
+  <li>On Windows, in the directory pointed by the <code>HOME</code> environment variable.</li>
+  <li>In the directory pointed by the <code>FMPP_HOME</code> environment variable. This is usually automatically set to the directory where you have installed FMPP.</li>
+</ol>
+
+<p>Only the first <code>.fmpprc</code> found will be loaded.</p>
+
+<p>The settings you can set in the <code>.fmpprc</code> are:</p>
+<ul>
+  <li><code><a href="settings.html#key_appendLogFile">appendLogFile</a></code></li>
+  <li><code><a href="settings.html#key_columns">columns</a></code></li>
+  <li><code><a href="settings.html#key_echoFormat">echoFormat</a></code></li>
+  <li><code><a href="settings.html#key_printStackTrace">printStackTrace</a></code>
+  <li><code><a href="settings.html#key_quiet">quiet</a></code></li>
+  <li><code><a href="settings.html#key_snip">snip</a></code>: Deprecated, now just an inverted alias of <code><a href="settings.html#key_printStackTrace">printStackTrace</a></code></li>
+</ul>
+
+
+
+<a name="sect8"></a>
+     <h2>Supported front-end dependent settings</h2>
+
+<p>All <a href="settings.html#logging">logging related settings</a> are supported.</p>
+
+<p>All recommended <code><a href="settings.html#key_echoFormat">echoFormat</a></code>-s are supported, but <code>verbose</code> is the same as <code>normal</code>. It depends on the terminal implementation you use, but <code>terse</code> echo format can substantially speed up the processing session if you have many files.</p>
+
+<p>All <code><a href="settings.html#key_quiet">quiet</a></code> values are supported.</p>
+
+
+
+<a name="sect9"></a>
+     <h2>List of all options</h2>
+
+<p>The complete list of command-line options with brief description is included further below in the output of <code>fmpp -h</code>.
+Almost all options correspond to FMPP settings; see the <a href="settings.html">complete descriptions of FMPP settings here</a>.</p>
+
+<pre>
+Typical usages:
+   fmpp -C configfile
+   fmpp -S sourcedir -O outputdir
+   fmpp sourcefile -o outputfile
+For more examples: http://fmpp.sourceforge.net/commandline.html
+
+Options:
+  -A, --locale=&lt;LOC&gt;             The locale (as ar_SA). Use the special value &quot;host&quot; (-A host) if the default
+                                   locale of the host machine should be used. The default value of the option
+                                   is en_US.
+      --always-create-directories Create output subdirectory even if it will remain empty. Defaults to false.
+      --append-log-file          If the log file already exists, it will be continuted, instead of restarting
+                                   it.
+      --boolean-format=&lt;FORMAT&gt;  The boolean format used to show boolean values, like &quot;Yes,No&quot;. Not
+                                   &quot;true,false&quot;; use ${myBool?c} for that. The default is error on ${myBool}.
+      --borders=&lt;SEQ&gt;            The list of TDD function calls that choose header and footer for templates,
+                                   e.g.:
+                                   -M &#39;border(&quot;&lt;#escape x as x?html&gt;&quot;, &quot;&lt;/#escape&gt;&quot;, *.htm, *.html),
+                                   header(&quot;&lt;#include \&quot;/css.ftl\&quot;&gt;&quot;, *.css)&#39;
+  -c, --continue-on-error        Skip to the next file on failed file processing (and log the error: see -L)
+  -C, --configuration=&lt;FILE&gt;     Load settings from a configuration file. Settings given with command-line
+                                   options have higher priority (note that some settings are merged, rather
+                                   than overridden). Be default fmpp will use ./config.fmpp or ./fmpp.cfg if
+                                   that exists. Use value &quot;none&quot; (-C none) to prevent this.
+      --case-sensitive           Upper- and lower-case letters are considered as different characters when
+                                   comparing or matching paths.
+      --columns=&lt;COLS&gt;           The number of columns on the console screen. Use when auto-detection gives
+                                   bad result.
+      --configuration-base=&lt;DIR&gt; The directory used as base to resolve relative paths in the configuration
+                                   file. It defaults to the directory of the configuration file.
+  -D, --data=&lt;TDD&gt;               Creates shared data that all template will see. &lt;TDD&gt; is the Textual Data
+                                   Definition, e.g.:
+                                   -D &quot;properties(style.properties), onLine:true&quot;
+                                   Note that paths like &quot;style.properties&quot; are relatve to the data root
+                                   directory.
+      --data-root=&lt;DIR&gt;          Sets the root directory of data files. The reserved value &quot;source&quot; means
+                                   that the data root is the same as the source root. The default value is
+                                   &quot;source&quot;.
+      --date-format=&lt;FORMAT&gt;     The format used to show date (year+month+day) values. The default is locale
+                                   dependent.
+      --datetime-format=&lt;FORMAT&gt; The format used to show date-time values. The default is locale dependent.
+      --dont-append-log-file     If the log file already exists, it will be restarted. This is the default.
+      --dont-ignore-cvs-files    Don&#39;t ignore CVS files in the source root directory.
+      --dont-ignore-svn-files    Don&#39;t ignore SVN files in the source root directory.
+      --dont-ignore-temporary-files Don&#39;t ignore well-known temporary files in the source root directory.
+      --dont-print-stack-trace   Don&#39;t print stack trace on error, just cause chain. This is the default.
+      --dont-snip                Deprecated; alias of printStackTrace.
+      --dont-validate-xml        Sets that XML files will not be validated by default. This is the default.
+  -E, --source-encoding=&lt;ENC&gt;    The encoding of textual sources (templates). Use the special value &quot;host&quot;
+                                   (-E host) if the default encoding of the host machine should be used. The
+                                   default is &quot;ISO-8859-1&quot;.
+  -F, --echo-format=&lt;FORMAT&gt;     The format used for displaying the progress. &lt;FORMAT&gt; is n[ormal], t[erse]
+                                   or q[uiet] (or v[erbose], which is the same as normal). The default is
+                                   normal.
+      --freemarker-incompatible-improvements=&lt;VER&gt; Enables the FreeMarker fixes/improvements that are not
+                                   100% backward compatible, and were implemented in FreeMarker version
+                                   &lt;VER&gt;. In older projects using the highest available 2.3.x is usually a
+                                   good compromise. New projects should use the maximum, which is currently
+                                   &quot;2.3.21&quot;. The default is &quot;2.3.0&quot;.
+      --freemarker-links=&lt;MAP&gt;   The map of FreeMarker links (external includes).
+  -h, --help                     Prints help on options.
+      --ignore-case              Upper- and lower-case letters are considered as the same characters when
+                                   comparing or matching paths. This is the default.
+      --ignore-cvs-files         Ignore CVS files in the source root directory. This is the default.
+      --ignore-svn-files         Ignore SVN files in the source root directory. This is the default.
+      --ignore-temporary-files   Ignore well-known temporary files (e.g. **/?*~) in the source root
+                                   directory. This is the default.
+      --inherit-configuration=&lt;FILE&gt; Inherits options from a configuration file. The options in the primary
+                                   configuration file (-C) has higher precednece.
+  -L, --log-file=&lt;FILE&gt;          Sets the log file. Use &quot;none&quot; (-L none) to disable logging. The default is
+                                   &quot;none&quot;.
+      --local-data=&lt;SEQ&gt;         Creates data that is visible only for certain templates. This is a list of
+                                   case(...) and layer() function calls.
+      --long-help                Deprecated; same as -h
+  -M, --modes=&lt;SEQ&gt;              The list of TDD function calls that choose the file processing mode, e.g.:
+                                   -M &quot;ignore(**/tmp/), execute(**/*.htm, **/*.html), copy(**/*)&quot;
+      --not-expert               Disables expert mode. This is the default.
+      --number-format=&lt;FORMAT&gt;   The number format used to show numerical values. The default is
+                                   0.############
+  -o, --output-file=&lt;FILE&gt;       The output file. This switches FMPP to single-file mode.
+  -O, --output-root=&lt;DIR&gt;        Sets the root directory of output files.
+      --object-wrapper=&lt;BSH&gt;     Specifies the ObjectWrapper to use with a BeanShell expression that must
+                                   evaluate to an object that extends BeansWrapper. The default value is a
+                                   BeansWrapper instance with simpleMapWrapper set to true.
+      --output-encoding=&lt;ENC&gt;    The encoding of template output. Use the special value &quot;source&quot; if the
+                                   encoding of the template file should be used. Use the special value &quot;host&quot;
+                                   if the default encoding of the host machine should be used. The default is
+                                   &quot;source&quot;.
+      --print-locales            Prints the locale codes that Java platform knows.
+      --print-stack-trace        Print stack trace on error.
+  -q, --quiet                    Don&#39;t write to the stdout, unless the command-line arguments are wrong.
+                                   Print warning and error messages to the stderr.
+  -Q, --really-quiet             As -q, but doesn&#39;t even write to the stderr.
+  -R, --remove-extensions=&lt;SEQ&gt;  These extensions will be removed from the output file name. &lt;SEQ&gt; contains
+                                   the extensions without the dot.
+      --remove-postfixes=&lt;SEQ&gt;   If the source file name without the extension ends with a string in the
+                                   &lt;SEQ&gt;, then that string will be removed from the output file name.
+      --replace-extensions=&lt;SEQ&gt; Replaces the extensions with another exensions. The list contains the old
+                                   and new extensions alternately; old1, new1, old2, new2, etc. The
+                                   extensions in the &lt;SEQ&gt; do not contain the dot.
+  -s, --stop-on-error            Terminate fmpp on failed file processing. This is the default behaviour. Use
+                                   -c to override this.
+  -S, --source-root=&lt;DIR&gt;        Sets the root directory of source files. In bulk-mode it defaults to the
+                                   current working directory.
+      --snip                     Deprecated; alias of dont-printStackTrace.
+      --sql-date-and-time-time-zone=&lt;ZONE&gt; Sets a different time zone for java.sql.Date and java.sql.Time
+                                   only.
+      --tag-syntax=&lt;WHAT&gt;        Sets the tag syntax for templates that doesn&#39;t start with the ftl directive.
+                                   Possible values are: angleBracket, squareBracket, autoDetect. The default
+                                   depends on the FreeMarker version. The recommended value is autoDetect.
+      --time-format=&lt;FORMAT&gt;     The format used to show time values. The default is locale dependent.
+      --time-zone=&lt;ZONE&gt;         Sets the time zone in which date/time/date-time values are shown. The
+                                   default is the time zone of the host machine. Example: GMT+02
+      --turns=&lt;SEQ&gt;              The list of turn(...)-s that choose the turns of processings, e.g.:
+                                   --turns &quot;turn(2, **/*_t2.*, ), turn(3, **/*_t3.*, **/*.toc)&quot;
+                                   By default all files will be procesed in the first turn.
+  -U, --skip-unchanged=&lt;WHAT&gt;    Skip &lt;WHAT&gt; files if the source was not modified after the output file was
+                                   last modified. &lt;WHAT&gt; can be &quot;all&quot;, &quot;none&quot; or &quot;static&quot;
+      --url-escaping-charset=&lt;ENC&gt; The charset used for URL escaping. Use the special value &quot;output&quot; if the
+                                   encoding of the output file should be used. The default is &quot;output&quot;.
+  -v, --verbose                  The opposite of -Q: prints everything to the stdout. This is the default.
+      --validate-xml             Sets that XML files will be validated by default.
+      --version                  Prints version information.
+  -x, --expert                   Expert mode.
+      --xml-catalog-files=&lt;SEQ&gt;  Sets the catalog files used for XML entity resolution. Catalog based
+                                   resolution is enabled if and only if this settings is specified.
+      --xml-catalog-prefer=&lt;WHAT&gt; Sets if catalog file based XML entity resolution prefers public or system
+                                   identifiers. Valid values are: public, system, globalDefault. Defaults to
+                                   public.
+      --xml-renderings=&lt;SEQ&gt;     Sets the sequence of XML renderings. Each item is hash, that stores the
+                                   options of an XML rendering configuration.
+      --xpath-engine=&lt;NAME&gt;      Sets the XPath engine to be used. Legal values are: dontSet, default, jaxen,
+                                   xalan, and any adapter class name.
+
+Most options above directly correspond to FMPP settings. See their full descriptions here:
+http://fmpp.sourceforge.net/settings.html
+
+
+
+</pre>
+
+
+
+            </div>
+          </div>
+</div>
+</div>
+<div class="site-footer">
+<div class="site-width footer-inner">
+<div class="footer-left">
+<nav>
+<ul class="pagers"><li><a class="pager-icon previous" href="frontends.html">Prev</a></li><li><a class="pager-icon next" href="ant.html">Next</a></li><li><a class="pager-icon contents" href="manual.html">Contents</a></li><li><a class="pager-icon home" href="index.html">Home</a></li><li><a class="pager-icon report-bug" href="reportbug.html">Report bug</a></li> </ul>
+</nav>
+<ul class="social-icons"><li><a class="github" href="https://github.com/freemarker/fmpp">Github</a></li><li><a class="twitter" href="https://twitter.com/freemarker">Twitter</a></li></ul>
+</div>
+<div class="footer-right">
+<div class="generated">
+Generated on <time itemprop="dateModified" datetime="2014-11-04T23:05:28Z" title="November 4, 2014 11:05:28 PM GMT">Nov 4, 2014 11:05 PM GMT</time><br>
+For FMPP version 0.9.15
+</div>
+<div class="external-links">
+<a href="http://sourceforge.net" rel="nofollow">
+<img src="style/sflogo.png" alt="SourceForge Logo" width="88" height="31"> </a>
+<a href="http://freemarker.org"><img src="style/poweredby_sq_simple.png" alt="Powered by FreeMarker" width="88" height="31"></a> </div>
+</div>
+</div>
+</div>
+</body>
+</html>

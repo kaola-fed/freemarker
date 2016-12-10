@@ -1,0 +1,33 @@
+// determines the max-width of the site at various resolutions
+.site-width {
+  margin-left: auto;
+  margin-right: auto;
+
+  padding-left: @gutter-width;
+  padding-right: @gutter-width;
+
+  .ie89 & {
+    width: @container-md;
+  }
+
+  @media (min-width: @screen-sm-min) {
+    width: @container-sm;
+  }
+
+  @media (min-width: @screen-md-min) {
+    width: @container-md;
+  }
+
+  @media (min-width: @screen-lg-min) {
+    width: @container-lg;
+  }
+}
+
+
+.warning {
+  color: @text-warning;
+}
+
+.clear {
+    .clearfix();
+}
