@@ -56,12 +56,12 @@ class Freemarker {
     };
     this._writeData(tddFile, data);
     this._writeConfig(configFile, config);
-    execFile(this.cmd, [ftl, '-C', configFile], (err) => {
+    execFile(this.cmd, [ftl, '-C', configFile], (err, log) => {
       let result = '';
       if (fs.existsSync(htmlFile)) {
         result = fs.readFileSync(htmlFile, 'utf8');
       }
-      callback(err, result);
+      callback(err? log: null, result);
       this._cleanFiles([htmlFile, tddFile, configFile]);
     });
   }
