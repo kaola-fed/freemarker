@@ -8,6 +8,7 @@ class Freemarker {
   constructor(options = {}) {
     this.tmpDir = os.tmpdir();
     this.sourceRoot = options.root || this.tmpDir;
+    this.suffix = '.' + (options.suffix || 'ftl');
     this.cmd = path.join(__dirname,
       `fmpp/bin/fmpp${os.platform() === 'win32' ? '.bat' : ''}`);
   }
@@ -33,17 +34,28 @@ class Freemarker {
       fs.existsSync(file) && fs.unlinkSync(file);
     });
   }
+  _getRealPath(file) {
+    let _file = file;
+    if (!_file.endsWith(this.suffix)) {
+      _file += this.suffix;
+    }
+    if (!path.isAbsolute(_file)) {
+      _file = path.join(this.sourceRoot, _file);
+    }
+    return _file;
+  }
 
   render(str, data, callback) {
-    const ftlFile = this._randomFile();
+    const ftlFile = this._randomFile() + this.suffix;
     this._writeFTL(ftlFile, str);
     this.renderFile(ftlFile, data, (err, result) => {
       callback(err, result);
       this._cleanFiles([ftlFile]);
     });
   }
-  renderFile(ftl, data = {}, callback = () => {}) {
-    if (!ftl) return callback('No ftl file');
+  renderFile(file, data = {}, callback = () => {}) {
+    if (!file) return callback('No ftl file');
+    const ftl = this._getRealPath(file);
     const htmlFile = this._randomFile();
     const tddFile = this._randomFile();
     const configFile = this._randomFile();

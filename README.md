@@ -41,6 +41,7 @@ freemarker.renderFile(path.join(__dirname, 'index.ftl'), data, (err, result) => 
   console.log(result);
 });
 ```
+In this example, `path.join(__dirname, 'index.ftl')` can be replaced with `index` or `index.ftl`
 
 ## Test
 `npm test`

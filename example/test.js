@@ -22,6 +22,20 @@ freemarker1.render('<h1>${title}</h1>', { title: 'test render' }, (err, result) 
   console.log(result);
 });
 
+freemarker2.renderFile('index', data, (err, result) => {
+  if (err) {
+    throw new Error(err);
+  }
+  console.log(result);
+});
+
+freemarker2.renderFile('index.ftl', data, (err, result) => {
+  if (err) {
+    throw new Error(err);
+  }
+  console.log(result);
+});
+
 freemarker2.renderFile(path.join(__dirname, 'index.ftl'), data, (err, result) => {
   if (err) {
     throw new Error(err);
