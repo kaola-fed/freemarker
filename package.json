@@ -1,6 +1,6 @@
 {
   "name": "freemarker",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Freemarker integration for NodeJS.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/int64ago/freemarker.git"
+    "url": "git+https://github.com/kaola-fed/freemarker.git"
   },
   "keywords": [
     "Freemarker"
@@ -16,7 +16,7 @@
   "author": "Cody Chan <int64ago@gmail.com> (https://int64ago.org)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/int64ago/freemarker/issues"
+    "url": "https://github.com/kaola-fed/freemarker/issues"
   },
-  "homepage": "https://github.com/int64ago/freemarker#readme"
+  "homepage": "https://github.com/kaola-fed/freemarker#readme"
 }
