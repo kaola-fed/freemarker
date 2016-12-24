@@ -1,5 +1,5 @@
 const path = require('path');
-const Freemarker = require('../index');
+const Freemarker = require('../src/app.js');
 
 const data = {
   title: 'Hello World',
