@@ -1,8 +1,8 @@
 {
   "name": "freemarker",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "description": "Freemarker integration for NodeJS.",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
     "test": "node example/test.js",
     "dev": "babel src -w -d dist",
