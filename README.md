@@ -6,7 +6,6 @@ Freemarker integration for NodeJS
 
 ## How to use
 
-  - Node v6+
   - `JAVA_HOME` should be set properly
   - `npm i freemarker -S`
 
