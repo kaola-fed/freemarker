@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const execFile = require('child_process').execFile;
+const assignJson = require('./polyfill/assign-json');
 
 const javaVersion = (callback) => {
   execFile('java', ['-version'], callback);
@@ -57,9 +58,23 @@ class Freemarker {
       this._cleanFiles([ftlFile]);
     });
   }
-  renderFile(file, data = {}, callback = () => {}) {
+
+  async renderFile(file, data = {}, callback = () => {}) {
+    const _file = this._getRealPath(file);
+    let {tempPath, cleanFile, error} = await assignJson.createTmp(_file, data);
+    if ( error ) {
+      return callback(error);
+    }
+    this.readProxy(tempPath, {}, (error, result) => {
+      cleanFile();
+      callback(error, result);
+    });
+
+  }
+
+  readProxy(file, data, callback) {
     if (!file) return callback('No ftl file');
-    const ftl = this._getRealPath(file);
+
     const htmlFile = this._randomFile();
     const tddFile = this._randomFile();
     const configFile = this._randomFile();
@@ -74,12 +89,12 @@ class Freemarker {
     this._writeConfig(configFile, config);
     javaVersion(err => {
       if (err) return callback('Java is not set properly!');
-      execFile(this.cmd, [ftl, '-C', configFile], (err, log) => {
+      execFile(this.cmd, [file, '-C', configFile], (err, log) => {
         let result = '';
         if (fs.existsSync(htmlFile)) {
           result = fs.readFileSync(htmlFile, 'utf8');
         }
-        callback(err? log: null, result);
+        callback((err || !/DONE/.test(log)) ? log: null, result);
         this._cleanFiles([htmlFile, tddFile, configFile]);
       });
     });
