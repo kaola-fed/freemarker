@@ -10,7 +10,6 @@ const data = {
   test3: {
     a: [1, '2', true],
     b: undefined,
-    c: undefined,
   },
 };
 
@@ -31,7 +30,7 @@ freemarker2.renderFile('index', data, (err, result) => {
   console.log(result);
 });
 
-freemarker2.renderFile('index2.ftl', data, (err, result) => {
+freemarker2.renderFile('index.ftl', data, (err, result) => {
 
   if (err) {
     return console.log(err)

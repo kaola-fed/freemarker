@@ -45,6 +45,9 @@ In this example, `path.join(__dirname, 'index.ftl')` can be replaced with `index
 ## Test
 `npm test`
 
+## Known issues
+ - `null` is not supported
+
 ## LICENSE
 MIT
 
