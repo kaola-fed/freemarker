@@ -2,9 +2,9 @@ const fs = require('../util/fs');
 const path = require('path');
 
 const escapeSymbol = (str) => {
-	return str.replace(/[#@$]/g, function (match) {
-		return '\\'+match;
-	});
+  return str.replace(/[#@$]/g, function (match) {
+    return '\\'+match;
+  });
 };
 
 function reduceMockTpl (mockData, tpl) {
@@ -22,18 +22,18 @@ export async function createTmp (p1, data) {
     const {name, dir} = path.parse(p1);
     const _tempPath = path.join(dir, '__temp__' + name + '.ftl');
     let _tpl = reduceMockTpl(data);
-		try{
-			_tpl.push(await fs.readFile(p1));
-			const _res = fs.writeFile(_tempPath, _tpl.join('\n'));
-			resolve({
-				tempPath: _tempPath,
-				cleanFile: () => {
-					cleanFile(_tempPath);
-				}
-			})
-		} catch (error) {
-			return resolve({error});
-		}
+    try{
+      _tpl.push(await fs.readFile(p1));
+      const _res = fs.writeFile(_tempPath, _tpl.join('\n'));
+      resolve({
+        tempPath: _tempPath,
+        cleanFile: () => {
+          cleanFile(_tempPath);
+        }
+      })
+    } catch (error) {
+      return resolve({error});
+    }
   });
 };
 
