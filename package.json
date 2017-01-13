@@ -1,10 +1,11 @@
 {
   "name": "freemarker",
-  "version": "1.1.8",
+  "version": "1.3.2",
   "description": "Freemarker integration for NodeJS.",
   "main": "dist/app.js",
   "files": [
-    "dist"
+    "dist",
+    "fmpp"
   ],
   "scripts": {
     "test": "node example/test.js",
@@ -27,11 +28,11 @@
   "homepage": "https://github.com/kaola-fed/freemarker#readme",
   "devDependencies": {
     "babel-cli": "^6.16.0",
-    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-3": "^6.11.0"
   },
   "dependencies": {
-    "babel-polyfill": "^6.20.0"
+    "babel-runtime": "^6.20.0"
   }
 }
