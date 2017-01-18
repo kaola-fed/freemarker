@@ -12,7 +12,7 @@ function reduceMockTpl (mockData, tpl) {
     .filter(item => {
       return !~item.indexOf('.');
     }).map(item => {
-      const _value = escapeSymbol(JSON.stringify(mockData[item]));
+      const _value = JSON.stringify(mockData[item]);
       return `<#assign ${item} = ${_value}/>`;
     });
 }
