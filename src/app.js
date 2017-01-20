@@ -61,18 +61,23 @@ class Freemarker {
 
   async renderFile(file, data = {}, callback = () => {}) {
     const _file = this._getRealPath(file);
+
+    if (Object.entries(data).length === 0) {
+      return this.renderProxy(file, {}, callback);
+    }
+
     let {tempPath, cleanFile, error} = await assignJson.createTmp(_file, data);
     if ( error ) {
       return callback(error);
     }
-    this.readProxy(tempPath, {}, (error, result) => {
-      cleanFile();
+    this.renderProxy(tempPath, {}, (error, result) => {
       callback(error, result);
+      cleanFile();
     });
 
   }
 
-  readProxy(file, data, callback) {
+  renderProxy(file, data, callback) {
     if (!file) return callback('No ftl file');
 
     const htmlFile = this._randomFile();

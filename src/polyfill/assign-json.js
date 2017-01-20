@@ -18,12 +18,6 @@ function reduceMockTpl (mockData, tpl) {
 }
 
 export async function createTmp (p1, data) {
-	if(Object.keys(data).length === 0) {
-		return {
-			tempPath: pa1,
-			cleanFile() {}
-		}
-	}
   return new Promise(async (resolve, reject) => {
     const {name, dir} = path.parse(p1);
     const _tempPath = path.join(dir, '__temp__' + name + '.ftl');
