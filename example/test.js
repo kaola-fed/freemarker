@@ -21,7 +21,7 @@ freemarker1.render('<h1>${title}</h1>', { title: 'test render' }, (err, result) 
   console.log(result);
 });
 
-freemarker2.renderFile('index', {}, (err, result) => {
+freemarker2.renderFile('index', data, (err, result) => {
   if (err) {
     throw new Error(err);
   }

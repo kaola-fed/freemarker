@@ -5,9 +5,6 @@ const crypto = require('crypto');
 const execFile = require('child_process').execFile;
 const assignJson = require('./polyfill/assign-json');
 
-const javaVersion = (callback) => {
-  execFile('java', ['-version'], callback);
-};
 
 class Freemarker {
   constructor(options = {}) {
@@ -63,7 +60,7 @@ class Freemarker {
     const _file = this._getRealPath(file);
 
     if (Object.entries(data).length === 0) {
-      return this.renderProxy(file, {}, callback);
+      return this.renderProxy(_file, {}, callback);
     }
 
     let {tempPath, cleanFile, error} = await assignJson.createTmp(_file, data);
@@ -92,16 +89,14 @@ class Freemarker {
     };
     this._writeData(tddFile, data);
     this._writeConfig(configFile, config);
-    javaVersion(err => {
-      if (err) return callback('Java is not set properly!');
-      execFile(this.cmd, [file, '-C', configFile], (err, log) => {
-        let result = '';
-        if (fs.existsSync(htmlFile)) {
-          result = fs.readFileSync(htmlFile, 'utf8');
-        }
-        callback((err || !/DONE/.test(log)) ? log: null, result);
-        this._cleanFiles([htmlFile, tddFile, configFile]);
-      });
+
+    execFile(this.cmd, [file, '-C', configFile], (err, log) => {
+      let result = '';
+      if (fs.existsSync(htmlFile)) {
+        result = fs.readFileSync(htmlFile, 'utf8');
+      }
+      callback((err || !/DONE/.test(log)) ? log: null, result);
+      this._cleanFiles([htmlFile, tddFile, configFile]);
     });
   }
 };
