@@ -14,7 +14,7 @@ const data = {
 const freemarker1 = new Freemarker();
 const freemarker2 = new Freemarker({ root: __dirname });
 
-freemarker1.render('<h1>${title}</h1>', { title: 'test render' }, (err, result) => {
+freemarker1.render('<h1>${title}</h1>', { title: '#{test render}' }, (err, result) => {
   if (err) {
     throw new Error(err);
   }

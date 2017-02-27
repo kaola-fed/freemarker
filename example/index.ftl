@@ -9,7 +9,7 @@
     <h1>${title}</h1>
     <script>
       window.config = {
-        test1: ${stringify(test1)},
+        test1: ${stringify(},
         test2: ${stringify(test2)},
         test3: ${stringify(test3)},
       };

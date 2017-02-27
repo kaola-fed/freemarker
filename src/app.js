@@ -63,12 +63,14 @@ class Freemarker {
       return this.renderProxy(_file, {}, callback);
     }
 
-    let {tempPath, cleanFile, error} = await assignJson.createTmp(_file, data);
+    let {tempPath, cleanFile, error, lines} = await assignJson.createTmp(_file, data);
     if ( error ) {
       return callback(error);
     }
     this.renderProxy(tempPath, {}, (error, result) => {
-      callback(error, result);
+      callback(error? error.replace(/line (\d+)\,/g, (match, line) => {
+        return `line ${Number(line) - lines},`;
+      }): error, result);
       cleanFile();
     });
 
