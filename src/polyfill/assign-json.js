@@ -7,21 +7,25 @@ const escapeSymbol = (str) => {
   });
 };
 
-function reduceMockTpl (mockData, tpl) {
+function reduceMockTpl (mockData, tpl, tagSyntax) {
   return Object.keys(mockData)
     .filter(item => {
       return !~item.indexOf('.');
     }).map(item => {
       const _value = escapeSymbol(JSON.stringify(mockData[item]));
-      return `<#assign ${item} = ${_value}/>`;
+      let ftlAssign = `<#assign ${item} = ${_value}/>`;
+      if(tagSyntax === 'squareBracket'){
+        ftlAssign = ftlAssign.replace('<', '[').replace('>', ']');
+      }
+      return ftlAssign;
     });
 }
 
-export async function createTmp (p1, data) {
+export async function createTmp (p1, data, tagSyntax) {
   return new Promise(async (resolve, reject) => {
     const {name, dir} = path.parse(p1);
     const _tempPath = path.join(dir, '__temp__' + name + '.ftl');
-    let _tpl = reduceMockTpl(data);
+    let _tpl = reduceMockTpl(data, null, tagSyntax);
     const lines = _tpl.length;
     try{
       _tpl.push(await fs.readFile(p1));

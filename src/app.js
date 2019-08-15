@@ -11,6 +11,7 @@ class Freemarker {
     this.tmpDir = os.tmpdir();
     this.sourceRoot = options.root || this.tmpDir;
     this.suffix = '.' + (options.suffix || 'ftl');
+    this.tagSyntax = options.tagSyntax || 'angleBracket';
     this.cmd = path.join(path.resolve(__dirname, '..'),
       `fmpp/bin/fmpp${os.platform() === 'win32' ? '.bat' : ''}`);
   }
@@ -63,7 +64,7 @@ class Freemarker {
       return this.renderProxy(_file, {}, callback);
     }
 
-    let {tempPath, cleanFile, error, lines} = await assignJson.createTmp(_file, data);
+    let {tempPath, cleanFile, error, lines} = await assignJson.createTmp(_file, data, this.tagSyntax);
     if ( error ) {
       return callback(error);
     }
@@ -84,6 +85,7 @@ class Freemarker {
     const configFile = this._randomFile();
     const config = {
       sourceRoot: this.sourceRoot,
+      tagSyntax: this.tagSyntax,
       outputFile: htmlFile,
       sourceEncoding: 'UTF-8',
       outputEncoding: 'UTF-8',

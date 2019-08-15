@@ -13,6 +13,8 @@ const data = {
 
 const freemarker1 = new Freemarker();
 const freemarker2 = new Freemarker({ root: __dirname });
+const freemarker3 = new Freemarker({ tagSyntax: 'squareBracket' });
+const freemarker4 = new Freemarker({ root: __dirname, tagSyntax: 'squareBracket' });
 
 freemarker1.render('<h1>${title}</h1>', { title: '#{test render}' }, (err, result) => {
   if (err) {
@@ -37,6 +39,20 @@ freemarker2.renderFile('index.ftl', data, (err, result) => {
 });
 
 freemarker2.renderFile(path.join(__dirname, 'index.ftl'), data, (err, result) => {
+  if (err) {
+    throw new Error(err);
+  }
+  console.log(result);
+});
+
+freemarker3.render('<h1>${title}</h1>', { title: '#{test render 3}' }, (err, result) => {
+  if (err) {
+    throw new Error(err);
+  }
+  console.log(result);
+});
+
+freemarker4.renderFile(path.join(__dirname, 'index2.ftl'), data, (err, result) => {
   if (err) {
     throw new Error(err);
   }
