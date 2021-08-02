@@ -1,5 +1,6 @@
 const fs = require('../util/fs');
 const path = require('path');
+const uuid = require('uuid');
 
 const escapeSymbol = (str) => {
   return str.replace(/((\#\{)|(\@\{)|(\$\{))([^}]*)\}?/g, function (...args) {
@@ -22,9 +23,9 @@ function reduceMockTpl (mockData, tpl, tagSyntax) {
 }
 
 export async function createTmp (p1, data, tagSyntax) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve, _reject) => {
     const {name, dir} = path.parse(p1);
-    const _tempPath = path.join(dir, '__temp__' + name + '.ftl');
+    const _tempPath = path.join(dir, `${uuid.v4()}__${name}.ftl`);
     let _tpl = reduceMockTpl(data, null, tagSyntax);
     const lines = _tpl.length;
     try{
