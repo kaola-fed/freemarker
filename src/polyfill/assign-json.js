@@ -12,7 +12,7 @@ function reduceMockTpl (mockData, tpl, tagSyntax) {
   return Object.keys(mockData)
     .map(item => {
       const _value = escapeSymbol(JSON.stringify(mockData[item]));
-      let ftlAssign = `<#assign ${item.replace('.', '\\.')} = ${_value}/>`;
+      let ftlAssign = `<#assign ${item.replace(/\./g, '\\.')} = ${_value}/>`;
       if(tagSyntax === 'squareBracket'){
         ftlAssign = ftlAssign.replace('<', '[').replace('>', ']');
       }
