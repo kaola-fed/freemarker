@@ -10,11 +10,9 @@ const escapeSymbol = (str) => {
 
 function reduceMockTpl (mockData, tpl, tagSyntax) {
   return Object.keys(mockData)
-    .filter(item => {
-      return !~item.indexOf('.');
-    }).map(item => {
+    .map(item => {
       const _value = escapeSymbol(JSON.stringify(mockData[item]));
-      let ftlAssign = `<#assign ${item} = ${_value}/>`;
+      let ftlAssign = `<#assign ${item.replace('.', '\\.')} = ${_value}/>`;
       if(tagSyntax === 'squareBracket'){
         ftlAssign = ftlAssign.replace('<', '[').replace('>', ']');
       }
