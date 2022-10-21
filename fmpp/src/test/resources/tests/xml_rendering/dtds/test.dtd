@@ -1,3 +1,0 @@
-<!ELEMENT a (b)+>
-
-<!ELEMENT b (#PCDATA)>

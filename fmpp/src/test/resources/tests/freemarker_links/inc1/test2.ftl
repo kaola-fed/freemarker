@@ -1,1 +1,0 @@
-EXTERNAL inc1/test2.ftl

@@ -1,6 +1,0 @@
-sourceRoot: src
-outputRoot: out
-data: {
-    tdd(data/style.tdd)
-    birds: csv(data/birds.csv)
-}

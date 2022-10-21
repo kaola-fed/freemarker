@@ -1,4 +1,0 @@
-sourceRoot: src
-outputRoot: out
-logFile: log.fmpp
-data: {h:htmlUtils()}

@@ -1,2 +1,0 @@
-[#ftl]
-<#-- I'm not a comment -->[#-- I'm a comment --]

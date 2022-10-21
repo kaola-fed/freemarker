@@ -1,1 +1,0 @@
-INTERNAL @inc/test1.ftl
