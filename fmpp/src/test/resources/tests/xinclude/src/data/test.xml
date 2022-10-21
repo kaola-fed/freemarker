@@ -1,6 +1,0 @@
-<?foo bar baaz ?>
-<book xmlns:xi="http://www.w3.org/2001/XInclude">
-  <!-- This is a comment -->
-  <xi:include href="part1.xml" />
-  <xi:include href="part2.xml" />
-</book>

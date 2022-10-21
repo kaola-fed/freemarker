@@ -1,3 +1,0 @@
-sourceRoot: src
-outputRoot: out
-modes: ignore(**/*.inc)

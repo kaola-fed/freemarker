@@ -1,4 +1,0 @@
-3
-<#flush>
-<@pp.renameOutputFile name="r/3.txt" />
-.

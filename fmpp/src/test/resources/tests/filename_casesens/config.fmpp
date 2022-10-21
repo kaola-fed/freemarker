@@ -1,3 +1,0 @@
-inheritConfiguration: ../filename/config.fmpp
-outputRoot: out
-caseSensitive: true

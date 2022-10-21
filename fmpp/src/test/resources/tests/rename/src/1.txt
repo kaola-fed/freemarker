@@ -1,2 +1,0 @@
-<@pp.renameOutputFile name="r1.txt" />
-1
